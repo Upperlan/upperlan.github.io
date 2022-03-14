@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="stack基本操作empty() 堆栈为空则返回真 pop() 移除栈顶元素 （删除） push() 在栈顶增加元素 （增加） size() 返回栈中元素数目 top() 返回栈顶元素，不删除（获取） 栈（stack）是限制插入和删除只能在一个位置上进行的线性表，该位置在表的末端，叫做栈顶。添加元素只能在尾节点后添加，删除元素只能删除尾节点，查看节点也只能查看尾节点。添加、删除、查看依次为入栈（p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL库内容器的基本操作">
+<meta property="og:url" content="http://example.com/2021/10/13/STL%E5%BA%93%E5%86%85%E5%AE%B9%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="Upperlan">
+<meta property="og:description" content="stack基本操作empty() 堆栈为空则返回真 pop() 移除栈顶元素 （删除） push() 在栈顶增加元素 （增加） size() 返回栈中元素数目 top() 返回栈顶元素，不删除（获取） 栈（stack）是限制插入和删除只能在一个位置上进行的线性表，该位置在表的末端，叫做栈顶。添加元素只能在尾节点后添加，删除元素只能删除尾节点，查看节点也只能查看尾节点。添加、删除、查看依次为入栈（p">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-13T05:59:06.000Z">
+<meta property="article:modified_time" content="2022-03-06T06:01:49.240Z">
+<meta property="article:author" content="篮球架上打砖块">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/10/13/STL%E5%BA%93%E5%86%85%E5%AE%B9%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>STL库内容器的基本操作 | Upperlan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Upperlan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/13/STL%E5%BA%93%E5%86%85%E5%AE%B9%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STL库内容器的基本操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-13 13:59:06" itemprop="dateCreated datePublished" datetime="2021-10-13T13:59:06+08:00">2021-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-06 14:01:49" itemprop="dateModified" datetime="2022-03-06T14:01:49+08:00">2022-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h1><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p>empty() 堆栈为空则返回真</p>
+<p>pop() 移除栈顶元素 （删除）</p>
+<p>push() 在栈顶增加元素 （增加）</p>
+<p>size() 返回栈中元素数目</p>
+<p>top() 返回栈顶元素，不删除（获取）</p>
+<p>栈（stack）是限制插入和删除只能在一个位置上进行的线性表，该位置在表的末端，叫做栈顶。添加元素只能在尾节点后添加，删除元素只能删除尾节点，查看节点也只能查看尾节点。添加、删除、查看依次为入栈（push）、出栈（pop）、栈顶节点（top）。形象的说，栈是一个先进后出（LIFO）表，先进去的节点要等到后边进去的节点出来才能出来。</p>
+<h1 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h1><h3 id="基本函数实现"><a href="#基本函数实现" class="headerlink" title="基本函数实现"></a>基本函数实现</h3><p>1.push_back 在数组的最后添加一个数据<br>2.pop_back 去掉数组的最后一个数据<br>3.at 得到编号位置的数据<br>4.begin 得到数组头的指针<br>5.end 得到数组的最后一个单元+1的指针<br>6．front 得到数组头的引用<br>7.back 得到数组的最后一个单元的引用<br>8.max_size 得到vector最大可以是多大<br>9.capacity 当前vector分配的大小<br>10.size 当前使用数据的大小<br>11.resize 改变当前使用数据的大小，如果它比当前使用的大，者填充默认值<br>12.reserve 改变当前vecotr所分配空间的大小<br>13.erase 删除指针指向的数据项<br>14.clear 清空当前的vector<br>15.rbegin 将vector反转后的开始指针返回(其实就是原来的end-1)<br>16.rend 将vector反转构的结束指针返回(其实就是原来的begin-1)<br>17.empty 判断vector是否为空<br>18.swap 与另一个vector交换数据</p>
+<h4 id="1-构造函数"><a href="#1-构造函数" class="headerlink" title="1.构造函数"></a>1.构造函数</h4><ul>
+<li>vector():创建一个空vector</li>
+<li>vector(int nSize):创建一个vector,元素个数为nSize</li>
+<li>vector(int nSize,const t&amp; t):创建一个vector，元素个数为nSize,且值均为t</li>
+<li>vector(const vector&amp;):复制构造函数</li>
+<li>vector(begin,end):复制[begin,end)区间内另一个数组的元素到vector中<h4 id="2-增加函数"><a href="#2-增加函数" class="headerlink" title="2.增加函数"></a>2.增加函数</h4></li>
+<li>void push_back(const T&amp; x):向量尾部增加一个元素X</li>
+<li>iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</li>
+<li>iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</li>
+<li>iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</li>
+</ul>
+<h1 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h1><h3 id="deque的API"><a href="#deque的API" class="headerlink" title="deque的API"></a>deque的API</h3><h4 id="1-1deque构造函数"><a href="#1-1deque构造函数" class="headerlink" title="1.1deque构造函数"></a>1.1deque构造函数</h4><p>deque<T> deqT;//默认构造形式</p>
+<p>deque(beg, end);//构造函数将[beg, end)区间中的元素拷贝给本身。</p>
+<p>deque(n, elem);//构造函数将n个elem拷贝给本身。</p>
+<p>deque(const deque &amp;deq);//拷贝构造函数。</p>
+<h4 id="1-2-deque赋值操作"><a href="#1-2-deque赋值操作" class="headerlink" title="1.2 deque赋值操作"></a>1.2 deque赋值操作</h4><p>assign(beg, end);//将[beg, end)区间中的数据拷贝赋值给本身。</p>
+<p>assign(n, elem);//将n个elem拷贝赋值给本身。</p>
+<p>deque&amp; operator=(const deque &amp;deq); //重载等号操作符</p>
+<p>swap(deq);// 将deq与本身的元素互换</p>
+<h4 id="1-3-deque大小操作"><a href="#1-3-deque大小操作" class="headerlink" title="1.3 deque大小操作"></a>1.3 deque大小操作</h4><p>deque.size();//返回容器中元素的个数</p>
+<p>deque.empty();//判断容器是否为空</p>
+<p>deque.resize(num);//重新指定容器的长度为num,若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。</p>
+<p>deque.resize(num, elem); //重新指定容器的长度为num,若容器变长，则以elem值填充新位置,如果容器变短，则末尾超出容器长度的元素被删除。</p>
+<h4 id="2-1-deque双端插入和删除操作"><a href="#2-1-deque双端插入和删除操作" class="headerlink" title="2.1 deque双端插入和删除操作"></a>2.1 deque双端插入和删除操作</h4><p>push_back(elem);//在容器尾部添加一个数据</p>
+<p>push_front(elem);//在容器头部插入一个数据</p>
+<p>pop_back();//删除容器最后一个数据</p>
+<p>pop_front();//删除容器第一个数据</p>
+<h4 id="2-2-deque数据存取"><a href="#2-2-deque数据存取" class="headerlink" title="2.2 deque数据存取"></a>2.2 deque数据存取</h4><p>at(idx);//返回索引idx所指的数据，如果idx越界，抛出out_of_range。</p>
+<p>operator[];//返回索引idx所指的数据，如果idx越界，不抛出异常，直接出错。</p>
+<p>front();//返回第一个数据。</p>
+<p>back();//返回最后一个数据</p>
+<h4 id="2-3-deque插入操作"><a href="#2-3-deque插入操作" class="headerlink" title="2.3 deque插入操作"></a>2.3 deque插入操作</h4><p>insert(pos,elem);//在pos位置插入一个elem元素的拷贝，返回新数据的位置。</p>
+<p>insert(pos,n,elem);//在pos位置插入n个elem数据，无返回值。</p>
+<p>insert(pos,beg,end);//在pos位置插入[beg,end)区间的数据，无返回值。</p>
+<h4 id="2-4-deque删除操作"><a href="#2-4-deque删除操作" class="headerlink" title="2.4 deque删除操作"></a>2.4 deque删除操作</h4><p>clear();//移除容器的所有数据</p>
+<p>erase(beg,end);//删除[beg,end)区间的数据，返回下一个数据的位置。</p>
+<p>erase(pos);//删除pos位置的数据，返回下一个数据的位置。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/12/C-%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%AC%94%E8%AE%B0/" rel="prev" title="C++类和对象笔记">
+      <i class="fa fa-chevron-left"></i> C++类和对象笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/01/Linux%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" rel="next" title="Linux常用操作">
+      Linux常用操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#stack"><span class="nav-number">1.</span> <span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.0.1.</span> <span class="nav-text">基本操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector"><span class="nav-number">2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.0.1.</span> <span class="nav-text">基本函数实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">1.构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%A2%9E%E5%8A%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">2.增加函数</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deque"><span class="nav-number">3.</span> <span class="nav-text">deque</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#deque%E7%9A%84API"><span class="nav-number">3.0.1.</span> <span class="nav-text">deque的API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1deque%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">1.1deque构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-deque%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.2.</span> <span class="nav-text">1.2 deque赋值操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-deque%E5%A4%A7%E5%B0%8F%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.3.</span> <span class="nav-text">1.3 deque大小操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-deque%E5%8F%8C%E7%AB%AF%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.4.</span> <span class="nav-text">2.1 deque双端插入和删除操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-deque%E6%95%B0%E6%8D%AE%E5%AD%98%E5%8F%96"><span class="nav-number">3.0.1.5.</span> <span class="nav-text">2.2 deque数据存取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-deque%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.6.</span> <span class="nav-text">2.3 deque插入操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-deque%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.7.</span> <span class="nav-text">2.4 deque删除操作</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">篮球架上打砖块</p>
+  <div class="site-description" itemprop="description">Apodidae</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">篮球架上打砖块</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

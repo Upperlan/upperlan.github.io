@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="恶意域名Anderson H S, Woodbridge J, Filar B. DeepDGA: Adversarially-tuned domain generation and detection[C]&#x2F;&#x2F;Proceedings of the 2016 ACM Workshop on Artificial Intelligence and Security. 2016: 13-21. 样本类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAN网络攻击文献简记">
+<meta property="og:url" content="http://example.com/2021/07/08/GAN%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E6%96%87%E7%8C%AE%E7%AE%80%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Upperlan">
+<meta property="og:description" content="恶意域名Anderson H S, Woodbridge J, Filar B. DeepDGA: Adversarially-tuned domain generation and detection[C]&#x2F;&#x2F;Proceedings of the 2016 ACM Workshop on Artificial Intelligence and Security. 2016: 13-21. 样本类">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-08T05:28:37.000Z">
+<meta property="article:modified_time" content="2022-03-06T06:21:33.290Z">
+<meta property="article:author" content="篮球架上打砖块">
+<meta property="article:tag" content="论文综述">
+<meta property="article:tag" content="科研">
+<meta property="article:tag" content="GAN">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/07/08/GAN%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E6%96%87%E7%8C%AE%E7%AE%80%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GAN网络攻击文献简记 | Upperlan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Upperlan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/08/GAN%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E6%96%87%E7%8C%AE%E7%AE%80%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GAN网络攻击文献简记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-08 13:28:37" itemprop="dateCreated datePublished" datetime="2021-07-08T13:28:37+08:00">2021-07-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-06 14:21:33" itemprop="dateModified" datetime="2022-03-06T14:21:33+08:00">2022-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E8%AE%BA%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">科研与论文</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="恶意域名"><a href="#恶意域名" class="headerlink" title="恶意域名"></a>恶意域名</h2><p>Anderson H S, Woodbridge J, Filar B. <strong>DeepDGA: Adversarially-tuned domain generation and detection</strong>[C]//Proceedings of the 2016 ACM Workshop on Artificial Intelligence and Security. 2016: 13-21.</p>
+<p>样本类型：域名字符串</p>
+<p>数据集：A域lexa 100万中的访问量靠前的名</p>
+<p>问题类型：恶意样本生成问题</p>
+<p>方法：Autoencoder组成的GAN</p>
+<p>我认为的contribution：提出的框架十分具有创新性，DGA的生成方法也是开创性的，文章写得也挺好，实验很完整</p>
+<h2 id="恶意网络流"><a href="#恶意网络流" class="headerlink" title="恶意网络流"></a>恶意网络流</h2><p>潘一鸣,林家骏. 基于生成对抗网络的恶意网络流生成及验证[J]. 华东理工大学学报（自然科学版）,2019,45(2):344-350. DOI:10.14135/j.cnki.1006-3080.20180313003.</p>
+<p>样本类型：组数据包序列， 它们具有相同的五元组信息：源 IP 地址、目的 IP 地址、源端口、目的端口、协议类型。将样本转化为 64×64 的二维向量，直接输入 模型。</p>
+<p>问题类型：恶意样本生成问题</p>
+<p>数据集：UNSW-NB15 数据集，9 种主流的攻击类型（没有良性，是个分类问题）</p>
+<p>二进制api数据的缺点：（1）稀疏的特征难以完整反映样本的 特质；（2）二进制的特征向量无法以较小的步长渐变。</p>
+<p>方法：利用弱相关位的原理来选择可更改的数据种类，用GAN生成的样本可以是深度学习模型错误分类，同时绕不过基于规则的Snort检测器，即为成功</p>
+<p>我认为的contribution：在网络流这个领域提出对抗样本概念，恶意网络流可以直接作为深度学习模型的样本，弱相关位来保持可执行性</p>
+<h2 id="僵尸网络检测"><a href="#僵尸网络检测" class="headerlink" title="僵尸网络检测"></a>僵尸网络检测</h2><p>Yin C, Zhu Y, Liu S, et al. <strong>An enhancing framework for botnet detection using generative adversarial networks</strong>[C]//2018 International Conference on Artificial Intelligence and Big Data (ICAIBD). IEEE, 2018: 228-234.</p>
+<p>样本类型：预处理将包数据处理成flow数据，包含16种特征的包数据，</p>
+<p>问题类型：恶意代码生成问题；机器学习数据集增强</p>
+<p>数据集：ISCX botnet dataset created by the University of New Brunswick；normal traffic from ISCX 2012 intrusion detection dataset，其中测试集中有训练集里没有的恶意样本类型</p>
+<p>方法：框架中的生成模型不断生成“伪”样本，辅助原始检测模型提高性能。该框架适用于扩充原始检测模型，降低了误报率。</p>
+<p>我认为的contribution：在僵尸网络领域使用了GAN，有一定新意，同时用kali</p>
+<h2 id="入侵检测"><a href="#入侵检测" class="headerlink" title="入侵检测"></a>入侵检测</h2><p>Usama M, Asim M, Latif S, et al. Generative adversarial networks for launching and thwarting adversarial attacks on network intrusion detection systems[C]//2019 15th international wireless communications &amp; mobile computing conference (IWCMC). IEEE, 2019: 78-83.</p>
+<p>样本类型：序列，有41个特征，其中34个是连续值，7个是特征类别的值</p>
+<p>数据集：KDD99</p>
+<p>问题类型：生成恶意样本绕过机器学习模型</p>
+<p>模型：GAN和各种机器学习算法</p>
+<p>方法：GAN生成样本绕过IDS；生成的样本投进IDS的训练集，强化IDS</p>
+<p>我认为的contribution：对比试验丰富，SVM，LR等，实验复现难度会小一些</p>
+<h2 id="恶意代码"><a href="#恶意代码" class="headerlink" title="恶意代码"></a>恶意代码</h2><h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>Nataraj L, Karthikeyan S, Jacob G, et al. Malware images: visualization and automatic classification[C]//Proceedings of the 8th international symposium on visualization for cyber security. 2011: 1-7.（已复现）</p>
+<p>问题类型：恶意代码预处理；图像分类；</p>
+<p>恶意软件类型：window PE</p>
+<p>方法：本文首先将恶意二进制代码转变为矩阵，再转变为恶意图像。利用二进制代码长度计算出矩阵的行数和列数，矩阵中每个数值对应一个字节，每个字节范围在00~FF 之间，刚好对应图像的像素范围0~255。然后根据纹理特征分类</p>
+<p>我认为的contribution：首先提出把恶意代码图像化的概念，把恶意代码的检测问题转变成一个图像检测问题，打开了新的思路。</p>
+<h3 id="1神经网络"><a href="#1神经网络" class="headerlink" title="1神经网络"></a>1神经网络</h3><p>Grosse K, Papernot N, Manoharan P, et al. <strong>Adversarial perturbations against deep neural networks for malware classification</strong>[J]. arXiv preprint arXiv:1606.04435, 2016.(已复现用cnn分类pe软件的image)</p>
+<p>恶意软件类型：安卓恶意软件</p>
+<p>数据集：DREBIN dataset</p>
+<p>问题类型：恶意样本生成问题</p>
+<p>方法：api二进制化输入模型，加入扰动</p>
+<p>我认为的contribution：实验和分析比较完整</p>
+<p>Kolosnjaji B, Demontis A, Biggio B, et al. <strong>Adversarial Malware Binaries: Evading Deep Learning for Malware Detection in Executables</strong>[J]. arXiv preprint arXiv:1803.04173, 2018.</p>
+<p>黑/白：白盒</p>
+<p>方法：通过目标函数对输入的导数方向选择并在文件末尾增加字节来产生对抗样本</p>
+<p>恶意软件类型：Windows PE</p>
+<p>数据集：VirusShare、Citadel和APT：19195 malware Popular search engines：4000 benign software</p>
+<p>模型：卷积神经网络</p>
+<p>Result：60%</p>
+<p>我认为的contribution：似乎是第一个攻击Malconv的比较成功的工作，尽管是白盒，但是结果还行</p>
+<h3 id="2-GAN"><a href="#2-GAN" class="headerlink" title="2 GAN"></a>2 GAN</h3><p>Kim J Y, Bu S J, Cho S B. <strong>Zero-day malware detection using transferred generative adversarial networks based on deep autoencoders</strong>[J]. Information Sciences, 2018, 460: 83-102.</p>
+<p>恶意软件类型：Window PE</p>
+<p>方法：1.将恶意代码预处理成RGB三通道的image来处理，保留了较多的特征</p>
+<ol>
+<li>用autoencoder和GAN结合的tGAN模型，优点是生成器更换了结构之后生成的效果更好了，训练好的判别器通过迁移学习用于零日恶意软件的检测。</li>
+</ol>
+<p>数据集：微软kaggle malware</p>
+<p>我认为的contribution：处理恶意代码image的思路不错，将GAN与恶意代码image结合</p>
+<h3 id="3-强化学习"><a href="#3-强化学习" class="headerlink" title="3 强化学习"></a>3 强化学习</h3><p>Anderson H S, Kharkar A, Filar B, et al. <strong>Learning to evade static pe machine learning malware models via reinforcement learning</strong>[J]. arXiv preprint arXiv:1801.08917, 2018.</p>
+<p>恶意软件类型：windows PE</p>
+<p>数据集：50K randomly selected malware samples from Virus Share,</p>
+<p>• 2.6K ransomware samples downloaded from VirusTotal,</p>
+<p>• 1.6K Virut samples downloaded from VirusTotal, and</p>
+<p>• 4.1K BrowseFox (adware) samples downloaded from Virus-Total.</p>
+<p>方法：更通用的基于强化学习的框架来修改已有的恶意PE软件。它可以对于给定的恶意软件样本，尝试不同的操作序列来尝试避开检测器（查杀病毒的机器学习模型）。其主要方法就是改变pe文件中不影响程序运行的部分</p>
+<p>我认为的contribution：提出了一种可行的让恶意软件变异的方法，同时不影响恶意软件的运行，关于变异后绕过机器学习检测算法的实验比较全面，但是关于恶意软件运行后是否还具有杀伤性的实验没有做，而且关于如何让这种恶意样本来增强检测模型能力的实验也没有说的很详细。</p>
+<h3 id="4-GAN-强化学习"><a href="#4-GAN-强化学习" class="headerlink" title="4 GAN+强化学习"></a>4 GAN+强化学习</h3><p><strong>PESIDIOIUS：Malware Mutation using Reinforcement Learning and GANs（GitHub上的一个模型）</strong></p>
+<p>关于以上模型的一个变种，结合了GAN和强化学习。在强化学习对PE文件进行”变异“的过程中需要向PE文件中添加一些内容，比如section table，import list等，这些东西的内容可能会成为机器学习识别算法的一个特征，所以本模型使用GAN去生成一些可以伪造成良性特征的添加内容，再用强化学习进行PE文件修改，从而达到更强的逃避检测能力。</p>
+<h2 id="GAN与ML模型安全"><a href="#GAN与ML模型安全" class="headerlink" title="GAN与ML模型安全"></a>GAN与ML模型安全</h2><p>[2018][ICLR]Samangouei P, Kabkab M, Chellappa R. <strong>Defense-gan: Protecting classifiers against adversarial attacks using generative models</strong>[J]. arXiv preprint arXiv:1805.06605, 2018.（有代码）</p>
+<p>方法：使用一个GAN模型来减小对抗样本扰动。</p>
+<p>前提：所有的恶意样本都是在普通样本上加扰动（perturbation）</p>
+<p>大概思路：生成器学会的是随机向量Z到样本空间的一个映射关系G，假设合法样本会在G中一个点的指定范围内，而对抗样本会在这个范围之外，所以，用GAN将样本”投影“（projecting）到G的指定范围内，就可以减少样本的对抗扰动。</p>
+<p>防御方法综述：1.对抗训练；2.DEFENSIVE DISTILLATION；3.Magnet：MagNet是对我们的方法最接近的，因为它试图使用一个学习过的自动编码器来改造一个对抗性样本。</p>
+<p>数据集：合法的正常样本（本文用的mnist）</p>
+<p>模型：WGAN，本文投影（projection）用的GD（梯度下降）</p>
+<p>我认为的contribution：一篇引用量600多的文章，传统的方法可能只适用于特定模型，或者黑盒攻击和白盒攻击的一种，而本文的方法都有适用性，可以用于不同的机器学习模型。类似于一种样本投入分类器之前的预处理。实验很完整，白盒和黑盒的实验都做了，可应用的领域很广。</p>
+<p>局限性：但是问题在于这个方法的成功非常依靠GAN训练的稳定性，而GAN训练的稳定性问题目前还是一个很重要的研究领域，一个很难解决的问题。</p>
+<p>Hu W, Tan Y. <strong>Generating adversarial malware examples for black-box attacks based on GAN</strong>[J]. arXiv preprint arXiv:1702.05983, 2017.</p>
+<p>恶意软件类型：Window PE</p>
+<p>样本类型：恶意软件的二进制API序列（一个带索引的二进制数组，固定长度，每一个二进制位代表是否使用了某个动态链接库的api，使用了就是1，没使用就是0）</p>
+<p>数据集： <a target="_blank" rel="noopener" href="https://malwr.com/：180000">https://malwr.com/：180000</a> samples，30%malware</p>
+<p>Result：多组实验达到100%</p>
+<p>方法：用自己的机器学习模型去模仿黑盒模型，利用GAN去训练出可以绕过黑盒的样本</p>
+<p>我认为的contribution：用自己的模型去模仿黑盒模型。文中开创性提出的GAN结构来实现模仿云上杀软分类器的方法，都很有创新性，实验也很完整，后续很多黑盒实验都使用这个思想去用自己的机器学习模型来“偷取”别人的模型。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%BB%BC%E8%BF%B0/" rel="tag"># 论文综述</a>
+              <a href="/tags/%E7%A7%91%E7%A0%94/" rel="tag"># 科研</a>
+              <a href="/tags/GAN/" rel="tag"># GAN</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/12/C-%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1%E7%AC%94%E8%AE%B0/" rel="next" title="C++类和对象笔记">
+      C++类和对象笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E5%9F%9F%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">恶意域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E7%BD%91%E7%BB%9C%E6%B5%81"><span class="nav-number">2.</span> <span class="nav-text">恶意网络流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%83%B5%E5%B0%B8%E7%BD%91%E7%BB%9C%E6%A3%80%E6%B5%8B"><span class="nav-number">3.</span> <span class="nav-text">僵尸网络检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">入侵检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">恶意代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">5.1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">5.2.</span> <span class="nav-text">1神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-GAN"><span class="nav-number">5.3.</span> <span class="nav-text">2 GAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.4.</span> <span class="nav-text">3 强化学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-GAN-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.5.</span> <span class="nav-text">4 GAN+强化学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GAN%E4%B8%8EML%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8"><span class="nav-number">6.</span> <span class="nav-text">GAN与ML模型安全</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">篮球架上打砖块</p>
+  <div class="site-description" itemprop="description">Apodidae</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">篮球架上打砖块</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

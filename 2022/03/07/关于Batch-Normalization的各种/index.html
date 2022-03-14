@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="归一化（Normalization）目的：  应用层面需要统一量纲 在使用梯度下降发求解最优化问题时，归一化或标准化后可以加快梯度下降的求解速度，即提升收敛速度 可以避免神经元饱和。神经元的激活在0或1时会饱和，这些区域梯度几乎为0，这样的话在反向传播的时候局部梯度也会接近0。因此归一化可以有效缓解梯度消失 避免数据中小的数值被大数值吞噬，也避免数值太大引发的数值问题。（输入图像的值）  为什么要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习基础-关于Batch Normalization的各种">
+<meta property="og:url" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/index.html">
+<meta property="og:site_name" content="Upperlan">
+<meta property="og:description" content="归一化（Normalization）目的：  应用层面需要统一量纲 在使用梯度下降发求解最优化问题时，归一化或标准化后可以加快梯度下降的求解速度，即提升收敛速度 可以避免神经元饱和。神经元的激活在0或1时会饱和，这些区域梯度几乎为0，这样的话在反向传播的时候局部梯度也会接近0。因此归一化可以有效缓解梯度消失 避免数据中小的数值被大数值吞噬，也避免数值太大引发的数值问题。（输入图像的值）  为什么要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307211017670-6658619.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307211225372-6658746.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307212515863-6659517.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307212905080-6659746.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307213044587.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307213242003-6659962.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/118059082-39d1a500-b3c2-11eb-80f8-75f2bf677451.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/118059220-9208a700-b3c2-11eb-841f-73781fa93342.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/68747470733a2f2f67697465652e636f6d2f6c6562686f7279692f506963476f506963747572654265642f7261772f6d61737465722f696d672f32303231303830333232353131312e706e67.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/68747470733a2f2f66696c65732e6d646e6963652e636f6d2f757365722f363933352f37383432636533652d613630662d346333372d623532302d3938383531353337663136642e706e67.png">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/equation-20220307220148569">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/equation-20220307220148672">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/equation">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/v2-98c5ec4adfd6b827e25127af0d0ba988_720w.jpg">
+<meta property="article:published_time" content="2022-03-07T12:49:15.000Z">
+<meta property="article:modified_time" content="2022-03-08T12:33:01.269Z">
+<meta property="article:author" content="篮球架上打砖块">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/image-20220307211017670-6658619.png">
+
+<link rel="canonical" href="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深度学习基础-关于Batch Normalization的各种 | Upperlan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Upperlan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习基础-关于Batch Normalization的各种
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-07 20:49:15" itemprop="dateCreated datePublished" datetime="2022-03-07T20:49:15+08:00">2022-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-08 20:33:01" itemprop="dateModified" datetime="2022-03-08T20:33:01+08:00">2022-03-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="归一化（Normalization）"><a href="#归一化（Normalization）" class="headerlink" title="归一化（Normalization）"></a>归一化（Normalization）</h1><p>目的：</p>
+<ol>
+<li>应用层面需要统一量纲</li>
+<li>在使用梯度下降发求解最优化问题时，归一化或标准化后可以加快梯度下降的求解速度，即提升收敛速度</li>
+<li>可以避免神经元饱和。神经元的激活在0或1时会饱和，这些区域梯度几乎为0，这样的话在反向传播的时候局部梯度也会接近0。因此归一化可以有效缓解梯度消失</li>
+<li>避免数据中小的数值被大数值吞噬，也避免数值太大引发的数值问题。（输入图像的值）</li>
+</ol>
+<h2 id="为什么要归一化"><a href="#为什么要归一化" class="headerlink" title="为什么要归一化"></a>为什么要归一化</h2><p>假设w1在[-10,10],w2在[-100,100]，梯度每次都前进一个单位，则w1在搜索全局最优时会相对来说走的更『快』。即提高了收敛速度</p>
+<h2 id="归一化类型"><a href="#归一化类型" class="headerlink" title="归一化类型"></a>归一化类型</h2><h3 id="线性归一化"><a href="#线性归一化" class="headerlink" title="线性归一化"></a>线性归一化</h3><script type="math/tex; mode=display">
+x^{'}=\frac{x-min(x)}{max(x)-min(x)}</script><p><img src="image-20220307211017670-6658619.png" alt="image-20220307211017670"></p>
+<h2 id="标准归一化"><a href="#标准归一化" class="headerlink" title="标准归一化"></a>标准归一化</h2><script type="math/tex; mode=display">
+x^{'}=\frac{x-\mu}{\sigma}</script><p><img src="image-20220307211225372-6658746.png" alt="image-20220307211225372"></p>
+<p>归一化后均值为0，标准差为1，$ \mu $ 为左右样本数据的均值，$\sigma$ 是所有样本数据的标准差。</p>
+<h1 id="批归一化（Batch-Normalization）"><a href="#批归一化（Batch-Normalization）" class="headerlink" title="批归一化（Batch Normalization）"></a>批归一化（Batch Normalization）</h1><p>在网络中间对数据进行归一化</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
+<li>减少对超参数的依赖，某些情况下可以取消Dropout方法或者L2正则项参数</li>
+<li>减少对学习率的要求（加强对学习率参数的鲁棒性）</li>
+<li>破坏原来的数据分布，一定程度上缓解过拟合，防止每批训练中某一个样本经常被选中</li>
+<li>减少梯度消失（数据分布奇怪使激活函数输入接近0或者1，梯度很小）</li>
+</ol>
+<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>$x_{i}$是上一层的输出结果，B和Y是学习参数</p>
+<ol>
+<li>计算上一层输出数据的均值</li>
+</ol>
+<script type="math/tex; mode=display">
+\mu _{\beta}=\frac{1}{m} \sum_{i=1}^{m}\left ( x_{i} \right)</script><p><img src="image-20220307212515863-6659517.png" alt="image-20220307212515863"></p>
+<ol>
+<li>计算上一层输出数据的标准差<script type="math/tex; mode=display">
+\sigma_{\beta}^{2}=\frac{1}{m} \sum_{i=1}^{m}(x_{i}-\mu _{\beta})^{2}</script></li>
+</ol>
+<p><img src="image-20220307212905080-6659746.png" alt="image-20220307212905080"></p>
+<ol>
+<li><p>进行归一化处理，得到</p>
+<script type="math/tex; mode=display">
+x_{i}=\frac{x_{i}+\mu _{\beta}}{\sqrt{\sigma_{\beta}^{2}+\epsilon}}</script><p><img src="image-20220307213044587.png" alt="image-20220307213044587"></p>
+<p>分母加一个极小值防止除0</p>
+</li>
+<li><p>重构</p>
+<script type="math/tex; mode=display">
+y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659962.png" alt="image-20220307213242003"></p>
+<p>gamma和beta是可学习参数。此时的均值是计算所有批次的mu_{beta}值的平均值得到的，标准差是每个批次的标准差的无偏估计。</p>
+</li>
+</ol>
+<h2 id="和组归一化比较（Group-Normalization）"><a href="#和组归一化比较（Group-Normalization）" class="headerlink" title="和组归一化比较（Group Normalization）"></a>和组归一化比较（Group Normalization）</h2><p>如果batch比较小，导致估计的值和整个数据集的真实均值方差差距较大，BN的误差就会很大。</p>
+<p>GN是将通道（channel）分成组，在每组内计算归一化的均值和方差，其准确度在各种批量大小下都很稳定</p>
+<h2 id="和权重归一化比较（weight-normalization）"><a href="#和权重归一化比较（weight-normalization）" class="headerlink" title="和权重归一化比较（weight normalization）"></a>和权重归一化比较（weight normalization）</h2><p>WN是对网络权重W进行归一化，适用于RNN，因为RNN处理的队列是变长的，基于时间状态计算，很难保存每个状态下的均值和方差，效率很低。</p>
+<h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><p> 适用于batch较大，数据分布比较接近的场景，不适用于动态网络和RNN结构。</p>
+<h2 id="梯度方向推导"><a href="#梯度方向推导" class="headerlink" title="梯度方向推导"></a>梯度方向推导</h2><p><img src="118059082-39d1a500-b3c2-11eb-80f8-75f2bf677451.png" alt="image"></p>
+<p>背诵版本：</p>
+<p><img src="118059220-9208a700-b3c2-11eb-841f-73781fa93342.png" alt="image"></p>
+<p>训练和测试时的区别：</p>
+<p><img src="68747470733a2f2f67697465652e636f6d2f6c6562686f7279692f506963476f506963747572654265642f7261772f6d61737465722f696d672f32303231303830333232353131312e706e67.png" alt="image-20210803225110049"></p>
+<h2 id="常用的归一化层"><a href="#常用的归一化层" class="headerlink" title="常用的归一化层"></a>常用的归一化层</h2><p><img src="68747470733a2f2f66696c65732e6d646e6963652e636f6d2f757365722f363933352f37383432636533652d613630662d346333372d623532302d3938383531353337663136642e706e67.png" alt="img"></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013289254/article/details/99690730">深度学习中的五种归一化（BN、LN、IN、GN和SN）方法简介</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuxiao214/article/details/81037416">BatchNormalization、LayerNormalization、InstanceNorm、GroupNorm、SwitchableNorm总结</a></p>
+</li>
+</ul>
+<h1 id="BN代码实现，以及多卡训练的sync-bn"><a href="#BN代码实现，以及多卡训练的sync-bn" class="headerlink" title="BN代码实现，以及多卡训练的sync_bn"></a>BN代码实现，以及多卡训练的sync_bn</h1><p>BN 的性能和 batch size 有很大的关系。batch size 越大，BN 的统计量也会越准。然而像检测这样的任务，占用显存较高，一张显卡往往只能拿较少的图片（比如 2 张）来训练，这就导致 BN 的表现变差。一个解决方式是 SyncBN：所有卡共享同一个 BN，得到全局的统计量。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/337732517">PyTorch 源码解读之 BN &amp; SyncBN：BN 与 多卡同步 BN 详解</a></li>
+</ul>
+<p>单卡上的 BN 会计算该卡对应输入的均值、方差，然后做 Normalize；SyncBN 则需要得到全局的统计量，也就是“所有卡上的输入”对应的均值、方差。一个简单的想法是分两个步骤：</p>
+<ol>
+<li>每张卡单独计算其均值，然后做一次同步，得到全局均值</li>
+<li>用全局均值去算每张卡对应的方差，然后做一次同步，得到全局方差</li>
+</ol>
+<p>但两次同步会消耗更多时间，事实上一次同步就可以实现 <img src="equation-20220307220148569" alt="[公式]"> 和 <img src="equation-20220307220148672" alt="[公式]"> 的计算：</p>
+<p><img src="equation" alt="[公式]"></p>
+<p><img src="v2-98c5ec4adfd6b827e25127af0d0ba988_720w.jpg" alt="img"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/07/Python%E7%9F%A5%E8%AF%86%E7%82%B9-%E8%A3%85%E9%A5%B0%E5%99%A8/" rel="prev" title="Python知识点-装饰器">
+      <i class="fa fa-chevron-left"></i> Python知识点-装饰器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E5%85%B3%E4%BA%8E%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%90%84%E7%A7%8D%E7%9A%84%E5%90%84%E7%A7%8D/" rel="next" title="深度学习基础-关于参数初始化的各种">
+      深度学习基础-关于参数初始化的各种 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96%EF%BC%88Normalization%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">归一化（Normalization）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">归一化类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">线性归一化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.3.</span> <span class="nav-text">标准归一化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%B9%E5%BD%92%E4%B8%80%E5%8C%96%EF%BC%88Batch-Normalization%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">批归一化（Batch Normalization）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E7%BB%84%E5%BD%92%E4%B8%80%E5%8C%96%E6%AF%94%E8%BE%83%EF%BC%88Group-Normalization%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">和组归一化比较（Group Normalization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E6%9D%83%E9%87%8D%E5%BD%92%E4%B8%80%E5%8C%96%E6%AF%94%E8%BE%83%EF%BC%88weight-normalization%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">和权重归一化比较（weight normalization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="nav-number">2.5.</span> <span class="nav-text">适用范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.6.</span> <span class="nav-text">梯度方向推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%BD%92%E4%B8%80%E5%8C%96%E5%B1%82"><span class="nav-number">2.7.</span> <span class="nav-text">常用的归一化层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BN%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%A4%9A%E5%8D%A1%E8%AE%AD%E7%BB%83%E7%9A%84sync-bn"><span class="nav-number">3.</span> <span class="nav-text">BN代码实现，以及多卡训练的sync_bn</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">篮球架上打砖块</p>
+  <div class="site-description" itemprop="description">Apodidae</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">篮球架上打砖块</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '[object Object]';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
