@@ -162,6 +162,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/" class="post-title-link" itemprop="url">深度学习基础-KL散度，JS散度和交叉熵</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-23 11:47:02 / 修改时间：13:46:19" itemprop="dateCreated datePublished" datetime="2022-03-23T11:47:02+08:00">2022-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h1><p>KL散度存在不对称性，为解决这个问题，在KL散度基础上引入了JS散度。</p>
+<p><img src="image-20220323134408097.png" alt="image-20220323134408097"></p>
+<p>JS散度的值域范围是[0,1]，相同则是0，相反为1</p>
+<h1 id="2-性质"><a href="#2-性质" class="headerlink" title="2. 性质"></a>2. 性质</h1><p>这个公式对于P1和P2明显是对称的，而且由于是两个KL叠加，故JS具有对称性和非负性。<br>当 𝑃1=（𝑃1+𝑃2）/ 2=𝑃2时，两个KL值均为0，故JS为0。也就是说当两个分布相同时JS为0。</p>
+<blockquote>
+<p>KL散度和JS散度度量的时候有一个问题：<br>如果两个分配P,Q离得很远，完全没有重叠的时候，那么KL散度值是没有意义的，而JS散度值是一个常数。这在学习算法中是比较致命的，这就意味这这一点的梯度为0。梯度消失了。</p>
+</blockquote>
+<h1 id="3-证明"><a href="#3-证明" class="headerlink" title="3. 证明"></a>3. 证明</h1><p>证明两个分布完全不重叠时，JS散度是一个常数。</p>
+<p><img src="image-20220323134507962-8014309.png" alt="image-20220323134507962"></p>
+<p>由于两个分布完全不重叠，故必有p(x)或q(x)为0<br>p(x)=0时</p>
+<p><img src="image-20220323134522191-8014323.png" alt="image-20220323134522191"></p>
+<p>q(x)=0时</p>
+<p><img src="image-20220323134532991-8014334.png" alt="image-20220323134532991"></p>
+<p>这就是JS散度的缺陷，当两个分布完全不重叠时，即便两个分布的中心距离有多近，其JS散度都是一个常数，导致梯度为0，无法更新。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/MorStar/p/14882813.html">https://www.cnblogs.com/MorStar/p/14882813.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1074,91 +1156,6 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/Python%E7%9F%A5%E8%AF%86%E7%82%B9-%E8%A3%85%E9%A5%B0%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/07/Python%E7%9F%A5%E8%AF%86%E7%82%B9-%E8%A3%85%E9%A5%B0%E5%99%A8/" class="post-title-link" itemprop="url">Python知识点-装饰器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-07 19:45:31" itemprop="dateCreated datePublished" datetime="2022-03-07T19:45:31+08:00">2022-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-10 20:03:51" itemprop="dateModified" datetime="2022-03-10T20:03:51+08:00">2022-03-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="实现一个简单的装饰器"><a href="#实现一个简单的装饰器" class="headerlink" title="实现一个简单的装饰器"></a>实现一个简单的装饰器</h3><p>一句话总结：把别装饰的函数替换成新函数，二者接受相同的参数，一般情况下返回被装饰的函数本该返回的值，同时还会做一些额外操作。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个简单的装饰器，输出函数的运行时间</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clock</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clocked</span>(<span class="params">*args</span>): <span class="comment">#*args的用法：当传入的参数个数未知，且不需要知道参数名称时。</span></span><br><span class="line">      <span class="comment">#**args的用法：当传入的参数个数未知，但需要知道参数的名称时(立马想到了字典，即键值对)</span></span><br><span class="line">        begin = time.perf_counter() <span class="comment"># 调用func时的时间</span></span><br><span class="line">        result = func(*args) <span class="comment">#运行被装饰函数</span></span><br><span class="line">        elapsed = time.perf_counter() - begin <span class="comment"># 函数运行时间</span></span><br><span class="line">        name = func.__name__ <span class="comment"># 得到被装饰函数名</span></span><br><span class="line">        arg_str = <span class="string">&#x27;,&#x27;</span>.join(<span class="built_in">repr</span>(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> args) <span class="comment"># 显示被装饰函数的传入参数</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;[%0.8fs] %s(%s) -&gt; %r&#x27;</span> % (elapsed, name, arg_str, result)) </span><br><span class="line">        <span class="comment"># func运行后，输出格式是[时间] 函数名（传入参数）-&gt; 函数结果</span></span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 记得返回结果！</span></span><br><span class="line">    <span class="keyword">return</span> clocked <span class="comment"># 被装饰函数已经被换成了一个新的函数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>使用装饰器：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> clockdeco <span class="keyword">import</span> clock <span class="comment"># 直接import</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@clock</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">snooze</span>(<span class="params">seconds</span>):</span><br><span class="line">    time.sleep(seconds)</span><br><span class="line"></span><br><span class="line"><span class="meta">@clock</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">factorial</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">if</span> n &lt; <span class="number">2</span> <span class="keyword">else</span> n*factorial(n-<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;*&#x27;</span> * <span class="number">40</span>, <span class="string">&#x27;Calling snooze(.123)&#x27;</span>)</span><br><span class="line">snooze(<span class="number">.123</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;*&#x27;</span> * <span class="number">40</span>, <span class="string">&#x27;Calling factorial(6)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;6! = &#x27;</span>, factorial(<span class="number">6</span>))</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">**************************************** Calling snooze(<span class="number">.123</span>)</span><br><span class="line">[<span class="number">0.12749738</span>s] snooze(<span class="number">0.123</span>) -&gt; <span class="literal">None</span></span><br><span class="line">**************************************** Calling factorial(<span class="number">6</span>)</span><br><span class="line">[<span class="number">0.00000154</span>s] factorial(<span class="number">1</span>) -&gt; <span class="number">1</span></span><br><span class="line">[<span class="number">0.00010962</span>s] factorial(<span class="number">2</span>) -&gt; <span class="number">2</span></span><br><span class="line">[<span class="number">0.00018708</span>s] factorial(<span class="number">3</span>) -&gt; <span class="number">6</span></span><br><span class="line">[<span class="number">0.00026196</span>s] factorial(<span class="number">4</span>) -&gt; <span class="number">24</span></span><br><span class="line">[<span class="number">0.00049425</span>s] factorial(<span class="number">5</span>) -&gt; <span class="number">120</span></span><br><span class="line">[<span class="number">0.00076513</span>s] factorial(<span class="number">6</span>) -&gt; <span class="number">720</span></span><br><span class="line"><span class="number">6</span>! =  <span class="number">720</span></span><br><span class="line">```</span><br></pre></td></tr></table></figure>
-<p>但此时如果访问被装饰函数的<code>__name__</code>和<code>__doc__</code>时就被clocked遮盖了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">snooze.__name__</span><br><span class="line"><span class="string">&#x27;clocked&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>可以用functools模块中的functools.wraps来构建行为良好的解释器</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个简单的装饰器，输出函数的运行时间</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clock</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clocked</span>(<span class="params">*args, **kwargs</span>): <span class="comment">#*args的用法：当传入的参数个数未知，且不需要知道参数名称时。</span></span><br><span class="line">        <span class="comment">#**args的用法：当传入的参数个数未知，但需要知道参数的名称时(立马想到了字典，即键值对)</span></span><br><span class="line">        begin = time.time() <span class="comment"># 调用func时的时间</span></span><br><span class="line">        result = func(*args, **kwargs) <span class="comment">#运行被装饰函数</span></span><br><span class="line">        elapsed = time.time() - begin <span class="comment"># 函数运行时间</span></span><br><span class="line">        name = func.__name__ <span class="comment"># 得到被装饰函数名</span></span><br><span class="line">        arg_lst = []</span><br><span class="line">        <span class="keyword">if</span> args:</span><br><span class="line">            arg_lst.append(<span class="string">&#x27;,&#x27;</span>.join(<span class="built_in">repr</span>(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> args))</span><br><span class="line">        <span class="keyword">if</span> kwargs:</span><br><span class="line">            pairs = [<span class="string">&#x27;%s=%r&#x27;</span> % (k, w) <span class="keyword">for</span> k, w <span class="keyword">in</span> <span class="built_in">sorted</span>(kwargs.items())]</span><br><span class="line">            arg_lst.append(<span class="string">&#x27;,&#x27;</span>.join(pairs))</span><br><span class="line">        arg_str = <span class="string">&#x27;,&#x27;</span>.join(arg_lst) <span class="comment"># 显示被装饰函数的传入参数</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;[%0.8fs] %s(%s) -&gt; %r&#x27;</span> % (elapsed, name, arg_str, result)) </span><br><span class="line">        <span class="comment"># func运行后，输出格式是[时间] 函数名（传入参数）-&gt; 函数结果</span></span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 记得返回结果！</span></span><br><span class="line">    <span class="keyword">return</span> clocked <span class="comment"># 被装饰函数已经被换成了一个新的函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="叠放装饰器"><a href="#叠放装饰器" class="headerlink" title="叠放装饰器"></a>叠放装饰器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@d1</span></span><br><span class="line"><span class="meta">@d2</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>等同于：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line">f() = d1(d2(f))</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1228,7 +1225,7 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

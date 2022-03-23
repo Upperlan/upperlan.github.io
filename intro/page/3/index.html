@@ -162,6 +162,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/01/Linux%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/01/Linux%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Linux常用操作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-01 22:22:17" itemprop="dateCreated datePublished" datetime="2021-11-01T22:22:17+08:00">2021-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-06 13:41:53" itemprop="dateModified" datetime="2022-03-06T13:41:53+08:00">2022-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工作常用</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="磁盘管理"><a href="#磁盘管理" class="headerlink" title="磁盘管理"></a>磁盘管理</h2><p>pwd：print work directory<br>ls : list file<br>ls -a<br>ls -ltr<br><code>mkdir &lt;directory&gt;</code>：创建目录<br><code>rmdir &lt;directory&gt;</code>:删除目录</p>
+<h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><p>移动和剪切：<br>cp 要复制的文件名或目录 目标目录<br>mv 要移动的文件名或目录 目标目录<br>mv 要被更改的文件名 更改后的文件名<br>删除文件：<br>rm 删除的文件名<br>rm -f 要删除的文件夹名<br>打印文件：cat 要输出的文件名<br>用cat复制一个文本并重命名：cat 要被重命名的文件 &gt; 重命名后的文件<br>看一个文件的前几行： head -n num 文件名<br>对比A和B文件：diff A B</p>
+<h2 id="文件压缩"><a href="#文件压缩" class="headerlink" title="文件压缩"></a>文件压缩</h2><h3 id="tar文件"><a href="#tar文件" class="headerlink" title="tar文件"></a>tar文件</h3><p>打包：tar -zcvf<br>解压: tar -zxvf</p>
+<h3 id="zip文件"><a href="#zip文件" class="headerlink" title="zip文件"></a>zip文件</h3><p>打包：zip 目标压缩包的名称 被压缩的文件1 被压缩的文件2</p>
+<h2 id="man命令：忘记某个命令参数的含义了"><a href="#man命令：忘记某个命令参数的含义了" class="headerlink" title="man命令：忘记某个命令参数的含义了"></a>man命令：忘记某个命令参数的含义了</h2><p>man 对应的命令<br>man 5 配置文件的详细信息了</p>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><p>useradd 创建的用户名<br>userdel 删除的用户名<br>修改当前用户密码：passwd<br>修改其他用户密码（root）：passwd 用户名</p>
+<h3 id="权限管理："><a href="#权限管理：" class="headerlink" title="权限管理："></a>权限管理：</h3><p>权限划分：-rwxrwxrwx-<br>前三位 文件归属人拥有的权限是什么<br>中间三位 归属的组，组员拥有的是什么<br>后三位 如果都不是以上人员，拥有的权限是什么<br>读权限 对应数字r=4<br>写权限 对应数字w=2<br>执行权限 对应数字x=1<br>修改权限chmod<br>chmod 750 filename<br>chmod -R 750 dirname<br>修改归属chown<br>修改归属人以及归属组：<br>chown user:group filename<br>chown -R user:group dirname</p>
+<h2 id="文件修改"><a href="#文件修改" class="headerlink" title="文件修改"></a>文件修改</h2><p>sed -i ‘s/aaa/bbb/g’ filename<br>s代表替换，aaa代表替换前的原始字符，bbb代表替换后的字符，g代表的是所有文件全部修改</p>
+<h3 id="删除文件内容"><a href="#删除文件内容" class="headerlink" title="删除文件内容"></a>删除文件内容</h3><p>删除前三行的内容：sed -i 1,3d filename<br>第一行到第三行全部删除，d就是删除的意思<br>删除第五行内容：sed -i 5d filename</p>
+<h3 id="文本处理命令awk"><a href="#文本处理命令awk" class="headerlink" title="文本处理命令awk"></a>文本处理命令awk</h3><h4 id="按列输出"><a href="#按列输出" class="headerlink" title="按列输出"></a>按列输出</h4><p>awk ‘{print $2}’ filename //以空格为分隔符，输出第二列<br>awk ‘{print $NF}’ filename //以空格为分隔符，输出最后一列<br>awk -F ‘a’ ‘{print $2}’ filename //以a为分隔符，输出第二列<br>正则字符串匹配：<br>awk ‘$2 ~/th/ {print $2,$4}’ filename //第二列包含th字符时，输出第2，4列</p>
+<h2 id="搜索查找命令"><a href="#搜索查找命令" class="headerlink" title="搜索查找命令"></a>搜索查找命令</h2><h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><p>grep -n ‘t[ae]st’ filename //在filename中查找所有包含tast或者test的内容<br>grep abc -rl dirname // grep查找dirname中所有包含abc内容的文件，可以搜索代码的变量</p>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><p>find / -name filename // 从根目录下查找名为filename的文件<br>find / -name filename -type d //从根目录小查找文件名为filename的文件并且属性为目录的文件<br>find / -name filename -exec ls -l {} \; //查找文件名为filename的文件，并查看该文件的属性</p>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><p>ping 网址 ：检测网络连通性<br>telnet  网址 端口 ：检测域名/IP和端口<br>netstat 各种网络相关信息，如网络连接，路由表，接口状态<br>ifconfig 查看网卡信息</p>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>ps展示PID和cmd内容<br>ps -ef内容更丰富<br>top跳到一个新的页面，可以监控具体PID占用cpu，内存的情况<br>杀死进程<br>kill <pid><br>强制杀死<br>kill -9 <pid></p>
+<h3 id="磁盘管理-1"><a href="#磁盘管理-1" class="headerlink" title="磁盘管理"></a>磁盘管理</h3><p>df命令：显示磁盘分区上可以使用的磁盘空间<br>    df -lh:以GB，MB，KB的格式显示可以使用的分区<br>du命令：显示每个文件和目录的磁盘使用空间</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/13/STL%E5%BA%93%E5%86%85%E5%AE%B9%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -711,7 +799,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
