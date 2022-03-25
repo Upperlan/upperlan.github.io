@@ -162,6 +162,151 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E9%80%92%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E9%80%92%E5%BD%92/" class="post-title-link" itemprop="url">算法系列-递归</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-24 22:18:20 / 修改时间：22:39:03" itemprop="dateCreated datePublished" datetime="2022-03-24T22:18:20+08:00">2022-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21. 合并两个有序链表"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-two-sorted-lists/">21. 合并两个有序链表</a></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode() : val(0), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeTwoLists</span><span class="params">(ListNode* list1, ListNode* list2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(list1 == <span class="literal">nullptr</span>) &#123;<span class="comment">//如果遇到list1为空，则不用合并了，直接返回list2</span></span><br><span class="line">            <span class="keyword">return</span> list2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(list2 == <span class="literal">nullptr</span>) &#123;<span class="comment">//同理</span></span><br><span class="line">            <span class="keyword">return</span> list1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(list1-&gt;val &lt;= list2-&gt;val) &#123;<span class="comment">//如果list1指的值比较小</span></span><br><span class="line">            list1-&gt;next = <span class="built_in">mergeTwoLists</span>(list1-&gt;next, list2);<span class="comment">//因为list都是升序所以list-&gt;next一定比list小，</span></span><br><span class="line">          <span class="comment">//假设mergeTwoLists已经实现，可以返回已经排序好的list-&gt;next和list2合并好了的链表</span></span><br><span class="line">            <span class="keyword">return</span> list1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        list2-&gt;next = <span class="built_in">mergeTwoLists</span>(list1, list2-&gt;next);</span><br><span class="line">        <span class="keyword">return</span> list2;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>就是遇到输入就先解决输入的几种可能应该怎么样，再假设自身这个函数的功能已经实现，怎么通过这个已经实现的函数实现自己的目的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/" class="post-title-link" itemprop="url">算法系列-深度优先搜索dfs</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-24 21:51:46 / 修改时间：21:57:34" itemprop="dateCreated datePublished" datetime="2022-03-24T21:51:46+08:00">2022-03-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="200-岛屿数量"><a href="#200-岛屿数量" class="headerlink" title="200. 岛屿数量"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></h4><p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p>示例 1：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”1”,”1”,”0”],<br>  [“1”,”1”,”0”,”1”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”0”,”0”,”0”]<br>]<br>输出：1<br>示例 2：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”1”,”0”,”0”],<br>  [“0”,”0”,”0”,”1”,”1”]<br>]<br>输出：3</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">private</span>: </span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">inArea</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i &gt;= <span class="number">0</span> &amp;&amp; j &gt;= <span class="number">0</span> &amp;&amp; i &lt; grid.<span class="built_in">size</span>() &amp;&amp; j &lt; grid[<span class="number">0</span>].<span class="built_in">size</span>();<span class="comment">//判断坐标是否合法</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">inArea</span>(grid, i, j)) <span class="keyword">return</span>;<span class="comment">//先把数值读进来，再判断是不是符合规则，当然直接放在下面判断也行，但读起来有点冗余</span></span><br><span class="line">        <span class="keyword">if</span>(grid[i][j] != <span class="string">&#x27;1&#x27;</span>) <span class="keyword">return</span>;</span><br><span class="line">        grid[i][j] = <span class="string">&#x27;2&#x27;</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i - <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i + <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; row;i++) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; col;j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">dfs</span>(grid, i, j);</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>首先，dfs的逻辑应该包括判断base case，即在知道目前输入的情况下，应该怎么处理当下的值；</p>
+<p>其次，应该思考下一步状态应该往那个方向转移，状态的表征是通过改变dfs的传入参数来实现的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -906,257 +1051,6 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E5%85%B3%E4%BA%8E%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%90%84%E7%A7%8D%E7%9A%84%E5%90%84%E7%A7%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E5%85%B3%E4%BA%8E%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%90%84%E7%A7%8D%E7%9A%84%E5%90%84%E7%A7%8D/" class="post-title-link" itemprop="url">深度学习基础-关于参数初始化的各种</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-08 20:32:12" itemprop="dateCreated datePublished" datetime="2022-03-08T20:32:12+08:00">2022-03-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-09 10:37:31" itemprop="dateModified" datetime="2022-03-09T10:37:31+08:00">2022-03-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="参数初始化"><a href="#参数初始化" class="headerlink" title="参数初始化"></a>参数初始化</h2><p>目的：让深度学习模型在训练过程中梯度不为零，可能会加快梯度下降的收敛速度，降低训练错误的概率。</p>
-<p>为了达到这个目的，初始化需要满足的条件：</p>
-<ol>
-<li>各层的激活值不会出现饱和迹象。（当输入过大或过小，激活函数的导数几乎为零，即梯度基本为0，称为饱和）</li>
-<li>各层的激活值不为0.</li>
-<li>尽量使各个层的激活值的方差保持一致。</li>
-<li>尽量使各个层对  状态的梯度  的方差保持一致</li>
-</ol>
-<h2 id="几种初始化方式"><a href="#几种初始化方式" class="headerlink" title="几种初始化方式"></a>几种初始化方式</h2><ol>
-<li>预训练模型</li>
-<li>随机初始化：使权重分布符合正态分布，在训练深度神经网络时可能会造成梯度消失或者梯度爆炸（网络层数太深，梯度容易一直变大或者一直变小）</li>
-<li>xavier初始化：基本思想事保持输入和输出的方差的一致，避免了所有的输出值都趋向于0；</li>
-<li>kaiming初始化：何恺明提出的一种针对Relu的初始化方法，思想是在Relu网络中，假设有一半的神经元被激活,另一半为0。保持方差不变，只需要在xavier基础上除以2即可。</li>
-</ol>
-<h2 id="为什么不能全0初始化"><a href="#为什么不能全0初始化" class="headerlink" title="为什么不能全0初始化"></a>为什么不能全0初始化</h2><p>如果权重是0，那么中间层的输出是输入数据乘权重，就也是0且相等。神经网络计算出来的输出值是一样的，那么神经网络反向传播算法计算出来的梯度也是一样，参数更新值也一样。所以不管再训练多少次，这些隐藏层梯度都是一样，和线性模型就没有区别了。</p>
-<h2 id="全部初始化为一样的值"><a href="#全部初始化为一样的值" class="headerlink" title="全部初始化为一样的值"></a>全部初始化为一样的值</h2><p>和上述一样，最后输出对于每一个参数反向传播的梯度都一样，相当于一个线性模型</p>
-<h2 id="初始化为小的随机数"><a href="#初始化为小的随机数" class="headerlink" title="初始化为小的随机数"></a>初始化为小的随机数</h2><p>是打破网络对称性的一个普遍的解决办法。神经元一开始的权重值是随机的，所以梯度反向传播时会有不同的更新。看起来初始化的值类似于</p>
-<script type="math/tex; mode=display">
-\mathbf{w} =0.01 \times np.random.randn(D,H)</script><p><img src="image-20220308213348126-6746429.png" alt="image-20220308213348126"></p>
-<p>0.01会试w变小，w很大时会导致神经元输出很大，再通过激活函数后容易梯度消失，饱和。当然如果太小，输出接近激活函数在负方向接近饱和，也容易梯度消失。</p>
-<h2 id="预训练"><a href="#预训练" class="headerlink" title="预训练"></a>预训练</h2><p>只谈finetune策略</p>
-<ol>
-<li>把预训练模型当做权重初始化权重，对整个网络进行完全训练，精度比2高很多。</li>
-<li>训练一些层而冻结其他层，一般较低层学习的是通用特征，较高层适用的是逻辑含义更复杂的抽象特征。如果模型很大，数据集不大，会冻结更多层以免过拟合。如果数据很多，模型不大，就可以训练更多层。一般只训练最后的分类层</li>
-<li>冻结卷积块，即卷积层，池化层等堆积的一个卷积模块。这种情况适用于训练、冻结平衡的极端情况。</li>
-</ol>
-<h2 id="为什么深度学习模型难训练"><a href="#为什么深度学习模型难训练" class="headerlink" title="为什么深度学习模型难训练"></a>为什么深度学习模型难训练</h2><p>1.梯度消失</p>
-<p>梯度反向传播的过程中越来越小，前面层比后面层学的慢，所以学习会卡住。反向传播过程中前面的层的梯度收到后面所有层的影响，如果梯度值很小，更新信息在传播中指数形式衰减，发生梯度消失。</p>
-<p>可能会由：</p>
-<p>学习率大小，网络初始化参数，激活函数的边缘效应（饱和）</p>
-<p>2.梯度爆炸</p>
-<p>梯度也可能在传播中指数增大，导致权重大幅度更新，甚至溢出，变成NaN值，无法更新</p>
-<p>3.权重矩阵退化导致模型的有效自由度变小。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/" class="post-title-link" itemprop="url">深度学习基础-关于Batch Normalization的各种</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-07 20:49:15" itemprop="dateCreated datePublished" datetime="2022-03-07T20:49:15+08:00">2022-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-24 11:40:13" itemprop="dateModified" datetime="2022-03-24T11:40:13+08:00">2022-03-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="归一化（Normalization）"><a href="#归一化（Normalization）" class="headerlink" title="归一化（Normalization）"></a>归一化（Normalization）</h1><p>目的：</p>
-<ol>
-<li>应用层面需要统一量纲</li>
-<li>在使用梯度下降发求解最优化问题时，归一化或标准化后可以加快梯度下降的求解速度，即提升收敛速度</li>
-<li>可以避免神经元饱和。神经元的激活在0或1时会饱和，这些区域梯度几乎为0，这样的话在反向传播的时候局部梯度也会接近0。因此归一化可以有效缓解梯度消失</li>
-<li>避免数据中小的数值被大数值吞噬，也避免数值太大引发的数值问题。（输入图像的值）</li>
-</ol>
-<h2 id="为什么要归一化"><a href="#为什么要归一化" class="headerlink" title="为什么要归一化"></a>为什么要归一化</h2><p>假设w1在[-10,10],w2在[-100,100]，梯度每次都前进一个单位，则w1在搜索全局最优时会相对来说走的更『快』。即提高了收敛速度</p>
-<h2 id="归一化类型"><a href="#归一化类型" class="headerlink" title="归一化类型"></a>归一化类型</h2><h3 id="线性归一化"><a href="#线性归一化" class="headerlink" title="线性归一化"></a>线性归一化</h3><script type="math/tex; mode=display">
-x^{'}=\frac{x-min(x)}{max(x)-min(x)}</script><p><img src="image-20220307211017670-6658619.png" alt="image-20220307211017670"></p>
-<h2 id="标准归一化"><a href="#标准归一化" class="headerlink" title="标准归一化"></a>标准归一化</h2><script type="math/tex; mode=display">
-x^{'}=\frac{x-\mu}{\sigma}</script><p><img src="image-20220307211225372-6658746.png" alt="image-20220307211225372"></p>
-<p>归一化后均值为0，标准差为1，$ \mu $ 为左右样本数据的均值，$\sigma$ 是所有样本数据的标准差。</p>
-<h1 id="批归一化（Batch-Normalization）"><a href="#批归一化（Batch-Normalization）" class="headerlink" title="批归一化（Batch Normalization）"></a>批归一化（Batch Normalization）</h1><p>在网络中间对数据进行归一化</p>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
-<li>减少对超参数的依赖，某些情况下可以取消Dropout方法或者L2正则项参数</li>
-<li>减少对学习率的要求（加强对学习率参数的鲁棒性）</li>
-<li>破坏原来的数据分布，一定程度上缓解过拟合，防止每批训练中某一个样本经常被选中</li>
-<li>减少梯度消失（数据分布奇怪使激活函数输入接近0或者1，梯度很小）</li>
-</ol>
-<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>$x_{i}$是上一层的输出结果，B和Y是学习参数</p>
-<ol>
-<li>计算上一层输出数据的均值</li>
-</ol>
-<script type="math/tex; mode=display">
-\mu _{\beta}=\frac{1}{m} \sum_{i=1}^{m}\left ( x_{i} \right)</script><p><img src="image-20220307212515863-6659517.png" alt="image-20220307212515863"></p>
-<ol>
-<li>计算上一层输出数据的标准差<script type="math/tex; mode=display">
-\sigma_{\beta}^{2}=\frac{1}{m} \sum_{i=1}^{m}(x_{i}-\mu _{\beta})^{2}</script></li>
-</ol>
-<p><img src="image-20220307212905080-6659746.png" alt="image-20220307212905080"></p>
-<ol>
-<li><p>进行归一化处理，得到</p>
-<script type="math/tex; mode=display">
-x_{i}=\frac{x_{i}+\mu _{\beta}}{\sqrt{\sigma_{\beta}^{2}+\epsilon}}</script><p><img src="image-20220307213044587.png" alt="image-20220307213044587"></p>
-<p>分母加一个极小值防止除0</p>
-</li>
-<li><p>重构</p>
-<script type="math/tex; mode=display">
-y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659962.png" alt="image-20220307213242003"></p>
-<p>gamma和beta是可学习参数。此时的均值是计算所有批次的mu_{beta}值的平均值得到的，标准差是每个批次的标准差的无偏估计。</p>
-</li>
-</ol>
-<h2 id="和组归一化比较（Group-Normalization）"><a href="#和组归一化比较（Group-Normalization）" class="headerlink" title="和组归一化比较（Group Normalization）"></a>和组归一化比较（Group Normalization）</h2><p>如果batch比较小，导致估计的值和整个数据集的真实均值方差差距较大，BN的误差就会很大。</p>
-<p>GN是将通道（channel）分成组，在每组内计算归一化的均值和方差，其准确度在各种批量大小下都很稳定</p>
-<h2 id="和权重归一化比较（weight-normalization）"><a href="#和权重归一化比较（weight-normalization）" class="headerlink" title="和权重归一化比较（weight normalization）"></a>和权重归一化比较（weight normalization）</h2><p>WN是对网络权重W进行归一化，适用于RNN，因为RNN处理的队列是变长的，基于时间状态计算，很难保存每个状态下的均值和方差，效率很低。</p>
-<h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><p> 适用于batch较大，数据分布比较接近的场景，不适用于动态网络和RNN结构。</p>
-<h2 id="梯度方向推导"><a href="#梯度方向推导" class="headerlink" title="梯度方向推导"></a>梯度方向推导</h2><p><img src="118059082-39d1a500-b3c2-11eb-80f8-75f2bf677451.png" alt="image"></p>
-<p>背诵版本：</p>
-<p><img src="118059220-9208a700-b3c2-11eb-841f-73781fa93342.png" alt="image"></p>
-<p>训练和测试时的区别：</p>
-<p><img src="68747470733a2f2f67697465652e636f6d2f6c6562686f7279692f506963476f506963747572654265642f7261772f6d61737465722f696d672f32303231303830333232353131312e706e67.png" alt="image-20210803225110049"></p>
-<h2 id="常用的归一化层"><a href="#常用的归一化层" class="headerlink" title="常用的归一化层"></a>常用的归一化层</h2><p><img src="68747470733a2f2f66696c65732e6d646e6963652e636f6d2f757365722f363933352f37383432636533652d613630662d346333372d623532302d3938383531353337663136642e706e67.png" alt="img"></p>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013289254/article/details/99690730">深度学习中的五种归一化（BN、LN、IN、GN和SN）方法简介</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuxiao214/article/details/81037416">BatchNormalization、LayerNormalization、InstanceNorm、GroupNorm、SwitchableNorm总结</a></p>
-</li>
-</ul>
-<h1 id="BN代码实现，以及多卡训练的sync-bn"><a href="#BN代码实现，以及多卡训练的sync-bn" class="headerlink" title="BN代码实现，以及多卡训练的sync_bn"></a>BN代码实现，以及多卡训练的sync_bn</h1><p>用numpy实现BN：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> Layers</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BatchNormlization</span>(<span class="title class_ inherited__">Layers</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    https://blog.csdn.net/weixin_44754861/article/details/108343938?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name, x,eps =<span class="number">1e-7</span>, momentum =<span class="number">0.9</span>, mode = <span class="string">&quot;train&quot;</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(BatchNormlization).__init__(name)</span><br><span class="line">        self.eps =eps</span><br><span class="line">        self.<span class="built_in">input</span> = x</span><br><span class="line">        n, c, h, w = x.shape</span><br><span class="line">        self.momentum = momentum</span><br><span class="line">        <span class="comment"># 相同batch里不同样本的相同的通道来计算均值和方差</span></span><br><span class="line">        self.running_mean = np.zeros(c)</span><br><span class="line">        self.running_var = np.zeros(c)</span><br><span class="line">        self.gamma = np.random(c)</span><br><span class="line">        self.beta =np.random(c)</span><br><span class="line">        self.mode = mode</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_dim</span>(<span class="params">x, dim</span>):</span><br><span class="line">        <span class="keyword">return</span> np.expand_dims(x, axis=dim) <span class="comment"># batch </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self</span>):</span><br><span class="line">        ib, ic, ih, iw = self.<span class="built_in">input</span>.shape</span><br><span class="line"></span><br><span class="line">        self.<span class="built_in">input</span> = self.<span class="built_in">input</span>.transpose(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>).reshape([ic, -<span class="number">1</span>]) <span class="comment"># n,c,h,w -&gt;c, n*h*w</span></span><br><span class="line">        <span class="keyword">if</span> self.mode ==<span class="string">&quot;train&quot;</span>:</span><br><span class="line">            self.var = np.sqrt(self.var +self.eps) <span class="comment"># </span></span><br><span class="line">            self.mean = np.mean(self.<span class="built_in">input</span>, axis=<span class="number">0</span>) <span class="comment"># 每个channel的均值</span></span><br><span class="line">            self.mean = self.add_dim(self.mean, <span class="number">1</span>) <span class="comment"># 与后面的self.input 维度一致</span></span><br><span class="line">            self.var = np.var(self.<span class="built_in">input</span>, axis=<span class="number">0</span>) <span class="comment">#每个channel的方差</span></span><br><span class="line">            self.var = self.add_dim(self.var , <span class="number">1</span>)</span><br><span class="line">            self.gamma = self.add_dim(self.gamma, <span class="number">1</span>)</span><br><span class="line">            self.beta = self.add_dim(self.beta, <span class="number">1</span>)</span><br><span class="line">            self.running_mean = self.momentum * self.running_mean + (<span class="number">1</span>-self.momentum) *self.mean</span><br><span class="line">            self.running_var = self.momentum * self.running_var + (<span class="number">1</span>-self.momentum) *self.var</span><br><span class="line">            self.input_ = (self.<span class="built_in">input</span> -  self.running_mean)/(self.running_var + self.eps)</span><br><span class="line">            dout = (self.input_*self.gamma +self.beta ).reshape(ic,ib, ih, iw).transpose(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">            self.cache = (self.input_, self.gamma, (self.<span class="built_in">input</span> - self.running_mean, self.running_var + self.eps))</span><br><span class="line">        <span class="keyword">elif</span> self.mode ==<span class="string">&quot;test&quot;</span>:</span><br><span class="line">            x_hat = (self.<span class="built_in">input</span> - self.running_mean) / (np.sqrt(self.running_var + self.eps))</span><br><span class="line">            dout = self.gamma * x_hat + self.beta</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Invalid forward batch normlization mode&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> dout, self.cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">self, dout</span>):</span><br><span class="line">        N, D = dout.shape</span><br><span class="line">        x_, gamma, x_minus_mean, var_plus_eps =self.cache</span><br><span class="line"></span><br><span class="line">        <span class="comment"># calculate gradients</span></span><br><span class="line">        dgamma = np.<span class="built_in">sum</span>(x_ * dout, axis=<span class="number">0</span>)</span><br><span class="line">        dbeta = np.<span class="built_in">sum</span>(dout, axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        dx_ = np.matmul(np.ones((N,<span class="number">1</span>)), gamma.reshape((<span class="number">1</span>, -<span class="number">1</span>))) * dout</span><br><span class="line">        dx = N * dx_ - np.<span class="built_in">sum</span>(dx_, axis=<span class="number">0</span>) - x_ * np.<span class="built_in">sum</span>(dx_ * x_, axis=<span class="number">0</span>)</span><br><span class="line">        dx *= (<span class="number">1.0</span>/N) / np.sqrt(var_plus_eps)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dx, dgamma, dbeta</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">self, lr, dgamma, dbeta</span>):</span><br><span class="line">        self.gamma -= dgamma *lr</span><br><span class="line">        self.beta -= dbeta*lr</span><br></pre></td></tr></table></figure>
-<p>BN 的性能和 batch size 有很大的关系。batch size 越大，BN 的统计量也会越准。然而像检测这样的任务，占用显存较高，一张显卡往往只能拿较少的图片（比如 2 张）来训练，这就导致 BN 的表现变差。一个解决方式是 SyncBN：所有卡共享同一个 BN，得到全局的统计量。</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/337732517">PyTorch 源码解读之 BN &amp; SyncBN：BN 与 多卡同步 BN 详解</a></li>
-</ul>
-<p>单卡上的 BN 会计算该卡对应输入的均值、方差，然后做 Normalize；SyncBN 则需要得到全局的统计量，也就是“所有卡上的输入”对应的均值、方差。一个简单的想法是分两个步骤：</p>
-<ol>
-<li>每张卡单独计算其均值，然后做一次同步，得到全局均值</li>
-<li>用全局均值去算每张卡对应的方差，然后做一次同步，得到全局方差</li>
-</ol>
-<p>但两次同步会消耗更多时间，事实上一次同步就可以实现 </p>
-<p><img src="v2-98c5ec4adfd6b827e25127af0d0ba988_720w.jpg" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1226,7 +1120,7 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1373,59 +1267,6 @@ $(document).ready(function() {
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '[object Object]';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 

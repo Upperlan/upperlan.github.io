@@ -20,20 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="numpy.full numpy.full(shape, fill_value, dtype&#x3D;None, order&#x3D;’C’, **, like&#x3D;None*)[source]    返回一个给定形状和类型的新数组，用fill_value填充。.   Parameters   shape:新矩阵的形状, e.g., (2, 3) or 2.   fill_value 填充的值   dtype 数据类">
+  <meta name="description" content="200. 岛屿数量给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。 岛屿总是被水包围，并且每座岛屿只能由水平方向和&#x2F;或竖直方向上相邻的陆地连接形成。 此外，你可以假设该网格的四条边均被水包围。 示例 1： 输入：grid &#x3D; [  [“1”,”1”,”1”,”1”,”0”],  [“1”,”1”,”0”,”1”,”0”],  [“1”,”1”,”0”,”0”,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NumPy的常用函数">
-<meta property="og:url" content="http://example.com/2022/03/12/NumPy%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:title" content="算法系列-深度优先搜索dfs">
+<meta property="og:url" content="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/index.html">
 <meta property="og:site_name" content="Upperlan">
-<meta property="og:description" content="numpy.full numpy.full(shape, fill_value, dtype&#x3D;None, order&#x3D;’C’, **, like&#x3D;None*)[source]    返回一个给定形状和类型的新数组，用fill_value填充。.   Parameters   shape:新矩阵的形状, e.g., (2, 3) or 2.   fill_value 填充的值   dtype 数据类">
+<meta property="og:description" content="200. 岛屿数量给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。 岛屿总是被水包围，并且每座岛屿只能由水平方向和&#x2F;或竖直方向上相邻的陆地连接形成。 此外，你可以假设该网格的四条边均被水包围。 示例 1： 输入：grid &#x3D; [  [“1”,”1”,”1”,”1”,”0”],  [“1”,”1”,”0”,”1”,”0”],  [“1”,”1”,”0”,”0”,">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-12T08:37:40.000Z">
-<meta property="article:modified_time" content="2022-03-12T13:18:51.911Z">
+<meta property="article:published_time" content="2022-03-24T13:51:46.000Z">
+<meta property="article:modified_time" content="2022-03-24T13:57:34.086Z">
 <meta property="article:author" content="篮球架上打砖块">
-<meta property="article:tag" content="实习">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/03/12/NumPy%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
+<link rel="canonical" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
 
 
 <script id="page-configurations">
@@ -46,7 +45,7 @@
   };
 </script>
 
-  <title>NumPy的常用函数 | Upperlan</title>
+  <title>算法系列-深度优先搜索dfs | Upperlan</title>
   
 
 
@@ -166,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/12/NumPy%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +178,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          NumPy的常用函数
+          算法系列-深度优先搜索dfs
         </h1>
 
         <div class="post-meta">
@@ -190,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-03-12 16:37:40 / 修改时间：21:18:51" itemprop="dateCreated datePublished" datetime="2022-03-12T16:37:40+08:00">2022-03-12</time>
+              <time title="创建时间：2022-03-24 21:51:46 / 修改时间：21:57:34" itemprop="dateCreated datePublished" datetime="2022-03-24T21:51:46+08:00">2022-03-24</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -198,7 +197,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
                 </span>
             </span>
 
@@ -220,49 +219,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="numpy-full"><a href="#numpy-full" class="headerlink" title="numpy.full"></a>numpy.full</h1><ul>
-<li>numpy.<strong>full</strong>(<em>shape</em>, <em>fill_value</em>, <em>dtype=None</em>, <em>order=’C’</em>, <em>**, </em>like=None*)<a target="_blank" rel="noopener" href="https://github.com/numpy/numpy/blob/v1.22.0/numpy/core/numeric.py#L289-L345">[source]</a></li>
-</ul>
-<p>  返回一个给定形状和类型的新数组，用<em>fill_value</em>填充。.</p>
-<p>  Parameters</p>
-<p>  <strong>shape</strong>:新矩阵的形状, e.g., <code>(2, 3)</code> or <code>2</code>.</p>
-<p>  <strong>fill_value</strong> 填充的值</p>
-<p>  <strong>dtype</strong> 数据类型 None, means<code>np.array(fill_value).dtype</code>.</p>
-<p>  <strong>order</strong>{‘C’, ‘F’}, optionalWhether to store multidimensional data in C- or Fortran-contiguous (row- or column-wise) order in memory.</p>
-<p>  <strong>like</strong> 可以从非NumPy转换， 前提是这个数组有 <code>__array_function__</code> 属性 </p>
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), np.inf) </span><br><span class="line">array([[inf, inf], [inf, inf]]) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), <span class="number">10</span>) </span><br><span class="line">array([[<span class="number">10</span>, <span class="number">10</span>], [<span class="number">10</span>, <span class="number">10</span>]]) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), [<span class="number">1</span>, <span class="number">2</span>]) </span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">1</span>, <span class="number">2</span>]])</span><br></pre></td></tr></table></figure>
-<h1 id="numpy-concatenate"><a href="#numpy-concatenate" class="headerlink" title="numpy.concatenate"></a>numpy.concatenate</h1><ul>
-<li><p>numpy.<strong>concatenate</strong>(<em>(a1</em>, <em>a2</em>, <em>…)</em>, <em>axis=0</em>, <em>out=None</em>, <em>dtype=None</em>, <em>casting=”same_kind”</em>)</p>
-<p>将一系列array合起来</p>
-<p>**a1, a2, …array类型的数据</p>
-<p>相同的shape, except in the dimension corresponding to <em>axis</em> (the first, by default).</p>
-<p><strong>axis</strong> int, optional</p>
-<p>按哪一个轴合到一起. 如果是None，array在操作前会被展平. Default is 0.</p>
-<p><strong>out </strong>ndarray, optional</p>
-<p>If provided, the destination to place the result. The shape must be correct, matching that of what concatenate would have returned if no out argument were specified.</p>
-<p><strong>dtype</strong>str or dtype</p>
-<p>If provided, the destination array will have this dtype. Cannot be provided together with <em>out</em>.</p>
-<p><em>New in version 1.20.0.</em></p>
-<p><strong>casting</strong>{‘no’, ‘equiv’, ‘safe’, ‘same_kind’, ‘unsafe’}, optional</p>
-<p>Controls what kind of data casting may occur. Defaults to ‘same_kind’.</p>
-</li>
-</ul>
-<h1 id="numpy-vstack"><a href="#numpy-vstack" class="headerlink" title="numpy.vstack"></a>numpy.vstack</h1><p>numpy.<strong>vstack</strong>(<em>tup</em>)<a target="_blank" rel="noopener" href="https://github.com/numpy/numpy/blob/v1.22.0/numpy/core/shape_base.py#L222-L282">[source]</a></p>
-<p>按垂直方向将arrays合起来（按行）</p>
-<p>类似于concat，将(N, )变成（1，N）</p>
-<p>This is equivalent to concatenation along the first axis after 1-D arrays of shape <em>(N,)</em> have been reshaped to <em>(1,N)</em>. Rebuilds arrays divided by <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.vsplit.html#numpy.vsplit"><code>vsplit</code></a>.</p>
-<p>This function makes most sense for arrays with up to 3 dimensions. For instance, for pixel-data with a height (first axis), width (second axis), and r/g/b channels (third axis). The functions <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.concatenate.html#numpy.concatenate"><code>concatenate</code></a>, <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack"><code>stack</code></a> and <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.block.html#numpy.block"><code>block</code></a> provide more general stacking and concatenation operations.</p>
-<ul>
-<li><p>Parameters</p>
-<p><strong>tup</strong>sequence of ndarraysThe arrays must have the same shape along all but the first axis. 1-D arrays must have the same length.</p>
-</li>
-<li><p>Returns</p>
-<p><strong>stacked</strong>ndarrayThe array formed by stacking the given arrays, will be at least 2-D.</p>
-</li>
-</ul>
-<h2 id="numpy-argmax"><a href="#numpy-argmax" class="headerlink" title="numpy.argmax"></a>numpy.argmax</h2><p>取出一个轴上最大的值对应的索引</p>
-<p>二维矩阵中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([[<span class="number">1</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">2</span>],</span><br><span class="line">              [<span class="number">9</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">8</span>],</span><br><span class="line">              [<span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">1</span>]])</span><br><span class="line">b=np.argmax(a, axis=<span class="number">0</span>)<span class="comment">#对二维矩阵来讲a[0][1]会有两个索引方向，第一个方向为a[0]，默认按列方向搜索最大值</span></span><br><span class="line"><span class="comment">#a的第一列为1，9，3,最大值为9，所在位置为1，</span></span><br><span class="line"><span class="comment">#a的第一列为5，6，7,最大值为7，所在位置为2，</span></span><br><span class="line"><span class="comment">#此此类推，因为a有4列，所以得到的b为1行4列，</span></span><br><span class="line"><span class="built_in">print</span>(b)<span class="comment">#[1 2 2 1]</span></span><br><span class="line"> </span><br><span class="line">c=np.argmax(a, axis=<span class="number">1</span>)<span class="comment">#现在按照a[0][1]中的a[1]方向，即行方向搜索最大值，</span></span><br><span class="line"><span class="comment">#a的第一行为1，5，5，2,最大值为5（虽然有2个5，但取第一个5所在的位置），索引值为1，</span></span><br><span class="line"><span class="comment">#a的第2行为9，6，2，8,最大值为9，索引值为0，</span></span><br><span class="line"><span class="comment">#因为a有3行，所以得到的c有3个值，即为1行3列</span></span><br><span class="line"><span class="built_in">print</span>(c)<span class="comment">#[1 0 2]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        <h4 id="200-岛屿数量"><a href="#200-岛屿数量" class="headerlink" title="200. 岛屿数量"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></h4><p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p>示例 1：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”1”,”1”,”0”],<br>  [“1”,”1”,”0”,”1”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”0”,”0”,”0”]<br>]<br>输出：1<br>示例 2：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”1”,”0”,”0”],<br>  [“0”,”0”,”0”,”1”,”1”]<br>]<br>输出：3</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">private</span>: </span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">inArea</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i &gt;= <span class="number">0</span> &amp;&amp; j &gt;= <span class="number">0</span> &amp;&amp; i &lt; grid.<span class="built_in">size</span>() &amp;&amp; j &lt; grid[<span class="number">0</span>].<span class="built_in">size</span>();<span class="comment">//判断坐标是否合法</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">inArea</span>(grid, i, j)) <span class="keyword">return</span>;<span class="comment">//先把数值读进来，再判断是不是符合规则，当然直接放在下面判断也行，但读起来有点冗余</span></span><br><span class="line">        <span class="keyword">if</span>(grid[i][j] != <span class="string">&#x27;1&#x27;</span>) <span class="keyword">return</span>;</span><br><span class="line">        grid[i][j] = <span class="string">&#x27;2&#x27;</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i - <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i + <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; row;i++) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; col;j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">dfs</span>(grid, i, j);</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>首先，dfs的逻辑应该包括判断base case，即在知道目前输入的情况下，应该怎么处理当下的值；</p>
+<p>其次，应该思考下一步状态应该往那个方向转移，状态的表征是通过改变dfs的传入参数来实现的。</p>
 
     </div>
 
@@ -271,9 +236,6 @@
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%AE%9E%E4%B9%A0/" rel="tag"># 实习</a>
-          </div>
 
         
 
@@ -281,12 +243,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/03/12/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-badcase%E6%8F%90%E5%8F%96/" rel="prev" title="目标检测-badcase提取">
-      <i class="fa fa-chevron-left"></i> 目标检测-badcase提取
+    <a href="/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/" rel="prev" title="深度学习基础-KL散度，JS散度和交叉熵">
+      <i class="fa fa-chevron-left"></i> 深度学习基础-KL散度，JS散度和交叉熵
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/03/15/%E9%9D%A2%E8%AF%95%E4%B9%8BACM%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" rel="next" title="面试之ACM输入输出">
-      面试之ACM输入输出 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E9%80%92%E5%BD%92/" rel="next" title="算法系列-递归">
+      算法系列-递归 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -346,7 +308,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#numpy-full"><span class="nav-number">1.</span> <span class="nav-text">numpy.full</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#numpy-concatenate"><span class="nav-number">2.</span> <span class="nav-text">numpy.concatenate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#numpy-vstack"><span class="nav-number">3.</span> <span class="nav-text">numpy.vstack</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#numpy-argmax"><span class="nav-number">3.1.</span> <span class="nav-text">numpy.argmax</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#200-%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">200. 岛屿数量</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
