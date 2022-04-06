@@ -162,6 +162,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/docker%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/05/docker%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">docker常用操作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-05 22:18:54 / 修改时间：22:20:25" itemprop="dateCreated datePublished" datetime="2022-03-05T22:18:54+08:00">2022-03-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工作常用</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="docker操作"><a href="#docker操作" class="headerlink" title="docker操作"></a>docker操作</h1><h2 id="docker基本命令"><a href="#docker基本命令" class="headerlink" title="docker基本命令"></a>docker基本命令</h2><ul>
+<li>查看容器镜像列表 docker images</li>
+<li>查看当前所有正在运行的容器 docker ps  (查看所有容器，包括运行和停止的。t)<h4 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h4></li>
+<li>将网上或者别的服务器上的docker镜像拉到本地。例如： docker pull uber/horovod:0.15.1-tf1.11.0-torch0.4.1-py3.</li>
+</ul>
+<h4 id="docker-push"><a href="#docker-push" class="headerlink" title="docker push"></a>docker push</h4><ul>
+<li><p>上传docker镜像(注意上传镜像统一格式，yq01-aip-m12-tianzhi14.yq01.baidu.com/[Name]:tagls<br>$ docker push yq01-aip-m12-tianzhi14.yq01.baidu.com/lvhaijun/tsm_horovod:0.15.0-tf1.11.0-torch0.4.1-py2.7</p>
+</li>
+<li><p>建立一个带gpu驱动的容器：</p>
+</li>
+<li>nvidia-docker run -e PASSWORD=tianzhi05 —network=host —shm-size=32g —name=haijunlv -v /home/ssd1/lvhaijun:/home/lvhaijun -it haijun_tf1.11_torch0.4_py2.7:latest /bin/bash 注意建立容器时请一定将—name 带上，用以区分创建者。无名字的/默认名字的，如果容器在被杀掉概不负责</li>
+</ul>
+<p>-e：设置环境变量<br>—network：将容器联网<br>—shm-size：/dev/shm/的大小（共享内存）<br>—name：给容器命名<br>-v：将宿主机目录挂载进docker，冒号左边是Host的路径，右边是容器内的路径<br>-it：指示Docker分配连接到容器的伪TTY<br>-p: 指定端口映射，格式为：主机(宿主)端口:容器端口<br>最后是镜像名称:镜像版本</p>
+<p>$docker run —runtime=nvidia —shm-size=32g —name=dingzhenkai -p 8017:8017 -v /home/dingzhenkai:/home/dingzhenkai -it registry.baidubce.com/rudder/train_basic/paddle2.1.2-gpu-cuda10.1-cudnn7:basic /bin/bash</p>
+<p>注意建立容器时请一定将—name 带上，用以区分创建者。</p>
+<ul>
+<li><p>退出容器： exit （杀死该容器进程） Control + p+ q (不kill 进程， 只退出当前容器，高频使用)</p>
+</li>
+<li><p>重新进行一个运行中的容器 docker attach CONTAINER_ID</p>
+</li>
+<li>从容器进程中创建一个容器进程(某进程死机后可用此方法再创建进程，查看死机进程状况) docker exec -it CONTAINER_ID bash</li>
+<li>重新启动一个停止的容器 docker start CONTAINER_ID</li>
+<li>docker 容器删除 docker container rm CONTAINER_ID </li>
+<li>docker 镜像删除 docker image rm IMAGE_ID</li>
+<li>docker rename 重命名</li>
+<li>docker exec —privileged -u root -it container-id bash root权限进入容器</li>
+<li>docker system df -v 查看容器占用空间</li>
+<li>批量静止容器删除 #删除所有未运行的容器（已经运行的删除不了，未运行的就一起被删除了） sudo docker rm $(sudo docker ps -a -q)</li>
+<li>docker 服务重启 service docker restart</li>
+<li>docker 容器保存成镜像 doker commit <container_id> new_image_name:tag</li>
+<li>镜像保存到本地 docker save image_name -o 本地路径/—.tar</li>
+<li>镜像从本地加载 docker load -i 本地路径/—.tar</li>
+<li>Dead 容器删除:<br>$ docker rm $(docker ps —all -q -f status=dead)</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/tmux%E4%BD%BF%E7%94%A8%E7%AE%80%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -301,115 +402,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92-%E7%AF%AE%E7%90%83%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/10/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92-%E7%AF%AE%E7%90%83%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">训练计划-篮球技术</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-10 14:35:17" itemprop="dateCreated datePublished" datetime="2022-01-10T14:35:17+08:00">2022-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-06 13:44:39" itemprop="dateModified" datetime="2022-03-06T13:44:39+08:00">2022-03-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%B7%E5%A3%AB%E4%BC%91%E9%97%B2/" itemprop="url" rel="index"><span itemprop="name">男士休闲</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一-Elite"><a href="#一-Elite" class="headerlink" title="一. Elite"></a>一. Elite</h2><p>原地普通运球 左右手各50<br>原地V字运球 左右手各50<br>原地普通运球+体前变向 30<br>原地普通运球+胯下 30<br>小幅度变向 50<br>背后运球 50<br>原地胯下背后Combo 左右侧各 15<br>原地胯下体前Combo 左右侧各 20<br>原地连续剪刀胯下 50<br>原地体前+胯下+背后 50<br>胯下体前胯下背后 左右各50</p>
-<ul>
-<li><strong>运球一定要使劲儿！用全力！</strong></li>
-<li><strong>不要怕丢！大家都会有失误很正常，追求完美，努力克服自己、克服困难！</strong></li>
-<li><strong>做不了的动作 就努力尝试！老去尝试 去挑战自然而然就会了！</strong></li>
-<li><strong>运球注意抬头！Eyes Up！</strong></li>
-<li><strong>压低重心，屈膝</strong>！</li>
-</ul>
-<p>行进中运球（底线到三分线的距离来回）<br>Sham+双体前<br>胯下行进<br>背后行进<br>In n Out胯下体前<br>胯下+双背后<br>In N Out Crossover<br>双体前+胯下+双背后</p>
-<ul>
-<li>新手 努力尝试！</li>
-<li>不熟的话可以先把动作慢慢做 熟悉后加快速率！</li>
-<li>高手 尽全力 干！！</li>
-</ul>
-<p><strong>以下所有数字全部为要求 -进-球-数- ！</strong></p>
-<p>篮筐底下投篮 10 （争取空心）<br>弧顶顺步突破抛投 左右各 8<br>弧顶试探步突破转身上篮 左右各5<br>右-突破胯下拉回跳投 5<br>右-突破胯下拉回变向拜佛 5 正向拜佛 5<br>左-突破胯下拉回跳投 5<br>左-突破胯下拉回变向拜佛 5 正向拜佛 5<br>*拜佛后的处理 自己选择！放大自己的想象力！各种各样的上篮！<br>罚球 3<br>认真对待每一个球！</p>
-<p>面对挡拆的处理<br>-右侧-<br>过挡拆后直接投篮 5 （当防守者从挡拆后面绕）<br>过挡拆后犹豫步突破 5 （当补防大个没有及时防你）ps：突破后 各种上篮或抛投 自己选择<br>过挡拆前变向跳投 5 （当防守者自作聪明提前绕挡拆）<br>过挡拆后Split突破 5 （当补防者过于凶猛地扑你）ps：突破后的选择 自己发挥想象力！<br>过挡拆后后撤 胯下体前 8 （当对手选择直接换防）接下来跳投或突破 自己选择<br>-左侧-<br>过挡拆后直接投篮 5 （当防守者从挡拆后面绕）<br>过挡拆后犹豫步突破 5 （当补防大个没有及时防你）ps：突破后 各种上篮或抛投 自己选择<br>过挡拆前变向跳投 5 （当防守者自作聪明提前绕挡拆）<br>过挡拆后Split突破 5 （当补防者过于凶猛地扑你）ps：突破后的选择 自己发挥想象力！<br>过挡拆后后撤 胯下体前 8 （当对手选择直接换防）接下来跳投或突破 自己选择<br>罚球 3<br>在疲累的时候 罚球 更考验真本事！</p>
-<p>推进<br>In n out Crossover 跳投 左右各 5<br>哈登步突破抛投 左右各 5<br>哈登步接胯下突破上篮 左右各 5<br>In n out 接急停跳投 左右各 8<br>*投篮射程按照自己的能力与需求定哦<br>罚球 5</p>
-<h2 id="二-Good-Times"><a href="#二-Good-Times" class="headerlink" title="二. Good Times"></a>二. Good Times</h2><p>半场距离往返运球<br>-进攻+后退+胯下运球进攻<br>-行进间背后运球<br>-胯下突破背后拉回<br>-双变向Hesi胯下<br>-In n Out 背后运胯下拉回</p>
-<p>胯下突破上篮 左右各 3<br>胯下突破抛投 左右各 3<br>顺步突破反篮 左右各 3 （可用诶诶步）<br>胯下hesi crossover 左右翼各 3 （变向要学会用眼神！）<br>双变向突破rondo假上篮 左右各 2<br>罚球 5</p>
-<p>三威胁一次运球急停跳投 左右各 5<br>转身后12步急停跳投 左右各 5<br><em>自己定射程！根据自己的需求与能力</em><br>胯下Hesi急停跳投 左右各 5<br>胯下Hesi一次运球急停跳投 左右各 3<br>In n Out胯下12步急停跳投 左右各 3<br>胯下Hesi Crossover急停跳投 左右各 5<br>胯下紧接干拔 左右各 5<br>胯下突破背后拉回跳投 左右各 5<br>变向拜佛突破抛投 左右翼各 5<br>哈登步Crossover顿拜突破 左右各 3<br>超级后撤步 左右各 3<br>利拉德后撤步 左右各 5<br>IT突破接后撤步跳投 左右翼各 5<br>In n Out 一次运球急停跳投 左右翼各 5<br>In n Out 接拜佛突破 8<br>胯下加胯下后跳步跳投  5<br>罚球 10 </p>
-<h2 id="三-Project-A"><a href="#三-Project-A" class="headerlink" title="三. Project A"></a>三. Project A</h2><p>双球 交替运50<br>双球 齐v字50<br>双球交替v字50<br>双球 齐侧v字50<br>双球交替侧v字50<br>单球 低运绕八字 100<br>单球 低运反绕八字 100<br>行进间 胯下变向 半场来回1次<br>行进间 背后变向 半场来回1次<br>行进间 体前变向 半场来回1次<br>行进间 in n out crossover 半场来回 1次<br>行进间 胯下+体前 半场来回1次<br>行进间 胯下+背后 半场来回1次<br>行进间 背后+背后 半场来回1次<br>5罚球<br>篮下miken训练<br>双脚正篮 10 反篮 10<br>单脚正篮 10 反篮 10<br>篮筐底下投篮（要求空心）10<br>弧顶持球<br>1次运球 急停跳投 左右各5<br>1次运球突破 背后拉回 跳投 左右各5<br>1次 运球突破 反胯下拉回 跳投 左右各5<br>胯下+体前crossover 跳投 左右各10<br>胯下+体前crossover 抛投 左右各8<br>哈登步突破上篮 左右各 5<br>哈登步急停跳投 左右各8</p>
-<p>左右翼<br>半转身走底线突破上篮 左右各5<br>hesi 突破底线 背后拉回跳投 左右各5<br>双体前crossover 突破底线反篮 左右各5</p>
-<p>In n out Crossover 跳投 左右各5<br>In n out Crossover 反胯下拉回 左右各5</p>
-<p>左右翼Again<br>双体前crossover 抛投 左右各5<br>双体前 crossover 后撤步 左右各5<br>背后+体前crossover 跳投 左右各5<br>背后+体前crossover 突破欧洲步 左右各5<br>10罚球</p>
-<ul>
-<li>以上分别是ELITE、Good Times、PROJECT A 三个板块，不同的训练结构、动作、方法、技能，可以选择每天换一个板块练，也可以选择每周 或 每月换一个板块练，根据自己的水平与需求！</li>
-<li>每一个板块的内容，是每一次训练（每天）需要完成的量，这是最理想的状态。</li>
-<li>如若说一天完成不了 某板块里面规定的内容，可以根据自己的情况 分两天（最多三天）完成，挑战自己！克服困难！</li>
-<li>训练过程中你会发现很多自己的不足，克服他们！保持稳定的训练！</li>
-<li>假设说里面某个动作让你非常喜欢，你也完全可以加量练习它！</li>
-<li>无论是哪个板块，争取每天都抽一个做一遍！或每周做四次以上！天道勤酬！</li>
-</ul>
-<p>Never Give Up！<br>When you put your heart and mind in to Anything, God will you help you achieve it.<br>与君共勉！</p>
-<p><a target="_blank" rel="noopener" href="https://v.youku.com/v_show/id_XMzgwNzM1NjI5Mg==.html?spm=a2h3j.8428770.3416059.1">https://v.youku.com/v_show/id_XMzgwNzM1NjI5Mg==.html?spm=a2h3j.8428770.3416059.1</a></p>
-<p>密码：thankyouGod<br>注意大小写<br>00:00 - 20:15 Elite<br>20:16 - 32:47 Good Times<br>32:48 - 50:40 Project A</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92-%E8%BA%AB%E4%BD%93%E7%B4%A0%E8%B4%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -507,6 +499,115 @@
 <p><a target="_blank" rel="noopener" href="https://v.youku.com/v_show/id_XMzgwMzI1ODk0OA==.html?spm=a2h3j.8428770.3416059.1">https://v.youku.com/v_show/id_XMzgwMzI1ODk0OA==.html?spm=a2h3j.8428770.3416059.1</a></p>
 <p>密码：HangtimeStrong</p>
 <p>注意大小写</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92-%E7%AF%AE%E7%90%83%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/10/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92-%E7%AF%AE%E7%90%83%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">训练计划-篮球技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-10 14:35:17" itemprop="dateCreated datePublished" datetime="2022-01-10T14:35:17+08:00">2022-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-06 13:44:39" itemprop="dateModified" datetime="2022-03-06T13:44:39+08:00">2022-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%94%B7%E5%A3%AB%E4%BC%91%E9%97%B2/" itemprop="url" rel="index"><span itemprop="name">男士休闲</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一-Elite"><a href="#一-Elite" class="headerlink" title="一. Elite"></a>一. Elite</h2><p>原地普通运球 左右手各50<br>原地V字运球 左右手各50<br>原地普通运球+体前变向 30<br>原地普通运球+胯下 30<br>小幅度变向 50<br>背后运球 50<br>原地胯下背后Combo 左右侧各 15<br>原地胯下体前Combo 左右侧各 20<br>原地连续剪刀胯下 50<br>原地体前+胯下+背后 50<br>胯下体前胯下背后 左右各50</p>
+<ul>
+<li><strong>运球一定要使劲儿！用全力！</strong></li>
+<li><strong>不要怕丢！大家都会有失误很正常，追求完美，努力克服自己、克服困难！</strong></li>
+<li><strong>做不了的动作 就努力尝试！老去尝试 去挑战自然而然就会了！</strong></li>
+<li><strong>运球注意抬头！Eyes Up！</strong></li>
+<li><strong>压低重心，屈膝</strong>！</li>
+</ul>
+<p>行进中运球（底线到三分线的距离来回）<br>Sham+双体前<br>胯下行进<br>背后行进<br>In n Out胯下体前<br>胯下+双背后<br>In N Out Crossover<br>双体前+胯下+双背后</p>
+<ul>
+<li>新手 努力尝试！</li>
+<li>不熟的话可以先把动作慢慢做 熟悉后加快速率！</li>
+<li>高手 尽全力 干！！</li>
+</ul>
+<p><strong>以下所有数字全部为要求 -进-球-数- ！</strong></p>
+<p>篮筐底下投篮 10 （争取空心）<br>弧顶顺步突破抛投 左右各 8<br>弧顶试探步突破转身上篮 左右各5<br>右-突破胯下拉回跳投 5<br>右-突破胯下拉回变向拜佛 5 正向拜佛 5<br>左-突破胯下拉回跳投 5<br>左-突破胯下拉回变向拜佛 5 正向拜佛 5<br>*拜佛后的处理 自己选择！放大自己的想象力！各种各样的上篮！<br>罚球 3<br>认真对待每一个球！</p>
+<p>面对挡拆的处理<br>-右侧-<br>过挡拆后直接投篮 5 （当防守者从挡拆后面绕）<br>过挡拆后犹豫步突破 5 （当补防大个没有及时防你）ps：突破后 各种上篮或抛投 自己选择<br>过挡拆前变向跳投 5 （当防守者自作聪明提前绕挡拆）<br>过挡拆后Split突破 5 （当补防者过于凶猛地扑你）ps：突破后的选择 自己发挥想象力！<br>过挡拆后后撤 胯下体前 8 （当对手选择直接换防）接下来跳投或突破 自己选择<br>-左侧-<br>过挡拆后直接投篮 5 （当防守者从挡拆后面绕）<br>过挡拆后犹豫步突破 5 （当补防大个没有及时防你）ps：突破后 各种上篮或抛投 自己选择<br>过挡拆前变向跳投 5 （当防守者自作聪明提前绕挡拆）<br>过挡拆后Split突破 5 （当补防者过于凶猛地扑你）ps：突破后的选择 自己发挥想象力！<br>过挡拆后后撤 胯下体前 8 （当对手选择直接换防）接下来跳投或突破 自己选择<br>罚球 3<br>在疲累的时候 罚球 更考验真本事！</p>
+<p>推进<br>In n out Crossover 跳投 左右各 5<br>哈登步突破抛投 左右各 5<br>哈登步接胯下突破上篮 左右各 5<br>In n out 接急停跳投 左右各 8<br>*投篮射程按照自己的能力与需求定哦<br>罚球 5</p>
+<h2 id="二-Good-Times"><a href="#二-Good-Times" class="headerlink" title="二. Good Times"></a>二. Good Times</h2><p>半场距离往返运球<br>-进攻+后退+胯下运球进攻<br>-行进间背后运球<br>-胯下突破背后拉回<br>-双变向Hesi胯下<br>-In n Out 背后运胯下拉回</p>
+<p>胯下突破上篮 左右各 3<br>胯下突破抛投 左右各 3<br>顺步突破反篮 左右各 3 （可用诶诶步）<br>胯下hesi crossover 左右翼各 3 （变向要学会用眼神！）<br>双变向突破rondo假上篮 左右各 2<br>罚球 5</p>
+<p>三威胁一次运球急停跳投 左右各 5<br>转身后12步急停跳投 左右各 5<br><em>自己定射程！根据自己的需求与能力</em><br>胯下Hesi急停跳投 左右各 5<br>胯下Hesi一次运球急停跳投 左右各 3<br>In n Out胯下12步急停跳投 左右各 3<br>胯下Hesi Crossover急停跳投 左右各 5<br>胯下紧接干拔 左右各 5<br>胯下突破背后拉回跳投 左右各 5<br>变向拜佛突破抛投 左右翼各 5<br>哈登步Crossover顿拜突破 左右各 3<br>超级后撤步 左右各 3<br>利拉德后撤步 左右各 5<br>IT突破接后撤步跳投 左右翼各 5<br>In n Out 一次运球急停跳投 左右翼各 5<br>In n Out 接拜佛突破 8<br>胯下加胯下后跳步跳投  5<br>罚球 10 </p>
+<h2 id="三-Project-A"><a href="#三-Project-A" class="headerlink" title="三. Project A"></a>三. Project A</h2><p>双球 交替运50<br>双球 齐v字50<br>双球交替v字50<br>双球 齐侧v字50<br>双球交替侧v字50<br>单球 低运绕八字 100<br>单球 低运反绕八字 100<br>行进间 胯下变向 半场来回1次<br>行进间 背后变向 半场来回1次<br>行进间 体前变向 半场来回1次<br>行进间 in n out crossover 半场来回 1次<br>行进间 胯下+体前 半场来回1次<br>行进间 胯下+背后 半场来回1次<br>行进间 背后+背后 半场来回1次<br>5罚球<br>篮下miken训练<br>双脚正篮 10 反篮 10<br>单脚正篮 10 反篮 10<br>篮筐底下投篮（要求空心）10<br>弧顶持球<br>1次运球 急停跳投 左右各5<br>1次运球突破 背后拉回 跳投 左右各5<br>1次 运球突破 反胯下拉回 跳投 左右各5<br>胯下+体前crossover 跳投 左右各10<br>胯下+体前crossover 抛投 左右各8<br>哈登步突破上篮 左右各 5<br>哈登步急停跳投 左右各8</p>
+<p>左右翼<br>半转身走底线突破上篮 左右各5<br>hesi 突破底线 背后拉回跳投 左右各5<br>双体前crossover 突破底线反篮 左右各5</p>
+<p>In n out Crossover 跳投 左右各5<br>In n out Crossover 反胯下拉回 左右各5</p>
+<p>左右翼Again<br>双体前crossover 抛投 左右各5<br>双体前 crossover 后撤步 左右各5<br>背后+体前crossover 跳投 左右各5<br>背后+体前crossover 突破欧洲步 左右各5<br>10罚球</p>
+<ul>
+<li>以上分别是ELITE、Good Times、PROJECT A 三个板块，不同的训练结构、动作、方法、技能，可以选择每天换一个板块练，也可以选择每周 或 每月换一个板块练，根据自己的水平与需求！</li>
+<li>每一个板块的内容，是每一次训练（每天）需要完成的量，这是最理想的状态。</li>
+<li>如若说一天完成不了 某板块里面规定的内容，可以根据自己的情况 分两天（最多三天）完成，挑战自己！克服困难！</li>
+<li>训练过程中你会发现很多自己的不足，克服他们！保持稳定的训练！</li>
+<li>假设说里面某个动作让你非常喜欢，你也完全可以加量练习它！</li>
+<li>无论是哪个板块，争取每天都抽一个做一遍！或每周做四次以上！天道勤酬！</li>
+</ul>
+<p>Never Give Up！<br>When you put your heart and mind in to Anything, God will you help you achieve it.<br>与君共勉！</p>
+<p><a target="_blank" rel="noopener" href="https://v.youku.com/v_show/id_XMzgwNzM1NjI5Mg==.html?spm=a2h3j.8428770.3416059.1">https://v.youku.com/v_show/id_XMzgwNzM1NjI5Mg==.html?spm=a2h3j.8428770.3416059.1</a></p>
+<p>密码：thankyouGod<br>注意大小写<br>00:00 - 20:15 Elite<br>20:16 - 32:47 Good Times<br>32:48 - 50:40 Project A</p>
 
       
     </div>
@@ -1462,7 +1563,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

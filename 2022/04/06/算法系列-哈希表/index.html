@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这里是打砖块记录一些常用技术的地方~也许偶尔会写一些日常不积跬步，无以至千里">
-<meta property="og:type" content="website">
-<meta property="og:title" content="上兰村的打砖块">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="unordered_map&lt;type1,type2&gt; map1type1类型的数据为key，对应一个type2数据为value。无序表，查询一次时间复杂度为O(n)。 map1.find(x) &#x3D;&#x3D; map1.end()意思是表中没有key为x1的键-值对 map.clear()是清楚所有现有的键值对 unordered_ser&lt;type&gt; set1set1中添加元素是se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法系列-哈希表">
+<meta property="og:url" content="http://example.com/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%93%88%E5%B8%8C%E8%A1%A8/index.html">
 <meta property="og:site_name" content="Upperlan">
-<meta property="og:description" content="这里是打砖块记录一些常用技术的地方~也许偶尔会写一些日常不积跬步，无以至千里">
+<meta property="og:description" content="unordered_map&lt;type1,type2&gt; map1type1类型的数据为key，对应一个type2数据为value。无序表，查询一次时间复杂度为O(n)。 map1.find(x) &#x3D;&#x3D; map1.end()意思是表中没有key为x1的键-值对 map.clear()是清楚所有现有的键值对 unordered_ser&lt;type&gt; set1set1中添加元素是se">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-05T13:59:49.000Z">
-<meta property="article:modified_time" content="2022-03-07T12:47:04.255Z">
+<meta property="article:published_time" content="2022-04-06T12:55:34.000Z">
+<meta property="article:modified_time" content="2022-04-06T13:54:09.470Z">
 <meta property="article:author" content="篮球架上打砖块">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%93%88%E5%B8%8C%E8%A1%A8/">
 
 
 <script id="page-configurations">
@@ -40,13 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>上兰村的打砖块 | Upperlan
-</title>
+  <title>算法系列-哈希表 | Upperlan</title>
   
 
 
@@ -158,43 +157,100 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%93%88%E5%B8%8C%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法系列-哈希表
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">上兰村的打砖块
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2022-04-06 20:55:34 / 修改时间：21:54:09" itemprop="dateCreated datePublished" datetime="2022-04-06T20:55:34+08:00">2022-04-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="unordered-map-lt-type1-type2-gt-map1"><a href="#unordered-map-lt-type1-type2-gt-map1" class="headerlink" title="unordered_map&lt;type1,type2&gt; map1"></a><code>unordered_map&lt;type1,type2&gt; map1</code></h3><p>type1类型的数据为key，对应一个type2数据为value。无序表，查询一次时间复杂度为O(n)。</p>
+<p><code>map1.find(x) == map1.end()</code>意思是表中没有key为x1的键-值对</p>
+<p><code>map.clear()</code>是清楚所有现有的键值对</p>
+<h3 id="unordered-ser-lt-type-gt-set1"><a href="#unordered-ser-lt-type-gt-set1" class="headerlink" title="unordered_ser&lt;type&gt; set1"></a><code>unordered_ser&lt;type&gt; set1</code></h3><p>set1中添加元素是set.insert(x),其中x为type类型。</p>
+<p>set1.erase(x)是消除set1中的x。set1.count(x)若返回值为0，则说明set1中没有元素x。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/06/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" rel="prev" title="目标跟踪-卡尔曼滤波">
+      <i class="fa fa-chevron-left"></i> 目标跟踪-卡尔曼滤波
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <h2 id="这里是打砖块记录一些常用技术的地方"><a href="#这里是打砖块记录一些常用技术的地方" class="headerlink" title="这里是打砖块记录一些常用技术的地方~"></a>这里是打砖块记录一些常用技术的地方~</h2><h2 id="也许偶尔会写一些日常"><a href="#也许偶尔会写一些日常" class="headerlink" title="也许偶尔会写一些日常"></a>也许偶尔会写一些日常</h2><h2 id="不积跬步，无以至千里"><a href="#不积跬步，无以至千里" class="headerlink" title="不积跬步，无以至千里"></a>不积跬步，无以至千里</h2>
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -245,7 +301,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%98%AF%E6%89%93%E7%A0%96%E5%9D%97%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%8A%80%E6%9C%AF%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">1.</span> <span class="nav-text">这里是打砖块记录一些常用技术的地方~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9F%E8%AE%B8%E5%81%B6%E5%B0%94%E4%BC%9A%E5%86%99%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8"><span class="nav-number">2.</span> <span class="nav-text">也许偶尔会写一些日常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E7%A7%AF%E8%B7%AC%E6%AD%A5%EF%BC%8C%E6%97%A0%E4%BB%A5%E8%87%B3%E5%8D%83%E9%87%8C"><span class="nav-number">3.</span> <span class="nav-text">不积跬步，无以至千里</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-map-lt-type1-type2-gt-map1"><span class="nav-number">1.</span> <span class="nav-text">unordered_map&lt;type1,type2&gt; map1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-ser-lt-type-gt-set1"><span class="nav-number">2.</span> <span class="nav-text">unordered_ser&lt;type&gt; set1</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

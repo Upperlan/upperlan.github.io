@@ -162,6 +162,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/12/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-badcase%E6%8F%90%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/12/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-badcase%E6%8F%90%E5%8F%96/" class="post-title-link" itemprop="url">目标检测-badcase提取</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-12 16:28:43 / 修改时间：21:54:55" itemprop="dateCreated datePublished" datetime="2022-03-12T16:28:43+08:00">2022-03-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="大致流程"><a href="#大致流程" class="headerlink" title="大致流程"></a>大致流程</h2><p>1.所需的数据是：</p>
+<p>模型输出，一般为pkl文件。</p>
+<p>推理的数据对应的gt数据，一般从coco格式数据集或者VOC格式数据集读取。</p>
+<p>原始图像，处理好后将标注框画在上面可视化</p>
+<p>输出的是：</p>
+<p>画有标注框的图像</p>
+<p>2.提取流程：根据数据集生成gt数据-&gt;处理pkl输出数据，与gt数据格式匹配-&gt;取出漏检，多检，错检的bbox-&gt;根据box把前面三种框corp出来保存-&gt;将gt、错检、漏检、多检画在图上可视化</p>
+<h2 id="取出漏检，多检，错检的bbox"><a href="#取出漏检，多检，错检的bbox" class="headerlink" title="取出漏检，多检，错检的bbox"></a>取出漏检，多检，错检的bbox</h2><ol>
+<li><p>对每一个img，判断极限情况：如果det_bbox长度为0，则没有检测框-&gt;所有gt框都漏了；如果gt_bbox长度为0-&gt;所有的检测框都是多检。</p>
+</li>
+<li><p>根据socre_thr分别选出比阈值低和高的检测框</p>
+</li>
+<li><p>比阈值高的检测框里没有框也是全部漏检，如果有，计算检测框和每个真实框的IOU，</p>
+</li>
+<li><p>对于每个检测框，找到iou最大的gt框</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对于每个检测框，找到iou最大的gt框</span></span><br><span class="line">            gt_ious_max = ious.<span class="built_in">max</span>(axis=<span class="number">1</span>)  <span class="comment"># gt_ious_max [num_det] 一维向量，是每个det对应的IoU最大的gt框的IoU值</span></span><br><span class="line">            gt_ious_argmax = ious.argmax(axis=<span class="number">1</span>)  <span class="comment"># gt_ious_argmax [num_det]一维向量，是每个det对应的IoU最大的gt框的索引</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>开始判断badcase：</p>
+<p>a. 错检，IoU匹配上了，但是label不对</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">####### badcase情形1 错检，IOU匹配，但label不一致  #####</span></span><br><span class="line">            gt_ious_max_val_indexs = gt_ious_max &gt;= iou_thr <span class="comment"># 1.筛选出有效检测框的索引</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">any</span>(gt_ious_max_val_indexs):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;所有检测框都未能匹配到gt框，都为多检&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># 找到所有能匹配上gt(iou满足)的det框及 det对应的gt框index</span></span><br><span class="line">                <span class="comment">#gt_ious_max = gt_ious_max[gt_ious_max_val_indexs]</span></span><br><span class="line">                matchgt_det_bboxes = det_bboxes[gt_ious_max_val_indexs] <span class="comment"># 选出有效检测框 [num_det,(4,)]</span></span><br><span class="line">                matchgt_det_labels = det_labels[gt_ious_max_val_indexs] <span class="comment"># 选出有效检测框的标签[num_det,1]</span></span><br><span class="line">                matchgt_gt_ious_argmax = gt_ious_argmax[gt_ious_max_val_indexs] <span class="comment"># 有效检测框中所负责的gt框[num_det, 1(对应本img上的gt框的索引)]</span></span><br><span class="line">                matchgt_gt_labels = gt_labels[matchgt_gt_ious_argmax] <span class="comment"># 取出已经匹配上的检测框对应的真实的标签[num_det,1]</span></span><br><span class="line">                matchgt_gt_bboxes = gt_bboxes[matchgt_gt_ious_argmax, :] <span class="comment"># 取出有效框对应真实框的bbox坐标</span></span><br><span class="line">                matchgt_gt_bboxes_idx = gt_bboxes_idx[matchgt_gt_ious_argmax] <span class="comment"># 取出有效款的真实bbox坐标</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># 筛选出所有错检</span></span><br><span class="line">                all_trouble_index = matchgt_gt_labels != matchgt_det_labels</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">any</span>(gt_ious_max_val_indexs):</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;no trouble det box&quot;</span>)  <span class="comment"># label都匹配上，没有错检</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    all_trouble_det_boxes = matchgt_det_bboxes[all_trouble_index] <span class="comment"># 选出错误匹配框的bbox</span></span><br><span class="line">                    all_trouble_det_labels = matchgt_det_labels[all_trouble_index]<span class="comment"># 选出错误的标签</span></span><br><span class="line">                    all_trouble_gt_labels = matchgt_gt_labels[all_trouble_index] <span class="comment"># 真实的标签</span></span><br><span class="line">                    all_trouble_gt_bboxes = matchgt_gt_bboxes[all_trouble_index] <span class="comment"># 真实的bbox</span></span><br><span class="line">                    all_trouble_gt_bboxes_indx = matchgt_gt_bboxes_idx[all_trouble_index] <span class="comment"># 有问题bbox的索引</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 所有错检中筛选出真实label在限定label范围内的错检</span></span><br><span class="line">                    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(all_trouble_gt_labels)):</span><br><span class="line">                        <span class="keyword">if</span> all_trouble_gt_labels[index] <span class="keyword">in</span> save_labels:</span><br><span class="line">                            trouble_gtbboxes.append(</span><br><span class="line">                                all_trouble_gt_bboxes[index])</span><br><span class="line">                            trouble_gtlabels.append(</span><br><span class="line">                                all_trouble_gt_labels[index])</span><br><span class="line">                            trouble_detbboxes.append(</span><br><span class="line">                                all_trouble_det_boxes[index])</span><br><span class="line">                            trouble_detlabels.append(</span><br><span class="line">                                all_trouble_det_labels[index])</span><br><span class="line">                            trouble_gtbboxes_idx.append(</span><br><span class="line">                                all_trouble_gt_bboxes_indx[index])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   b.多检，未匹配gt的det框</p>
+   <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">####### badcase情形2 多检， 未匹配gt的det框#####</span></span><br><span class="line">gt_ious_max_val_indexs = gt_ious_max &lt; iou_thr</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">any</span>(gt_ious_max_val_indexs):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;所有检测框都能匹配到gt框&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 找到所有不能匹配上gt的det框,即为多检</span></span><br><span class="line">    unmatch_det_bboxes = det_bboxes[gt_ious_max_val_indexs]</span><br><span class="line">    unmatch_det_labels = det_labels[gt_ious_max_val_indexs]</span><br><span class="line">   </span><br><span class="line">    unlable_index = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 所有多检中筛选出预测lablel在限定label范围内的多检</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(unmatch_det_labels)):</span><br><span class="line">        <span class="keyword">if</span> unmatch_det_labels[index] <span class="keyword">in</span> save_labels:</span><br><span class="line">            unlabel_gtbboxes.append(unmatch_det_bboxes[index])</span><br><span class="line">            unlabel_gtlabels.append(unmatch_det_labels[index])</span><br><span class="line">            unlabel_gtbboxes_idx.append(</span><br><span class="line">                max_anno_idx[<span class="number">0</span>] + unlable_index + <span class="number">1</span>)</span><br><span class="line">            unlable_index += <span class="number">1</span></span><br><span class="line">   </span><br><span class="line"><span class="comment"># 对于每个gt框，找到iou最大的检测框</span></span><br><span class="line">det_ious_max = ious.<span class="built_in">max</span>(axis=<span class="number">0</span>)  <span class="comment"># gt_ious_max [num_gt]</span></span><br><span class="line">det_ious_argmax = ious.argmax(axis=<span class="number">0</span>)  <span class="comment"># gt_ious_argmax [num_gt]</span></span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+<p>   c.漏检，未匹配到检测框的gt框</p>
+   <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">####### badcase情形3 漏检，未匹配det 的gt框 #####</span></span><br><span class="line">det_ious_max_val_indexs = det_ious_max &lt; iou_thr</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">any</span>(det_ious_max_val_indexs):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;所有gt框都能匹配到至少一个检测框&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 找到所有不能匹配上det的gt框,即为漏检</span></span><br><span class="line">    unmatch_gt_bboxes = gt_bboxes[det_ious_max_val_indexs]</span><br><span class="line">    unmatch_gt_labels = gt_labels[det_ious_max_val_indexs]</span><br><span class="line">    unmatch_gt_bboxes_idx = gt_bboxes_idx[det_ious_max_val_indexs]</span><br><span class="line">   </span><br><span class="line">    <span class="comment"># 所有漏检中筛选出真实label在限定label范围内的漏检</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(unmatch_gt_labels)):</span><br><span class="line">        <span class="keyword">if</span> unmatch_gt_labels[index] <span class="keyword">in</span> save_labels:</span><br><span class="line">            undetected_gtbboxes.append(unmatch_gt_bboxes[index])</span><br><span class="line">            undetected_gtlabels.append(unmatch_gt_labels[index])</span><br><span class="line">            undetected_gtbboxes_idx.append(</span><br><span class="line">                unmatch_gt_bboxes_idx[index])</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%8E%92%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1169,107 +1255,6 @@ Attention\left ( Q,K,T\right )=Softmax\left ( \frac{QK^{T}}{\sqrt{d}+B}\right )V
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/05/docker%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/05/docker%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">docker常用操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-05 22:18:54 / 修改时间：22:20:25" itemprop="dateCreated datePublished" datetime="2022-03-05T22:18:54+08:00">2022-03-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工作常用</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="docker操作"><a href="#docker操作" class="headerlink" title="docker操作"></a>docker操作</h1><h2 id="docker基本命令"><a href="#docker基本命令" class="headerlink" title="docker基本命令"></a>docker基本命令</h2><ul>
-<li>查看容器镜像列表 docker images</li>
-<li>查看当前所有正在运行的容器 docker ps  (查看所有容器，包括运行和停止的。t)<h4 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h4></li>
-<li>将网上或者别的服务器上的docker镜像拉到本地。例如： docker pull uber/horovod:0.15.1-tf1.11.0-torch0.4.1-py3.</li>
-</ul>
-<h4 id="docker-push"><a href="#docker-push" class="headerlink" title="docker push"></a>docker push</h4><ul>
-<li><p>上传docker镜像(注意上传镜像统一格式，yq01-aip-m12-tianzhi14.yq01.baidu.com/[Name]:tagls<br>$ docker push yq01-aip-m12-tianzhi14.yq01.baidu.com/lvhaijun/tsm_horovod:0.15.0-tf1.11.0-torch0.4.1-py2.7</p>
-</li>
-<li><p>建立一个带gpu驱动的容器：</p>
-</li>
-<li>nvidia-docker run -e PASSWORD=tianzhi05 —network=host —shm-size=32g —name=haijunlv -v /home/ssd1/lvhaijun:/home/lvhaijun -it haijun_tf1.11_torch0.4_py2.7:latest /bin/bash 注意建立容器时请一定将—name 带上，用以区分创建者。无名字的/默认名字的，如果容器在被杀掉概不负责</li>
-</ul>
-<p>-e：设置环境变量<br>—network：将容器联网<br>—shm-size：/dev/shm/的大小（共享内存）<br>—name：给容器命名<br>-v：将宿主机目录挂载进docker，冒号左边是Host的路径，右边是容器内的路径<br>-it：指示Docker分配连接到容器的伪TTY<br>-p: 指定端口映射，格式为：主机(宿主)端口:容器端口<br>最后是镜像名称:镜像版本</p>
-<p>$docker run —runtime=nvidia —shm-size=32g —name=dingzhenkai -p 8017:8017 -v /home/dingzhenkai:/home/dingzhenkai -it registry.baidubce.com/rudder/train_basic/paddle2.1.2-gpu-cuda10.1-cudnn7:basic /bin/bash</p>
-<p>注意建立容器时请一定将—name 带上，用以区分创建者。</p>
-<ul>
-<li><p>退出容器： exit （杀死该容器进程） Control + p+ q (不kill 进程， 只退出当前容器，高频使用)</p>
-</li>
-<li><p>重新进行一个运行中的容器 docker attach CONTAINER_ID</p>
-</li>
-<li>从容器进程中创建一个容器进程(某进程死机后可用此方法再创建进程，查看死机进程状况) docker exec -it CONTAINER_ID bash</li>
-<li>重新启动一个停止的容器 docker start CONTAINER_ID</li>
-<li>docker 容器删除 docker container rm CONTAINER_ID </li>
-<li>docker 镜像删除 docker image rm IMAGE_ID</li>
-<li>docker rename 重命名</li>
-<li>docker exec —privileged -u root -it container-id bash root权限进入容器</li>
-<li>docker system df -v 查看容器占用空间</li>
-<li>批量静止容器删除 #删除所有未运行的容器（已经运行的删除不了，未运行的就一起被删除了） sudo docker rm $(sudo docker ps -a -q)</li>
-<li>docker 服务重启 service docker restart</li>
-<li>docker 容器保存成镜像 doker commit <container_id> new_image_name:tag</li>
-<li>镜像保存到本地 docker save image_name -o 本地路径/—.tar</li>
-<li>镜像从本地加载 docker load -i 本地路径/—.tar</li>
-<li>Dead 容器删除:<br>$ docker rm $(docker ps —all -q -f status=dead)</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1339,7 +1324,7 @@ Attention\left ( Q,K,T\right )=Softmax\left ( \frac{QK^{T}}{\sqrt{d}+B}\right )V
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
