@@ -162,6 +162,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%8F%8C%E6%8C%87%E9%92%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%8F%8C%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">算法系列-双指针</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-06 22:23:03 / 修改时间：22:30:31" itemprop="dateCreated datePublished" datetime="2022-04-06T22:23:03+08:00">2022-04-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="双指针的两种情况"><a href="#双指针的两种情况" class="headerlink" title="双指针的两种情况"></a>双指针的两种情况</h3><ol>
+<li>两个指针分别指向两个不同的序列（归并排序）</li>
+<li>两个指针指向同一序列</li>
+</ol>
+<h3 id="情况2的大致模板"><a href="#情况2的大致模板" class="headerlink" title="情况2的大致模板"></a>情况2的大致模板</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>,j = <span class="number">0</span>;i &lt; n;i++) &#123;</span><br><span class="line">  <span class="keyword">while</span>(j &lt; i &amp;&amp; <span class="built_in">check</span>(i,j)) j++;</span><br><span class="line">  <span class="comment">//具体逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>本身两个指针都遍历一个序列，暴力的话是O(n^2)。核心思想就是将这么一个过程，利用某些性质，优化到O(n)。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E5%93%88%E5%B8%8C%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -914,116 +987,6 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/12/NumPy%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/12/NumPy%E7%9A%84%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">NumPy的常用函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-12 16:37:40 / 修改时间：21:18:51" itemprop="dateCreated datePublished" datetime="2022-03-12T16:37:40+08:00">2022-03-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="numpy-full"><a href="#numpy-full" class="headerlink" title="numpy.full"></a>numpy.full</h1><ul>
-<li>numpy.<strong>full</strong>(<em>shape</em>, <em>fill_value</em>, <em>dtype=None</em>, <em>order=’C’</em>, <em>**, </em>like=None*)<a target="_blank" rel="noopener" href="https://github.com/numpy/numpy/blob/v1.22.0/numpy/core/numeric.py#L289-L345">[source]</a></li>
-</ul>
-<p>  返回一个给定形状和类型的新数组，用<em>fill_value</em>填充。.</p>
-<p>  Parameters</p>
-<p>  <strong>shape</strong>:新矩阵的形状, e.g., <code>(2, 3)</code> or <code>2</code>.</p>
-<p>  <strong>fill_value</strong> 填充的值</p>
-<p>  <strong>dtype</strong> 数据类型 None, means<code>np.array(fill_value).dtype</code>.</p>
-<p>  <strong>order</strong>{‘C’, ‘F’}, optionalWhether to store multidimensional data in C- or Fortran-contiguous (row- or column-wise) order in memory.</p>
-<p>  <strong>like</strong> 可以从非NumPy转换， 前提是这个数组有 <code>__array_function__</code> 属性 </p>
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), np.inf) </span><br><span class="line">array([[inf, inf], [inf, inf]]) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), <span class="number">10</span>) </span><br><span class="line">array([[<span class="number">10</span>, <span class="number">10</span>], [<span class="number">10</span>, <span class="number">10</span>]]) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.full((<span class="number">2</span>, <span class="number">2</span>), [<span class="number">1</span>, <span class="number">2</span>]) </span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">1</span>, <span class="number">2</span>]])</span><br></pre></td></tr></table></figure>
-<h1 id="numpy-concatenate"><a href="#numpy-concatenate" class="headerlink" title="numpy.concatenate"></a>numpy.concatenate</h1><ul>
-<li><p>numpy.<strong>concatenate</strong>(<em>(a1</em>, <em>a2</em>, <em>…)</em>, <em>axis=0</em>, <em>out=None</em>, <em>dtype=None</em>, <em>casting=”same_kind”</em>)</p>
-<p>将一系列array合起来</p>
-<p>**a1, a2, …array类型的数据</p>
-<p>相同的shape, except in the dimension corresponding to <em>axis</em> (the first, by default).</p>
-<p><strong>axis</strong> int, optional</p>
-<p>按哪一个轴合到一起. 如果是None，array在操作前会被展平. Default is 0.</p>
-<p><strong>out </strong>ndarray, optional</p>
-<p>If provided, the destination to place the result. The shape must be correct, matching that of what concatenate would have returned if no out argument were specified.</p>
-<p><strong>dtype</strong>str or dtype</p>
-<p>If provided, the destination array will have this dtype. Cannot be provided together with <em>out</em>.</p>
-<p><em>New in version 1.20.0.</em></p>
-<p><strong>casting</strong>{‘no’, ‘equiv’, ‘safe’, ‘same_kind’, ‘unsafe’}, optional</p>
-<p>Controls what kind of data casting may occur. Defaults to ‘same_kind’.</p>
-</li>
-</ul>
-<h1 id="numpy-vstack"><a href="#numpy-vstack" class="headerlink" title="numpy.vstack"></a>numpy.vstack</h1><p>numpy.<strong>vstack</strong>(<em>tup</em>)<a target="_blank" rel="noopener" href="https://github.com/numpy/numpy/blob/v1.22.0/numpy/core/shape_base.py#L222-L282">[source]</a></p>
-<p>按垂直方向将arrays合起来（按行）</p>
-<p>类似于concat，将(N, )变成（1，N）</p>
-<p>This is equivalent to concatenation along the first axis after 1-D arrays of shape <em>(N,)</em> have been reshaped to <em>(1,N)</em>. Rebuilds arrays divided by <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.vsplit.html#numpy.vsplit"><code>vsplit</code></a>.</p>
-<p>This function makes most sense for arrays with up to 3 dimensions. For instance, for pixel-data with a height (first axis), width (second axis), and r/g/b channels (third axis). The functions <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.concatenate.html#numpy.concatenate"><code>concatenate</code></a>, <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack"><code>stack</code></a> and <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.block.html#numpy.block"><code>block</code></a> provide more general stacking and concatenation operations.</p>
-<ul>
-<li><p>Parameters</p>
-<p><strong>tup</strong>sequence of ndarraysThe arrays must have the same shape along all but the first axis. 1-D arrays must have the same length.</p>
-</li>
-<li><p>Returns</p>
-<p><strong>stacked</strong>ndarrayThe array formed by stacking the given arrays, will be at least 2-D.</p>
-</li>
-</ul>
-<h2 id="numpy-argmax"><a href="#numpy-argmax" class="headerlink" title="numpy.argmax"></a>numpy.argmax</h2><p>取出一个轴上最大的值对应的索引</p>
-<p>二维矩阵中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([[<span class="number">1</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">2</span>],</span><br><span class="line">              [<span class="number">9</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">8</span>],</span><br><span class="line">              [<span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">1</span>]])</span><br><span class="line">b=np.argmax(a, axis=<span class="number">0</span>)<span class="comment">#对二维矩阵来讲a[0][1]会有两个索引方向，第一个方向为a[0]，默认按列方向搜索最大值</span></span><br><span class="line"><span class="comment">#a的第一列为1，9，3,最大值为9，所在位置为1，</span></span><br><span class="line"><span class="comment">#a的第一列为5，6，7,最大值为7，所在位置为2，</span></span><br><span class="line"><span class="comment">#此此类推，因为a有4列，所以得到的b为1行4列，</span></span><br><span class="line"><span class="built_in">print</span>(b)<span class="comment">#[1 2 2 1]</span></span><br><span class="line"> </span><br><span class="line">c=np.argmax(a, axis=<span class="number">1</span>)<span class="comment">#现在按照a[0][1]中的a[1]方向，即行方向搜索最大值，</span></span><br><span class="line"><span class="comment">#a的第一行为1，5，5，2,最大值为5（虽然有2个5，但取第一个5所在的位置），索引值为1，</span></span><br><span class="line"><span class="comment">#a的第2行为9，6，2，8,最大值为9，索引值为0，</span></span><br><span class="line"><span class="comment">#因为a有3行，所以得到的c有3个值，即为1行3列</span></span><br><span class="line"><span class="built_in">print</span>(c)<span class="comment">#[1 0 2]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1093,7 +1056,7 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
