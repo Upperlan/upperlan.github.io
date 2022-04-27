@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简介Sample online and realtime tracking (SORT)利用了帧和帧之间的关系，用卡尔曼滤波和匈牙利算法来进行多目标跟踪。但是SORT的ID switches次数很高，因为SORT在跟踪目标动作的可预测性很高的情况下性能比较好，但在有遮挡的场景表现不太好。 DeepSORT结合了目标的动作状态和图像特征信息。具体是利用CNN来分辨行人。 算法细节跟踪处理与状态估计目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="目标跟踪-DeepSort">
+<meta property="og:url" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/index.html">
+<meta property="og:site_name" content="Upperlan">
+<meta property="og:description" content="简介Sample online and realtime tracking (SORT)利用了帧和帧之间的关系，用卡尔曼滤波和匈牙利算法来进行多目标跟踪。但是SORT的ID switches次数很高，因为SORT在跟踪目标动作的可预测性很高的情况下性能比较好，但在有遮挡的场景表现不太好。 DeepSORT结合了目标的动作状态和图像特征信息。具体是利用CNN来分辨行人。 算法细节跟踪处理与状态估计目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427115037637-1031439.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427120402875-1032244.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427135149852-1038711.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427135222368-1038743.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427135346383-1038828.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427140300284-1039381.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427140408605-1039450.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427140815315-1039696.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427143045821-1041046.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427143554243-1041356.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427144143537-1041705.png">
+<meta property="og:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nka25pZ2h0X2hhcHB5,size_16,color_FFFFFF,t_70.png">
+<meta property="article:published_time" content="2022-04-27T03:17:51.000Z">
+<meta property="article:modified_time" content="2022-04-27T07:17:28.818Z">
+<meta property="article:author" content="篮球架上打砖块">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/目标跟踪-DeepSort/image-20220427115037637-1031439.png">
+
+<link rel="canonical" href="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>目标跟踪-DeepSort | Upperlan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Upperlan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          目标跟踪-DeepSort
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-27 11:17:51 / 修改时间：15:17:28" itemprop="dateCreated datePublished" datetime="2022-04-27T11:17:51+08:00">2022-04-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Sample online and realtime tracking (SORT)利用了帧和帧之间的关系，用卡尔曼滤波和匈牙利算法来进行多目标跟踪。但是SORT的ID switches次数很高，因为SORT在跟踪目标动作的可预测性很高的情况下性能比较好，但在有遮挡的场景表现不太好。</p>
+<p>DeepSORT结合了目标的动作状态和图像特征信息。具体是利用CNN来分辨行人。</p>
+<h2 id="算法细节"><a href="#算法细节" class="headerlink" title="算法细节"></a>算法细节</h2><h3 id="跟踪处理与状态估计"><a href="#跟踪处理与状态估计" class="headerlink" title="跟踪处理与状态估计"></a>跟踪处理与状态估计</h3><p>目标的状态空间为：<img src="目标跟踪-DeepSort/image-20220427115037637-1031439.png" alt="image-20220427115037637"></p>
+<p>其中u和v是bbox的中心店坐标，y是宽高比例，h是高，后面四个值是前面四个值在图像坐标上的加速度。我们使用了匀速运动和线性观测模型的卡尔曼滤波器。</p>
+<p>每个轨道k都会预测最后成功匹配上目标的那一帧到下一次匹配到目标的那一帧之间的帧数a_k, 当匹配到时a_k清0，当a_k超过一个阈值A_max时，就会认为这个轨道k已经离开了画面，从轨道匹配池中去掉。当一个新的目标没办法匹配上任何一个k时，就会新建一个轨道。当一个新轨道的前三帧没有全部匹配上时，就删除这个轨道。</p>
+<h3 id="对象分配问题"><a href="#对象分配问题" class="headerlink" title="对象分配问题"></a>对象分配问题</h3><p>为了考虑运动信息，我们使用预测的卡尔曼状态和新到的测量值之间的（平方）Mahalanobis距离：</p>
+<p><img src="目标跟踪-DeepSort/image-20220427120402875-1032244.png" alt="image-20220427120402875"></p>
+<p>第i个track的在度量空间中的分布<img src="目标跟踪-DeepSort/image-20220427135149852-1038711.png" alt="image-20220427135149852"></p>
+<p>第j个bbox的检测结果<img src="目标跟踪-DeepSort/image-20220427135222368-1038743.png" alt="image-20220427135222368"></p>
+<p>通过计算<img src="目标跟踪-DeepSort/image-20220427135346383-1038828.png" alt="image-20220427135346383"></p>
+<p>如果b=1，则第i个track和第j个检测结果是匹配的，这里t设计的阈值为9.4877</p>
+<p>因为Mahalanobis距离在目标运动变化性较低的时候效果更好，而卡尔曼滤波对新的状态的预测也是一个粗略估计，再加上摄像机也有可能会发生抖动，所以在有遮挡时，Mahalanobis距离的效果可能不太好。</p>
+<p>因此引入第二个metric来帮助跟踪任务进行对象分配。</p>
+<p>为每个检测结果d_j构造一个外形描述向量r_j，且r_j的L1范数为1。同时保存一个track上最后L_k个r向量，所以我们第二个metric是比较第i个track和第j个检测结果的cosine距离：</p>
+<p><img src="目标跟踪-DeepSort/image-20220427140300284-1039381.png" alt="image-20220427140300284"></p>
+<p>同上，也有<img src="目标跟踪-DeepSort/image-20220427140408605-1039450.png" alt="image-20220427140408605"></p>
+<p>在实际使用时，我们使用CNN来计算这个r向量</p>
+<p>最后将这两个b值进行统一：</p>
+<p><img src="目标跟踪-DeepSort/image-20220427140815315-1039696.png" alt="image-20220427140815315"></p>
+<h3 id="级联匹配（Matching-Cascade）"><a href="#级联匹配（Matching-Cascade）" class="headerlink" title="级联匹配（Matching Cascade）"></a>级联匹配（Matching Cascade）</h3><p>解决的问题：当一个目标因为被遮挡等原因而失去追踪时，卡尔曼滤波器会增加预测目标位置的不确定性，从而导致预测的目标分布更分散，观测可能性（observation likelihood）也会分散，更难被匹配上。直觉上应该增加物体到track判断距离的阈值来应对这种情形。但是反直觉的是当有两个track来匹配同一个检测目标时，Mahalanobis距离会偏向于预测不确定性更大的track，因为这种操作会显著减少任何检测到映射track平均值的标准偏差距离。这是一个不太合理的行为，因为这样会导致tracks更加碎片化，增加了track的不稳定性。</p>
+<p>因此我们提出级联匹配来优先匹配出现频率更高的目标，来应对我们发现的匹配相关性中的概率分散问题。</p>
+<p><img src="目标跟踪-DeepSort/image-20220427143045821-1041046.png" alt="image-20220427143045821"></p>
+<p><img src="目标跟踪-DeepSort/image-20220427143554243-1041356.png" alt="image-20220427143554243">是指有n帧没有检测结果匹配上的track。</p>
+<p>第七行的意思是从当前帧的检测结果中找与已有track中cost值最小的检测目标</p>
+<p>如果这个目标满足b值条件，就匹配上相应的track</p>
+<h3 id="外观描述向量（Deep-Appearance-Descriptor）"><a href="#外观描述向量（Deep-Appearance-Descriptor）" class="headerlink" title="外观描述向量（Deep Appearance Descriptor）"></a>外观描述向量（Deep Appearance Descriptor）</h3><p>是一个基于CNN模型</p>
+<p><img src="目标跟踪-DeepSort/image-20220427144143537-1041705.png" alt="image-20220427144143537"></p>
+<p>实验结果如下：</p>
+<p><img src="目标跟踪-DeepSort/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nka25pZ2h0X2hhcHB5,size_16,color_FFFFFF,t_70.png" alt="在这里插入图片描述"></p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">KalmanFilter</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    A simple Kalman filter for tracking bounding boxes in image space.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The 8-dimensional state space</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        x, y, a, h, vx, vy, va, vh</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    contains the bounding box center position (x, y), aspect ratio a, height h,</span></span><br><span class="line"><span class="string">    and their respective velocities.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Object motion follows a constant velocity model. The bounding box location</span></span><br><span class="line"><span class="string">    (x, y, a, h) is taken as direct observation of the state space (linear</span></span><br><span class="line"><span class="string">    observation model).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        ndim, dt = <span class="number">4</span>, <span class="number">1.</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create Kalman filter model matrices.</span></span><br><span class="line">        self.a_motion_mt = np.eye(<span class="number">2</span> * ndim, <span class="number">2</span> * ndim) <span class="comment"># 8 * 8的对角线矩阵</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ndim):</span><br><span class="line">            self._motion_mat[i, ndim + i] = dt</span><br><span class="line">        self._update_mat = np.eye(ndim, <span class="number">2</span> * ndim)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Motion and observation uncertainty are chosen relative to the current</span></span><br><span class="line">        <span class="comment"># state estimate. These weights control the amount of uncertainty in</span></span><br><span class="line">        <span class="comment"># the model. This is a bit hacky.</span></span><br><span class="line">        self._std_weight_position = <span class="number">1.</span> / <span class="number">20</span></span><br><span class="line">        self._std_weight_velocity = <span class="number">1.</span> / <span class="number">160</span></span><br></pre></td></tr></table></figure>
+<p>这里<code>self.a_motion_mt</code>如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">array([[1., 0., 0., 0., 1., 0., 0., 0.],</span><br><span class="line">       [0., 1., 0., 0., 0., 1., 0., 0.],</span><br><span class="line">       [0., 0., 1., 0., 0., 0., 1., 0.],</span><br><span class="line">       [0., 0., 0., 1., 0., 0., 0., 1.],</span><br><span class="line">       [0., 0., 0., 0., 1., 0., 0., 0.],</span><br><span class="line">       [0., 0., 0., 0., 0., 1., 0., 0.],</span><br><span class="line">       [0., 0., 0., 0., 0., 0., 1., 0.],</span><br><span class="line">       [0., 0., 0., 0., 0., 0., 0., 1.]])</span><br></pre></td></tr></table></figure>
+<p><code>self._update_mat</code>如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">array([[1., 0., 0., 0., 0., 0., 0., 0.],</span><br><span class="line">       [0., 1., 0., 0., 0., 0., 0., 0.],</span><br><span class="line">       [0., 0., 1., 0., 0., 0., 0., 0.],</span><br><span class="line">       [0., 0., 0., 1., 0., 0., 0., 0.]])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">initiate</span>(<span class="params">self, measurement</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Create track from unassociated measurement.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        measurement (ndarray): Bounding box coordinates (x, y, a, h) with</span></span><br><span class="line"><span class="string">            center position (x, y), aspect ratio a, and height h.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        The mean vector (8 dimensional) and covariance matrix (8x8</span></span><br><span class="line"><span class="string">        dimensional) of the new track. Unobserved velocities are </span></span><br><span class="line"><span class="string">        initialized to 0 mean.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    mean_pos = measurement</span><br><span class="line">    mean_vel = np.zeros_like(mean_pos)</span><br><span class="line">    mean = np.r_[mean_pos, mean_vel] <span class="comment"># 这里是给4维位置相关参数配上4个加速度，初始化为0</span></span><br><span class="line"></span><br><span class="line">    std = [</span><br><span class="line">        <span class="number">2</span> * self._std_weight_position * measurement[<span class="number">3</span>],</span><br><span class="line">        <span class="number">2</span> * self._std_weight_position * measurement[<span class="number">3</span>], <span class="number">1e-2</span>,</span><br><span class="line">        <span class="number">2</span> * self._std_weight_position * measurement[<span class="number">3</span>],</span><br><span class="line">        <span class="number">10</span> * self._std_weight_velocity * measurement[<span class="number">3</span>],</span><br><span class="line">        <span class="number">10</span> * self._std_weight_velocity * measurement[<span class="number">3</span>], <span class="number">1e-5</span>,</span><br><span class="line">        <span class="number">10</span> * self._std_weight_velocity * measurement[<span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    covariance = np.diag(np.square(std)) <span class="comment"># 8 * 8矩阵</span></span><br><span class="line">    <span class="keyword">return</span> mean, covariance</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">self, mean, covariance</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Run Kalman filter prediction step.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        mean (ndarray): The 8 dimensional mean vector of the object state</span></span><br><span class="line"><span class="string">            at the previous time step.</span></span><br><span class="line"><span class="string">        covariance (ndarray): The 8x8 dimensional covariance matrix of the</span></span><br><span class="line"><span class="string">            object state at the previous time step.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        The mean vector and covariance matrix of the predicted state. </span></span><br><span class="line"><span class="string">        Unobserved velocities are initialized to 0 mean.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    std_pos = [</span><br><span class="line">        self._std_weight_position * mean[<span class="number">3</span>], self._std_weight_position *</span><br><span class="line">        mean[<span class="number">3</span>], <span class="number">1e-2</span>, self._std_weight_position * mean[<span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    std_vel = [</span><br><span class="line">        self._std_weight_velocity * mean[<span class="number">3</span>], self._std_weight_velocity *</span><br><span class="line">        mean[<span class="number">3</span>], <span class="number">1e-5</span>, self._std_weight_velocity * mean[<span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    motion_cov = np.diag(np.square(np.r_[std_pos, std_vel]))</span><br><span class="line"></span><br><span class="line">    <span class="comment">#mean = np.dot(self._motion_mat, mean)</span></span><br><span class="line">    mean = np.dot(mean, self._motion_mat.T)</span><br><span class="line">    covariance = np.linalg.multi_dot(</span><br><span class="line">        (self._motion_mat, covariance, self._motion_mat.T)) + motion_cov</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> mean, covariance</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">project</span>(<span class="params">self, mean, covariance</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Project state distribution to measurement space.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args</span></span><br><span class="line"><span class="string">        mean (ndarray): The state&#x27;s mean vector (8 dimensional array).</span></span><br><span class="line"><span class="string">        covariance (ndarray): The state&#x27;s covariance matrix (8x8 dimensional).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        The projected mean and covariance matrix of the given state estimate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    std = [</span><br><span class="line">        self._std_weight_position * mean[<span class="number">3</span>], self._std_weight_position *</span><br><span class="line">        mean[<span class="number">3</span>], <span class="number">1e-1</span>, self._std_weight_position * mean[<span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    innovation_cov = np.diag(np.square(std))</span><br><span class="line"></span><br><span class="line">    mean = np.dot(self._update_mat, mean)</span><br><span class="line">    covariance = np.linalg.multi_dot((self._update_mat, covariance,</span><br><span class="line">                                      self._update_mat.T))</span><br><span class="line">    <span class="keyword">return</span> mean, covariance + innovation_cov</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">multi_predict</span>(<span class="params">self, mean, covariance</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Run Kalman filter prediction step (Vectorized version).</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        mean (ndarray): The Nx8 dimensional mean matrix of the object states</span></span><br><span class="line"><span class="string">            at the previous time step.</span></span><br><span class="line"><span class="string">        covariance (ndarray): The Nx8x8 dimensional covariance matrics of the</span></span><br><span class="line"><span class="string">            object states at the previous time step.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        The mean vector and covariance matrix of the predicted state.</span></span><br><span class="line"><span class="string">        Unobserved velocities are initialized to 0 mean.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    std_pos = [</span><br><span class="line">        self._std_weight_position * mean[:, <span class="number">3</span>], self._std_weight_position *</span><br><span class="line">        mean[:, <span class="number">3</span>], <span class="number">1e-2</span> * np.ones_like(mean[:, <span class="number">3</span>]),</span><br><span class="line">        self._std_weight_position * mean[:, <span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    std_vel = [</span><br><span class="line">        self._std_weight_velocity * mean[:, <span class="number">3</span>], self._std_weight_velocity *</span><br><span class="line">        mean[:, <span class="number">3</span>], <span class="number">1e-5</span> * np.ones_like(mean[:, <span class="number">3</span>]),</span><br><span class="line">        self._std_weight_velocity * mean[:, <span class="number">3</span>]</span><br><span class="line">    ]</span><br><span class="line">    sqr = np.square(np.r_[std_pos, std_vel]).T</span><br><span class="line"></span><br><span class="line">    motion_cov = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(mean)):</span><br><span class="line">        motion_cov.append(np.diag(sqr[i]))</span><br><span class="line">    motion_cov = np.asarray(motion_cov)</span><br><span class="line"></span><br><span class="line">    mean = np.dot(mean, self._motion_mat.T)</span><br><span class="line">    left = np.dot(self._motion_mat, covariance).transpose((<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line">    covariance = np.dot(left, self._motion_mat.T) + motion_cov</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> mean, covariance</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">self, mean, covariance, measurement</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Run Kalman filter correction step.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        mean (ndarray): The predicted state&#x27;s mean vector (8 dimensional).</span></span><br><span class="line"><span class="string">        covariance (ndarray): The state&#x27;s covariance matrix (8x8 dimensional).</span></span><br><span class="line"><span class="string">        measurement (ndarray): The 4 dimensional measurement vector</span></span><br><span class="line"><span class="string">            (x, y, a, h), where (x, y) is the center position, a the aspect</span></span><br><span class="line"><span class="string">            ratio, and h the height of the bounding box.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        The measurement-corrected state distribution.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    projected_mean, projected_cov = self.project(mean, covariance)</span><br><span class="line"></span><br><span class="line">    chol_factor, lower = scipy.linalg.cho_factor(</span><br><span class="line">        projected_cov, lower=<span class="literal">True</span>, check_finite=<span class="literal">False</span>)</span><br><span class="line">    kalman_gain = scipy.linalg.cho_solve(</span><br><span class="line">        (chol_factor, lower),</span><br><span class="line">        np.dot(covariance, self._update_mat.T).T,</span><br><span class="line">        check_finite=<span class="literal">False</span>).T</span><br><span class="line">    innovation = measurement - projected_mean</span><br><span class="line"></span><br><span class="line">    new_mean = mean + np.dot(innovation, kalman_gain.T)</span><br><span class="line">    new_covariance = covariance - np.linalg.multi_dot(</span><br><span class="line">        (kalman_gain, projected_cov, kalman_gain.T))</span><br><span class="line">    <span class="keyword">return</span> new_mean, new_covariance</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gating_distance</span>(<span class="params">self,</span></span><br><span class="line"><span class="params">                    mean,</span></span><br><span class="line"><span class="params">                    covariance,</span></span><br><span class="line"><span class="params">                    measurements,</span></span><br><span class="line"><span class="params">                    only_position=<span class="literal">False</span>,</span></span><br><span class="line"><span class="params">                    metric=<span class="string">&#x27;maha&#x27;</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Compute gating distance between state distribution and measurements.</span></span><br><span class="line"><span class="string">    A suitable distance threshold can be obtained from `chi2inv95`. If</span></span><br><span class="line"><span class="string">    `only_position` is False, the chi-square distribution has 4 degrees of</span></span><br><span class="line"><span class="string">    freedom, otherwise 2.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        mean (ndarray): Mean vector over the state distribution (8</span></span><br><span class="line"><span class="string">            dimensional).</span></span><br><span class="line"><span class="string">        covariance (ndarray): Covariance of the state distribution (8x8</span></span><br><span class="line"><span class="string">            dimensional).</span></span><br><span class="line"><span class="string">        measurements (ndarray): An Nx4 dimensional matrix of N measurements,</span></span><br><span class="line"><span class="string">            each in format (x, y, a, h) where (x, y) is the bounding box center</span></span><br><span class="line"><span class="string">            position, a the aspect ratio, and h the height.</span></span><br><span class="line"><span class="string">        only_position (Optional[bool]): If True, distance computation is </span></span><br><span class="line"><span class="string">            done with respect to the bounding box center position only.</span></span><br><span class="line"><span class="string">        metric (str): Metric type, &#x27;gaussian&#x27; or &#x27;maha&#x27;.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">        An array of length N, where the i-th element contains the squared</span></span><br><span class="line"><span class="string">        Mahalanobis distance between (mean, covariance) and `measurements[i]`.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    mean, covariance = self.project(mean, covariance)</span><br><span class="line">    <span class="keyword">if</span> only_position:</span><br><span class="line">        mean, covariance = mean[:<span class="number">2</span>], covariance[:<span class="number">2</span>, :<span class="number">2</span>]</span><br><span class="line">        measurements = measurements[:, :<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    d = measurements - mean</span><br><span class="line">    <span class="keyword">if</span> metric == <span class="string">&#x27;gaussian&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> np.<span class="built_in">sum</span>(d * d, axis=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">elif</span> metric == <span class="string">&#x27;maha&#x27;</span>:</span><br><span class="line">        cholesky_factor = np.linalg.cholesky(covariance)</span><br><span class="line">        z = scipy.linalg.solve_triangular(</span><br><span class="line">            cholesky_factor,</span><br><span class="line">            d.T,</span><br><span class="line">            lower=<span class="literal">True</span>,</span><br><span class="line">            check_finite=<span class="literal">False</span>,</span><br><span class="line">            overwrite_b=<span class="literal">True</span>)</span><br><span class="line">        squared_maha = np.<span class="built_in">sum</span>(z * z, axis=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> squared_maha</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&#x27;invalid distance metric&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E6%AD%A3%E5%88%99%E5%8C%96/" rel="prev" title="深度学习基础知识-正则化">
+      <i class="fa fa-chevron-left"></i> 深度学习基础知识-正则化
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%BB%86%E8%8A%82"><span class="nav-number">2.</span> <span class="nav-text">算法细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E5%A4%84%E7%90%86%E4%B8%8E%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1"><span class="nav-number">2.1.</span> <span class="nav-text">跟踪处理与状态估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">对象分配问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A7%E8%81%94%E5%8C%B9%E9%85%8D%EF%BC%88Matching-Cascade%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">级联匹配（Matching Cascade）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E8%A7%82%E6%8F%8F%E8%BF%B0%E5%90%91%E9%87%8F%EF%BC%88Deep-Appearance-Descriptor%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">外观描述向量（Deep Appearance Descriptor）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number"></span> <span class="nav-text">代码</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">篮球架上打砖块</p>
+  <div class="site-description" itemprop="description">Apodidae</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">篮球架上打砖块</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
