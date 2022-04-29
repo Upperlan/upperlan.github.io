@@ -162,6 +162,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">度量学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-28 15:23:28 / 修改时间：16:06:20" itemprop="dateCreated datePublished" datetime="2022-04-28T15:23:28+08:00">2022-04-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">度量学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Metric-Learning"><a href="#Metric-Learning" class="headerlink" title="Metric Learning"></a>Metric Learning</h2><p>度量学习（metric learning）的目的是<strong>度量样本之间的相似性，同时使用最优距离度量进行学习任务</strong>。</p>
+<p>传统的度量学习方法通常使用<strong>线性投影，在解决非线性特征的现实世界问题时受到限制（例如典型的文本中的语义相似度问题，很难保证直接通过线性变换的方式使得相似的样本在转换后的特征空间也相似）</strong>。在传统的度量学习中常使用<strong>核方法</strong>来解决这个问题。近年来，深度度量学习通过激活函数为数据的非线性变换提供了更好的解决方案，引起了许多领域研究人员的关注。本文旨在揭示深度度量学习的重要性，并结合近年来的研究发现深度度量学习存在的问题<strong>。在这一领域的研究中，现有的研究大多是受到Siamese和Triplet网络的启发，在深度度量学习中使用共享权值来实现样本间的关联</strong>。这些网络的成功是基于它们理解样本之间相似关系的能力。此外，<strong>采样策略、合适的距离度量和网络结构</strong>是研究人员提高网络模型性能的挑战性因素。这篇文章的重要性在于，它是第一个将这些因素作为一个整体进行系统的分析和评价，并通过比较方法的定量结果来支持的综合性研究。</p>
+<p>总结：metric learning研究的是通过对原始数据进行变换使得变换后的数据能够满足我们人工认定的某种相似度度量，这里的度量可以是简单的计算指标，例如文本相似度中的cosine similarity,overlap similarity,jaccard similarity,也可以是复杂的人工判定，例如语义相似度，情感相似度等等；</p>
+<p>传统的机器学习技术受到原始数据处理能力的限制。因此，它们需要特征工程，如在分类或聚类任务之前的预处理和特征提取步骤。所有这些步骤都需要专业知识。而深度学习直接在分类结构中学习更高层次的数据。这种观点显示了传统机器学习方法和深度学习之间的根本区别。与传统的机器学习方法不同，深度学习需要大量的数据才能获得成功的结果，因为深度学习在数据量较低的情况下不够成功。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39910711/article/details/113985520">马氏距离</a>讲的很好</p>
+<h3 id="Deep-metric-learning的pipeline（使用步骤）"><a href="#Deep-metric-learning的pipeline（使用步骤）" class="headerlink" title="Deep metric learning的pipeline（使用步骤）"></a>Deep metric learning的pipeline（使用步骤）</h3><p>深度度量学习的pipeline主要包括三个主要部分：</p>
+<p><strong>1.输入样本的选择和准备；</strong></p>
+<p><strong>2.网络模型结构的设计；</strong></p>
+<p><strong>3.度量损失函数的设计和选择</strong>。</p>
+<p><strong>deep metric leanring的核心在于最小化同类的类内距离，最大化不同类的类间距离</strong></p>
+<p>deep metric learning的研究中主要集中在loss function的设计和选择上，但是在实际应用中，<strong>输入样本选择和准备，</strong>在分类或聚类中也起着非常重要的作用。合理的样本输入是提高deep metric learning成功的最重要因素之一。</p>
+<p>而deep metric learning中研究的loss function则复杂得多，因为deep metric learning的核心目标是<strong>类内更近，类间更远</strong>，所以其loss function基本上是围绕这个目标来设计的。 <strong>当然，这种方法和常规的方法之间的切换成本不高，因为我们要做的其实就是 准备好适合这种loss function的输入样本的形式，例如从 二元组输入到三元组输入，网络结构不变，改变loss function，开发成本不高的</strong>。</p>
+<p><img src="度量学习/image-20220428160601946-1133163.png" alt="image-20220428160601946"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -287,17 +367,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-14 21:54:12 / 修改时间：22:57:57" itemprop="dateCreated datePublished" datetime="2022-04-14T21:54:12+08:00">2022-04-14</time>
+              <time title="创建时间：2022-04-14 21:54:12" itemprop="dateCreated datePublished" datetime="2022-04-14T21:54:12+08:00">2022-04-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-28 15:24:09" itemprop="dateModified" datetime="2022-04-28T15:24:09+08:00">2022-04-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
                 </span>
             </span>
 
@@ -577,7 +663,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-04-27 21:08:47" itemprop="dateModified" datetime="2022-04-27T21:08:47+08:00">2022-04-27</time>
+                <time title="修改时间：2022-04-29 11:33:32" itemprop="dateModified" datetime="2022-04-29T11:33:32+08:00">2022-04-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -622,6 +708,17 @@
 <p>当s[i] == ‘(‘时，因为要求必须连续的括号，所以必须为0，要不然递推的时候就会保留不连续的构成符号的最大长度。</p>
 <p>当s[i] == ‘)’时，考虑i-1如果正好是’(‘，可以匹配上时，直接与i-2的状态想加就行，最难的是i-1是’)’就要考虑前面的这个是否能构成括号，因此需要考虑一个i-dp[i - 1] - 1这个位置，整好对应第s[i]这个反括号的相应正括号应该存在的地方，这个地方是否是正括号决定了是否能构成有效括号。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">longestValidParentheses</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dp</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="type">int</span> maxVal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i] == <span class="string">&#x27;)&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(s[i - <span class="number">1</span>] == <span class="string">&#x27;(&#x27;</span>) &#123;</span><br><span class="line">                    dp[i] = <span class="number">2</span>;</span><br><span class="line">                    <span class="keyword">if</span>(i - <span class="number">2</span> &gt; <span class="number">0</span>) &#123;<span class="comment">//注意判断条件</span></span><br><span class="line">                        dp[i] = dp[i] + dp[i - <span class="number">2</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;<span class="comment">//第一个判别式必须取等号，否则s[0]位置上如果有正括号会漏掉</span></span><br><span class="line">                    <span class="keyword">if</span>(i - dp[i - <span class="number">1</span>] - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; s[i - dp[i - <span class="number">1</span>] - <span class="number">1</span>] == <span class="string">&#x27;(&#x27;</span>) &#123;</span><br><span class="line">                        dp[i] = <span class="number">2</span> + dp[i - <span class="number">1</span>];</span><br><span class="line">                        <span class="keyword">if</span>(i - dp[i - <span class="number">1</span>] - <span class="number">2</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                            dp[i] = dp[i] + dp[i - dp[i - <span class="number">1</span>] - <span class="number">2</span>];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            maxVal = <span class="built_in">max</span>(maxVal, dp[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxVal;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="494-目标和"><a href="#494-目标和" class="headerlink" title="494. 目标和"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/target-sum/">494. 目标和</a></h4><p>给你一个整数数组 nums 和一个整数 target 。</p>
+<p>向数组中的每个整数前添加 ‘+’ 或 ‘-‘ ，然后串联起所有整数，可以构造一个 表达式 ：</p>
+<p>例如，nums = [2, 1] ，可以在 2 之前添加 ‘+’ ，在 1 之前添加 ‘-‘ ，然后串联起来得到表达式 “+2-1” 。<br>返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。</p>
+<p>示例 1：</p>
+<p>输入：nums = [1,1,1,1,1], target = 3<br>输出：5<br>解释：一共有 5 种方法让最终目标和为 3 。<br>-1 + 1 + 1 + 1 + 1 = 3<br>+1 - 1 + 1 + 1 + 1 = 3<br>+1 + 1 - 1 + 1 + 1 = 3<br>+1 + 1 + 1 - 1 + 1 = 3<br>+1 + 1 + 1 + 1 - 1 = 3<br>示例 2：</p>
+<p>输入：nums = [1], target = 1<br>输出：1</p>
+<p>此题是需要利用数学推理，将该问题转变成一个背包问题。</p>
+<p>假设被置为负数的元素，其正数和为nag，所有元素正数和为sum，则有sum - nag - nag = target。</p>
+<p>所以nag = (sum - target) / 2, 如果nag不为正整数，则无解。</p>
+<p>此时就变成了从nums中选一些数，和为nag，即一个背包问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findTargetSumWays</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> num : nums) &#123;</span><br><span class="line">            sum += num;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> diff = sum - target;</span><br><span class="line">        <span class="keyword">if</span>(diff &lt; <span class="number">0</span> || diff % <span class="number">2</span> != <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">        <span class="type">int</span> nag = (sum - target) / <span class="number">2</span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">dp</span>(n + <span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(nag + <span class="number">1</span>, <span class="number">0</span>));<span class="comment">//根据dp数组的定义来确定是否+1</span></span><br><span class="line">        <span class="comment">//因为j的索引取值是有含义的，为选取的值的和，所以索引会取到nag值，因此数组大小必须+1</span></span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="type">int</span> num = nums[i - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt;= nag; j++) &#123;</span><br><span class="line">                dp[i][j] = dp[i - <span class="number">1</span>][j];</span><br><span class="line">                <span class="keyword">if</span>(num &lt;= j) &#123;</span><br><span class="line">                    dp[i][j] += dp[i - <span class="number">1</span>][j - num];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n][nag];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -886,128 +983,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">深度学习基础-激活函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-16 22:10:54" itemprop="dateCreated datePublished" datetime="2022-03-16T22:10:54+08:00">2022-03-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-25 11:41:18" itemprop="dateModified" datetime="2022-03-25T11:41:18+08:00">2022-03-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="为什么需要激活函数"><a href="#为什么需要激活函数" class="headerlink" title="为什么需要激活函数"></a>为什么需要激活函数</h2><p>激活函数可以引进非线性因素。如果不使用激活函数，输出信号就是一个线性函数，而线性函数的复杂度有限，很难学习到数据中复杂的映射关系。没有激活函数，神经网络很难学习和模拟其他复杂类型的数据，如图像，语音等。</p>
-<p>激活函数也可以把当前特征空间通过一定的线性映射转换到另一个空间，让数据能更容易被分类。</p>
-<p>非线性函数可以让网络的能力更加强大，学习更复杂的食物，找到输入和输出之间的非线性映射。</p>
-<h2 id="常见的激活函数"><a href="#常见的激活函数" class="headerlink" title="常见的激活函数"></a>常见的激活函数</h2><h3 id="sigmoid函数"><a href="#sigmoid函数" class="headerlink" title="sigmoid函数"></a>sigmoid函数</h3><script type="math/tex; mode=display">
-f\left ( x \right)=\frac{1}{1+e^{-x}}</script><p><strong>Sigmoid及其导数曲线：</strong></p>
-<p><img src="v2-595feb9c4660fdee432dcd30b8256735_1440w.jpg" alt="img"></p>
-<p><strong>Sigmoid作为激活函数的特点：</strong></p>
-<p>优点：平滑、易于求导。</p>
-<p>缺点：</p>
-<ol>
-<li>激活函数计算量大（在正向传播和反向传播中都包含幂运算和除法）；</li>
-<li>反向传播求误差梯度时，求导涉及除法；</li>
-<li>Sigmoid导数取值范围是[0, 0.25]，由于神经网络反向传播时的“链式反应”，很容易就会出现梯度消失的情况。例如对于一个10层的网络， 根据0.25^{10}=0.000000954，第10层的误差相对第一层卷积的参数的梯度将是一个非常小的值，这就是所谓的“梯度消失”。</li>
-<li>Sigmoid的输出不是0均值（即zero-centered）；这会导致后一层的神经元将得到上一层输出的非0均值的信号作为输入，随着网络的加深，会改变数据的原始分布。</li>
-</ol>
-<h3 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h3><script type="math/tex; mode=display">
-f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src="image-20220316222452213-7440694.png" alt="image-20220316222452213"></p>
-<p><strong>tanh及其导数曲线：</strong></p>
-<p><img src="v2-ac5875cf045fbdf213b8b0ba67f10b30_1440w.jpg" alt="img"></p>
-<p><strong>tanh作为激活函数的特点：</strong></p>
-<p>相比Sigmoid函数，</p>
-<ol>
-<li>tanh的输出范围时(-1, 1)，解决了Sigmoid函数的不是zero-centered输出问题；</li>
-<li>幂运算的问题仍然存在；</li>
-<li>tanh导数范围在(0, 1)之间，相比sigmoid的(0, 0.25)，梯度消失（gradient vanishing）问题会得到缓解，但仍然还会存在。</li>
-</ol>
-<p>Relu(Rectified Linear Unit)——修正线性单元函数：该函数形式比较简单，</p>
-<h3 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h3><p>公式：relu=max(0, x)</p>
-<p><strong>ReLU及其导数曲线：</strong></p>
-<p><img src="v2-da3babf705f525effbaab3bbbed7df51_1440w.jpg" alt="img"></p>
-<p>从上图可知，ReLU的有效导数是常数1，解决了深层网络中出现的梯度消失问题，也就使得深层网络可训练。<strong>同时ReLU又是非线性函数，所谓非线性，就是一阶导数不为常数；对ReLU求导，在输入值分别为正和为负的情况下，导数是不同的，即ReLU的导数不是常数，所以ReLU是非线性的（只是不同于Sigmoid和tanh，relu的非线性不是光滑的）。</strong></p>
-<p><strong>ReLU在x&gt;0下，导数为常数1的特点：</strong></p>
-<p>导数为常数1的好处就是在“链式反应”中不会出现梯度消失，但梯度下降的强度就完全取决于权值的乘积，这样就可能会出现梯度爆炸问题。解决这类问题：一是控制权值，让它们在（0，1）范围内；二是做梯度裁剪，控制梯度下降强度，如ReLU(x)=min(6, max(0,x))</p>
-<p><strong>ReLU在x&lt;0下，输出置为0的特点：</strong></p>
-<p>描述该特征前，需要明确深度学习的目标：深度学习是根据大批量样本数据，从错综复杂的数据关系中，找到关键信息（关键特征）。换句话说，就是把密集矩阵转化为稀疏矩阵，保留数据的关键信息，去除噪音，这样的模型就有了鲁棒性。ReLU将x&lt;0的输出置为0，就是一个去噪音，稀疏矩阵的过程。而且在训练过程中，这种稀疏性是动态调节的，网络会自动调整稀疏比例，保证矩阵有最优的有效特征。</p>
-<p>但是ReLU 强制将x&lt;0部分的输出置为0（置为0就是屏蔽该特征），可能会导致模型无法学习到有效特征，所以如果学习率设置的太大，就可能会导致网络的大部分神经元处于‘dead’状态，所以使用ReLU的网络，学习率不能设置太大。</p>
-<p><strong>ReLU作为激活函数的特点：</strong></p>
-<ul>
-<li>相比Sigmoid和tanh，ReLU摒弃了复杂的计算，提高了运算速度。</li>
-<li>解决了梯度消失问题，收敛速度快于Sigmoid和tanh函数，但要防范ReLU的梯度爆炸</li>
-<li>容易得到更好的模型，但也要防止训练中出现模型‘Dead’情况。</li>
-</ul>
-<h2 id="Leaky-ReLU-PReLU（Parametric-Relu）-RReLU（Random-ReLU）"><a href="#Leaky-ReLU-PReLU（Parametric-Relu）-RReLU（Random-ReLU）" class="headerlink" title="Leaky ReLU, PReLU（Parametric Relu）, RReLU（Random ReLU）"></a>Leaky ReLU, PReLU（Parametric Relu）, RReLU（Random ReLU）</h2><p>为了防止模型的‘Dead’情况，后人将x&lt;0部分并没有直接置为0，而是给了一个很小的负数梯度值</p>
-<p><strong>Leaky ReLU</strong>中的<img src="https://www.zhihu.com/equation?tex=%5Calpha" alt="[公式]">为常数，一般设置 0.01。这个函数通常比 Relu 激活函数效果要好，但是效果不是很稳定，所以在实际中 Leaky ReLu 使用的并不多。</p>
-<p><strong>PRelu（参数化修正线性单元）</strong> 中的a作为一个可学习的参数，会在训练的过程中进行更新。</p>
-<p><strong>RReLU（随机纠正线性单元）</strong>也是Leaky ReLU的一个变体。在RReLU中，负值的斜率在训练中是随机的，在之后的测试中就变成了固定的了。RReLU的亮点在于，在训练环节中，aji是从一个均匀的分布U(I,u)中随机抽取的数值。</p>
-<p><strong>ReLU及其变体图像：</strong></p>
-<p><img src="v2-96c799e1b9f0b80de1ca17e503e4c11a_1440w.jpg" alt="img"></p>
-<h2 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zongfa/p/8971213.html">https://www.cnblogs.com/zongfa/p/8971213.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1077,7 +1052,7 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

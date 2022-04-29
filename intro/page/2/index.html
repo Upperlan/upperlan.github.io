@@ -162,6 +162,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">深度学习基础-激活函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-16 22:10:54" itemprop="dateCreated datePublished" datetime="2022-03-16T22:10:54+08:00">2022-03-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-25 11:41:18" itemprop="dateModified" datetime="2022-03-25T11:41:18+08:00">2022-03-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="为什么需要激活函数"><a href="#为什么需要激活函数" class="headerlink" title="为什么需要激活函数"></a>为什么需要激活函数</h2><p>激活函数可以引进非线性因素。如果不使用激活函数，输出信号就是一个线性函数，而线性函数的复杂度有限，很难学习到数据中复杂的映射关系。没有激活函数，神经网络很难学习和模拟其他复杂类型的数据，如图像，语音等。</p>
+<p>激活函数也可以把当前特征空间通过一定的线性映射转换到另一个空间，让数据能更容易被分类。</p>
+<p>非线性函数可以让网络的能力更加强大，学习更复杂的食物，找到输入和输出之间的非线性映射。</p>
+<h2 id="常见的激活函数"><a href="#常见的激活函数" class="headerlink" title="常见的激活函数"></a>常见的激活函数</h2><h3 id="sigmoid函数"><a href="#sigmoid函数" class="headerlink" title="sigmoid函数"></a>sigmoid函数</h3><script type="math/tex; mode=display">
+f\left ( x \right)=\frac{1}{1+e^{-x}}</script><p><strong>Sigmoid及其导数曲线：</strong></p>
+<p><img src="v2-595feb9c4660fdee432dcd30b8256735_1440w.jpg" alt="img"></p>
+<p><strong>Sigmoid作为激活函数的特点：</strong></p>
+<p>优点：平滑、易于求导。</p>
+<p>缺点：</p>
+<ol>
+<li>激活函数计算量大（在正向传播和反向传播中都包含幂运算和除法）；</li>
+<li>反向传播求误差梯度时，求导涉及除法；</li>
+<li>Sigmoid导数取值范围是[0, 0.25]，由于神经网络反向传播时的“链式反应”，很容易就会出现梯度消失的情况。例如对于一个10层的网络， 根据0.25^{10}=0.000000954，第10层的误差相对第一层卷积的参数的梯度将是一个非常小的值，这就是所谓的“梯度消失”。</li>
+<li>Sigmoid的输出不是0均值（即zero-centered）；这会导致后一层的神经元将得到上一层输出的非0均值的信号作为输入，随着网络的加深，会改变数据的原始分布。</li>
+</ol>
+<h3 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h3><script type="math/tex; mode=display">
+f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src="image-20220316222452213-7440694.png" alt="image-20220316222452213"></p>
+<p><strong>tanh及其导数曲线：</strong></p>
+<p><img src="v2-ac5875cf045fbdf213b8b0ba67f10b30_1440w.jpg" alt="img"></p>
+<p><strong>tanh作为激活函数的特点：</strong></p>
+<p>相比Sigmoid函数，</p>
+<ol>
+<li>tanh的输出范围时(-1, 1)，解决了Sigmoid函数的不是zero-centered输出问题；</li>
+<li>幂运算的问题仍然存在；</li>
+<li>tanh导数范围在(0, 1)之间，相比sigmoid的(0, 0.25)，梯度消失（gradient vanishing）问题会得到缓解，但仍然还会存在。</li>
+</ol>
+<p>Relu(Rectified Linear Unit)——修正线性单元函数：该函数形式比较简单，</p>
+<h3 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h3><p>公式：relu=max(0, x)</p>
+<p><strong>ReLU及其导数曲线：</strong></p>
+<p><img src="v2-da3babf705f525effbaab3bbbed7df51_1440w.jpg" alt="img"></p>
+<p>从上图可知，ReLU的有效导数是常数1，解决了深层网络中出现的梯度消失问题，也就使得深层网络可训练。<strong>同时ReLU又是非线性函数，所谓非线性，就是一阶导数不为常数；对ReLU求导，在输入值分别为正和为负的情况下，导数是不同的，即ReLU的导数不是常数，所以ReLU是非线性的（只是不同于Sigmoid和tanh，relu的非线性不是光滑的）。</strong></p>
+<p><strong>ReLU在x&gt;0下，导数为常数1的特点：</strong></p>
+<p>导数为常数1的好处就是在“链式反应”中不会出现梯度消失，但梯度下降的强度就完全取决于权值的乘积，这样就可能会出现梯度爆炸问题。解决这类问题：一是控制权值，让它们在（0，1）范围内；二是做梯度裁剪，控制梯度下降强度，如ReLU(x)=min(6, max(0,x))</p>
+<p><strong>ReLU在x&lt;0下，输出置为0的特点：</strong></p>
+<p>描述该特征前，需要明确深度学习的目标：深度学习是根据大批量样本数据，从错综复杂的数据关系中，找到关键信息（关键特征）。换句话说，就是把密集矩阵转化为稀疏矩阵，保留数据的关键信息，去除噪音，这样的模型就有了鲁棒性。ReLU将x&lt;0的输出置为0，就是一个去噪音，稀疏矩阵的过程。而且在训练过程中，这种稀疏性是动态调节的，网络会自动调整稀疏比例，保证矩阵有最优的有效特征。</p>
+<p>但是ReLU 强制将x&lt;0部分的输出置为0（置为0就是屏蔽该特征），可能会导致模型无法学习到有效特征，所以如果学习率设置的太大，就可能会导致网络的大部分神经元处于‘dead’状态，所以使用ReLU的网络，学习率不能设置太大。</p>
+<p><strong>ReLU作为激活函数的特点：</strong></p>
+<ul>
+<li>相比Sigmoid和tanh，ReLU摒弃了复杂的计算，提高了运算速度。</li>
+<li>解决了梯度消失问题，收敛速度快于Sigmoid和tanh函数，但要防范ReLU的梯度爆炸</li>
+<li>容易得到更好的模型，但也要防止训练中出现模型‘Dead’情况。</li>
+</ul>
+<h2 id="Leaky-ReLU-PReLU（Parametric-Relu）-RReLU（Random-ReLU）"><a href="#Leaky-ReLU-PReLU（Parametric-Relu）-RReLU（Random-ReLU）" class="headerlink" title="Leaky ReLU, PReLU（Parametric Relu）, RReLU（Random ReLU）"></a>Leaky ReLU, PReLU（Parametric Relu）, RReLU（Random ReLU）</h2><p>为了防止模型的‘Dead’情况，后人将x&lt;0部分并没有直接置为0，而是给了一个很小的负数梯度值</p>
+<p><strong>Leaky ReLU</strong>中的<img src="https://www.zhihu.com/equation?tex=%5Calpha" alt="[公式]">为常数，一般设置 0.01。这个函数通常比 Relu 激活函数效果要好，但是效果不是很稳定，所以在实际中 Leaky ReLu 使用的并不多。</p>
+<p><strong>PRelu（参数化修正线性单元）</strong> 中的a作为一个可学习的参数，会在训练的过程中进行更新。</p>
+<p><strong>RReLU（随机纠正线性单元）</strong>也是Leaky ReLU的一个变体。在RReLU中，负值的斜率在训练中是随机的，在之后的测试中就变成了固定的了。RReLU的亮点在于，在训练环节中，aji是从一个均匀的分布U(I,u)中随机抽取的数值。</p>
+<p><strong>ReLU及其变体图像：</strong></p>
+<p><img src="v2-96c799e1b9f0b80de1ca17e503e4c11a_1440w.jpg" alt="img"></p>
+<h2 id="softmax"><a href="#softmax" class="headerlink" title="softmax"></a>softmax</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zongfa/p/8971213.html">https://www.cnblogs.com/zongfa/p/8971213.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/15/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1045,87 +1167,6 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/Vision-Transformer%E5%A4%84%E7%90%86%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E5%9B%BE%E5%83%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/07/Vision-Transformer%E5%A4%84%E7%90%86%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E5%9B%BE%E5%83%8F/" class="post-title-link" itemprop="url">Vision Transformer处理恶意软件图像</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-07 12:06:39 / 修改时间：20:43:10" itemprop="dateCreated datePublished" datetime="2022-03-07T12:06:39+08:00">2022-03-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E8%AE%BA%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">科研与论文</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="整体思路"><a href="#整体思路" class="headerlink" title="整体思路"></a>整体思路</h1><p>将恶意软件的PE十六进制机器码转换成序列，再根据ASCII码表将序列值转化成像素点的数值，最后用多种方法填充成一幅图像，供Vision Transformer模型进行分类。</p>
-<h1 id="1-简要前言：转换成图像的意义"><a href="#1-简要前言：转换成图像的意义" class="headerlink" title="1.简要前言：转换成图像的意义"></a>1.简要前言：转换成图像的意义</h1><p>可以利用视觉领域先进的模型与算法，更好的提取PE恶意软件十六进制代码里的特征。</p>
-<p><img src="image-20220307121458807-6626500.png" alt="image-20220307121458807"></p>
-<p>上图就是我们直接读取可执行PE文件的十六进制代码的结果。最左边一列是这些代码在虚拟内存中的地址，右边是每个地址存储的待执行代码。很明显几乎不可能直观的看出来这些代码的逻辑和操作。而如果用机器学习进行分类，就需要很多关于此类数据的先验知识对这些数据进行特征提取或降维。而深度学习模型的一个特点就是能够找到众多输入数据中所包含的特征，如图像分类问题中，CNN有能力识别到指定图片中目标对象的类别。因此直觉上深度学习模型是处理此类问题十分有效的工具。</p>
-<p>而深度学习模型的输入数据一般是统一成一个指定类型的数据。目前图像领域里有很多sota模型可以对图像类数据的特征进行提取，分类，因此如果能让输入数据具备类似图像上的特征，即像素点数据分布的特征，那么就可以利用视觉类深度学习模型来处理恶意软件的分类问题。所以如何将恶意软件进行图像化就是一个很重要的问题了。</p>
-<p>使用视觉类DL模型的另外一个原因是恶意软件的序列并不是严格意义上的时间序列，而是包含了丰富的语义特征的序列，就像NLP里单词和单词之间，单词与句子之间的语义一样。用于NLP模型的恶意软件数据集很难构建出来，因为需要大量的可执行文件反汇编，逆向工程的先验知识。因此图像类深度学习模型，或者由NLP领域发展而来的Vision Transformer模型是目前我实验中比较有效的模型。</p>
-<h1 id="2-Vision-Transformer特点"><a href="#2-Vision-Transformer特点" class="headerlink" title="2.Vision Transformer特点"></a>2.Vision Transformer特点</h1><p>Vision Transformer模型的特点是和self attention模块的功能高度相关的。从宏观上来说，self-attention layer能够并行输入一个sequence，输出一个sequence，<strong>它的每一个输出都看过了整个的输入sequence，这一点与bi-directional RNN相同。但是神奇的地方是：它的每一个输出都可以并行化计算。</strong></p>
-<p><img src="image-20220307134209708-6631731.png" alt="image-20220307134209708"></p>
-<p>用CNN，你确实也可以做到输入是一个sequence，输出是另外一个sequence。但是，表面上CNN和Vision Transformer可以做到相同的输入和输出，但是CNN只能考虑非常有限的内容。比如在我们下图中CNN的filter只考虑了3个vector，不像RNN可以考虑之前的所有vector。但是CNN也不是没有办法考虑很长时间的dependency的，你只需要堆叠filter，多堆叠几层，上层的filter就可以考虑比较多的资讯，比如，第二层的filter (蓝色的三角形)看了6个vector，所以，只要叠很多层，就能够看很长时间的资讯。</p>
-<p>做CNN的时候是只考虑感受野红框里面的资讯，而不是图片的全局信息。所以CNN可以看作是一种简化版本的self-attention。</p>
-<p>或者可以反过来说，self-attention是一种复杂化的CNN，在做CNN的时候是只考虑感受野红框里面的资讯，而感受野的范围和大小是由人决定的。但是self-attention由attention找到相关的pixel，就好像是感受野的范围和大小是自动被学出来的，所以CNN可以看做是self-attention的特例，如图所示。</p>
-<p><img src="v2-f28a8b0295863ab78d92a281ae55fce2_720w.jpg" alt="img"></p>
-<p><img src="v2-f268035371aa22a350a317fc237a04f7_720w.jpg" alt="img"></p>
-<p>既然self-attention是更广义的CNN，则这个模型更加flexible。而我们认为，一个模型越flexible，训练它所需要的数据量就越多，所以在训练self-attention模型时就需要更多的数据，论文 ViT 中有印证，它需要的数据集是有3亿张图片的JFT-300，而如果不使用这么多数据而只使用ImageNet，则性能不如CNN。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1195,7 +1236,7 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
