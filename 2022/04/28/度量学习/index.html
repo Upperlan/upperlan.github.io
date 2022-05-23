@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="Upperlan">
 <meta property="og:description" content="Metric Learning度量学习（metric learning）的目的是度量样本之间的相似性，同时使用最优距离度量进行学习任务。 传统的度量学习方法通常使用线性投影，在解决非线性特征的现实世界问题时受到限制（例如典型的文本中的语义相似度问题，很难保证直接通过线性变换的方式使得相似的样本在转换后的特征空间也相似）。在传统的度量学习中常使用核方法来解决这个问题。近年来，深度度量学习通过激活函数">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/度量学习/image-20220505192219871-1749741.png">
+<meta property="og:image" content="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/度量学习/20200703235330209.png">
 <meta property="og:image" content="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/度量学习/image-20220428160601946-1133163.png">
 <meta property="article:published_time" content="2022-04-28T07:23:28.000Z">
-<meta property="article:modified_time" content="2022-04-28T08:06:20.226Z">
+<meta property="article:modified_time" content="2022-05-07T01:59:25.143Z">
 <meta property="article:author" content="篮球架上打砖块">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/度量学习/image-20220428160601946-1133163.png">
+<meta name="twitter:image" content="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/度量学习/image-20220505192219871-1749741.png">
 
 <link rel="canonical" href="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/">
 
@@ -189,10 +191,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-28 15:23:28 / 修改时间：16:06:20" itemprop="dateCreated datePublished" datetime="2022-04-28T15:23:28+08:00">2022-04-28</time>
+              <time title="创建时间：2022-04-28 15:23:28" itemprop="dateCreated datePublished" datetime="2022-04-28T15:23:28+08:00">2022-04-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-07 09:59:25" itemprop="dateModified" datetime="2022-05-07T09:59:25+08:00">2022-05-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -225,7 +233,16 @@
 <p>传统的度量学习方法通常使用<strong>线性投影，在解决非线性特征的现实世界问题时受到限制（例如典型的文本中的语义相似度问题，很难保证直接通过线性变换的方式使得相似的样本在转换后的特征空间也相似）</strong>。在传统的度量学习中常使用<strong>核方法</strong>来解决这个问题。近年来，深度度量学习通过激活函数为数据的非线性变换提供了更好的解决方案，引起了许多领域研究人员的关注。本文旨在揭示深度度量学习的重要性，并结合近年来的研究发现深度度量学习存在的问题<strong>。在这一领域的研究中，现有的研究大多是受到Siamese和Triplet网络的启发，在深度度量学习中使用共享权值来实现样本间的关联</strong>。这些网络的成功是基于它们理解样本之间相似关系的能力。此外，<strong>采样策略、合适的距离度量和网络结构</strong>是研究人员提高网络模型性能的挑战性因素。这篇文章的重要性在于，它是第一个将这些因素作为一个整体进行系统的分析和评价，并通过比较方法的定量结果来支持的综合性研究。</p>
 <p>总结：metric learning研究的是通过对原始数据进行变换使得变换后的数据能够满足我们人工认定的某种相似度度量，这里的度量可以是简单的计算指标，例如文本相似度中的cosine similarity,overlap similarity,jaccard similarity,也可以是复杂的人工判定，例如语义相似度，情感相似度等等；</p>
 <p>传统的机器学习技术受到原始数据处理能力的限制。因此，它们需要特征工程，如在分类或聚类任务之前的预处理和特征提取步骤。所有这些步骤都需要专业知识。而深度学习直接在分类结构中学习更高层次的数据。这种观点显示了传统机器学习方法和深度学习之间的根本区别。与传统的机器学习方法不同，深度学习需要大量的数据才能获得成功的结果，因为深度学习在数据量较低的情况下不够成功。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39910711/article/details/113985520">马氏距离</a>讲的很好</p>
+<h3 id="各种距离计算原理与代码"><a href="#各种距离计算原理与代码" class="headerlink" title="各种距离计算原理与代码"></a>各种距离计算原理与代码</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39910711/article/details/113985520">马氏距离</a>讲的很好</p>
+<h4 id="欧式距离"><a href="#欧式距离" class="headerlink" title="欧式距离"></a>欧式距离</h4><p><img src="度量学习/image-20220505192219871-1749741.png" alt="image-20220505192219871"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">euclidean_dist</span>(<span class="params">x,y</span>):</span><br><span class="line">    m,n = x.size(<span class="number">0</span>),y.size(<span class="number">0</span>)</span><br><span class="line">    xx = torch.<span class="built_in">pow</span>(x,<span class="number">2</span>).<span class="built_in">sum</span>(<span class="number">1</span>,keepdim=<span class="literal">True</span>).expand(m,n)</span><br><span class="line">    yy = torch.<span class="built_in">pow</span>(y,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>,keepdim=<span class="literal">True</span>).expand(n,m).t()</span><br><span class="line">    dist = xx + yy</span><br><span class="line">    dist.addmm_(<span class="number">1</span>,-<span class="number">2</span>,x,y.t())</span><br><span class="line">    dist = dist.clamp(<span class="built_in">min</span>=<span class="number">1e-12</span>).sqrt()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dist</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="余弦距离"><a href="#余弦距离" class="headerlink" title="余弦距离"></a>余弦距离</h4><p>严格来讲余弦距离不是距离，而只是相似性。其他距离直接测量两个高维空间上的点的距离，如果距离为0则两个点“相同”；余弦的结果为在[0，1]之中，如果为 1，只能确定两者完全相关、完全相似。</p>
+<p>假设两用户同时对两件商品评分，向量分别为(3,3)和(5,5)，这两位用户对两件商品的喜好其实是一样的，余弦距离此时为1，欧式距离给出的解显然没有余弦值直观。</p>
+<p>对于点X和点Y，其余弦距离：</p>
+<p><img src="度量学习/20200703235330209.png" alt="在这里插入图片描述"></p>
+<p>余弦距离在给文本分类的词袋模型中使用，例如给一篇文章一共出现过6000个词，则用一个6000维度的向量X表示这篇文章，每个维度代表各个字出现的数目；另外一篇文章也恰好只出现过这6000字，用向量Y表示该文章，则这两篇文章相似度可以用余弦距离来测量。</p>
+<p>优点：余弦距离根据向量方向来判断向量相似度，与向量各个维度的相对大小有关，不受各个维度直接数值影响。<br>某种程度上，归一化后的欧氏距离和余弦相似性表征能力相同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cosine_dist</span>(<span class="params">x,y</span>):</span><br><span class="line">    bs1, bs2 = x.size(<span class="number">0</span>),y.size(<span class="number">0</span>)</span><br><span class="line">    frac_up = torch.matmul(x,y.transpose(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">    frac_down = (torch.sqrt( torch.<span class="built_in">pow</span>(x,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>) ).view(bs1,<span class="number">1</span>).repeat(<span class="number">1</span>,bs2)) * \</span><br><span class="line">                (torch.sqrt( torch.<span class="built_in">pow</span>(y,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>).view(<span class="number">1</span>,bs2).repeat(bs1,<span class="number">1</span>) )  )</span><br><span class="line">    cosine = frac_up/frac_down</span><br><span class="line">    cos_d = <span class="number">1</span> - cosine</span><br><span class="line">    <span class="keyword">return</span> cos_d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="Deep-metric-learning的pipeline（使用步骤）"><a href="#Deep-metric-learning的pipeline（使用步骤）" class="headerlink" title="Deep metric learning的pipeline（使用步骤）"></a>Deep metric learning的pipeline（使用步骤）</h3><p>深度度量学习的pipeline主要包括三个主要部分：</p>
 <p><strong>1.输入样本的选择和准备；</strong></p>
 <p><strong>2.网络模型结构的设计；</strong></p>
@@ -252,7 +269,10 @@
     <a href="/2022/04/27/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA-DeepSort/" rel="prev" title="目标跟踪-DeepSort">
       <i class="fa fa-chevron-left"></i> 目标跟踪-DeepSort
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/07/%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-jde/" rel="next" title="目标跟踪-jde">
+      目标跟踪-jde <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -311,7 +331,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Metric-Learning"><span class="nav-number">1.</span> <span class="nav-text">Metric Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Deep-metric-learning%E7%9A%84pipeline%EF%BC%88%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">Deep metric learning的pipeline（使用步骤）</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Metric-Learning"><span class="nav-number">1.</span> <span class="nav-text">Metric Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E7%A7%8D%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">各种距离计算原理与代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AC%A7%E5%BC%8F%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.1.1.</span> <span class="nav-text">欧式距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%99%E5%BC%A6%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.1.2.</span> <span class="nav-text">余弦距离</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deep-metric-learning%E7%9A%84pipeline%EF%BC%88%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">Deep metric learning的pipeline（使用步骤）</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -325,7 +345,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

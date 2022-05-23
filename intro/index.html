@@ -162,6 +162,160 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/NMS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/23/NMS/" class="post-title-link" itemprop="url">NMS和IOU代码实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-23 20:29:40 / 修改时间：20:40:56" itemprop="dateCreated datePublished" datetime="2022-05-23T20:29:40+08:00">2022-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index"><span itemprop="name">目标检测</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="NMS"><a href="#NMS" class="headerlink" title="NMS"></a>NMS</h2><p>非极大值抑制的具体实现代码如下面的nms函数的定义，需要说明的是数据集中含有多个类别的物体，所以这里需要做多分类非极大值抑制，其实现原理与非极大值抑制相同，区别在于需要对每个类别都做非极大值抑制，实现代码如下面的multiclass_nms所示。</p>
+<h4 id="nms逻辑"><a href="#nms逻辑" class="headerlink" title="nms逻辑"></a>nms逻辑</h4><ol>
+<li>将scores排序，从大到小<br>while inds.size &gt; 0:<br> 选一个最大score_m<br> score_m &lt; 阈值： break<br> 否则<br> for(bbbox ： 所有确认保留的bbox索引 keen_inds)：<pre><code> 计算所有bbox和已保留的bbox的IoU
+ 如果很大，就认为重叠，不保留
+ 如果保留，push到确认保留的bbox，
+ pop一个最大score的bbox
+</code></pre></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非极大值抑制</span></span><br><span class="line"><span class="comment"># 假设score：[0.2, 0.3, 0.1, 0.8, 0.7]</span></span><br><span class="line"><span class="comment"># bboxes[nums_bbox, 4]</span></span><br><span class="line"><span class="comment">#i：batch size</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">nms</span>(<span class="params">bboxes, scores, score_thresh, nms_thresh, pre_nms_topk, i=<span class="number">0</span>, c=<span class="number">0</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    nms</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    inds = np.argsort(scores) </span><br><span class="line">    <span class="comment"># 将scores中的元素从小到大排列，提取其对应的index(索引)，然后输出到y。例如：score[2]=0.1最小，所以y[0]=2,</span></span><br><span class="line">    <span class="comment"># score[4]=0.8最大，所以inds[5]=0.8。</span></span><br><span class="line">    inds = inds[::-<span class="number">1</span>] <span class="comment"># 倒序，变成从大到小</span></span><br><span class="line">    keep_inds = []</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">len</span>(inds) &gt; <span class="number">0</span>):</span><br><span class="line">        cur_ind = inds[<span class="number">0</span>] <span class="comment"># 选出当前最大score的索引</span></span><br><span class="line">        cur_score = scores[cur_ind] <span class="comment"># 从索引取出值来</span></span><br><span class="line">        <span class="comment"># if score of the box is less than score_thresh, just drop it</span></span><br><span class="line">        <span class="keyword">if</span> cur_score &lt; score_thresh:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        keep = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> ind <span class="keyword">in</span> keep_inds:</span><br><span class="line">            current_box = bboxes[cur_ind] <span class="comment"># 选出当前最大的score的bbox</span></span><br><span class="line">            remain_box = bboxes[ind] <span class="comment"># 剩下的所有bbox一个一个来</span></span><br><span class="line">            iou = box_iou_xyxy(current_box, remain_box) <span class="comment"># 剩下所有bbox和最大scorebbox的IoU</span></span><br><span class="line">            <span class="keyword">if</span> iou &gt; nms_thresh: <span class="comment"># 大于一定IoU的直接去掉,不保存索引，也就是不加入keep_ind</span></span><br><span class="line">                keep = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"><span class="comment">#         if i == 0 and c == 4 and cur_ind == 951:</span></span><br><span class="line"><span class="comment">#             print(&#x27;suppressed, &#x27;, keep, i, c, cur_ind, ind, iou)</span></span><br><span class="line">        <span class="keyword">if</span> keep:</span><br><span class="line">            keep_inds.append(cur_ind)</span><br><span class="line">        inds = inds[<span class="number">1</span>:] <span class="comment"># 每个循环结束，就pop掉一个最大score</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.array(keep_inds)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多分类非极大值抑制</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">multiclass_nms</span>(<span class="params">bboxes, scores, score_thresh=<span class="number">0.01</span>, nms_thresh=<span class="number">0.45</span>, pre_nms_topk=<span class="number">1000</span>, pos_nms_topk=<span class="number">100</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    This is for multiclass_nms</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    batch_size = bboxes.shape[<span class="number">0</span>]</span><br><span class="line">    class_num = scores.shape[<span class="number">1</span>]</span><br><span class="line">    rets = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(batch_size):</span><br><span class="line">        bboxes_i = bboxes[i]</span><br><span class="line">        scores_i = scores[i]</span><br><span class="line">        ret = []</span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(class_num):</span><br><span class="line">            scores_i_c = scores_i[c]</span><br><span class="line">            keep_inds = nms(bboxes_i, scores_i_c, score_thresh, nms_thresh, pre_nms_topk, i=i, c=c)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(keep_inds) &lt; <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            keep_bboxes = bboxes_i[keep_inds]</span><br><span class="line">            keep_scores = scores_i_c[keep_inds]</span><br><span class="line">            keep_results = np.zeros([keep_scores.shape[<span class="number">0</span>], <span class="number">6</span>])</span><br><span class="line">            keep_results[:, <span class="number">0</span>] = c</span><br><span class="line">            keep_results[:, <span class="number">1</span>] = keep_scores[:]</span><br><span class="line">            keep_results[:, <span class="number">2</span>:<span class="number">6</span>] = keep_bboxes[:, :]</span><br><span class="line">            ret.append(keep_results)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(ret) &lt; <span class="number">1</span>:</span><br><span class="line">            rets.append(ret)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        ret_i = np.concatenate(ret, axis=<span class="number">0</span>)</span><br><span class="line">        scores_i = ret_i[:, <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(scores_i) &gt; pos_nms_topk:</span><br><span class="line">            inds = np.argsort(scores_i)[::-<span class="number">1</span>]</span><br><span class="line">            inds = inds[:pos_nms_topk]</span><br><span class="line">            ret_i = ret_i[inds]</span><br><span class="line"></span><br><span class="line">        rets.append(ret_i)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> rets</span><br></pre></td></tr></table></figure>
+<h2 id="IoU"><a href="#IoU" class="headerlink" title="IoU"></a>IoU</h2><p>找到相交区域的斜对角两个边界点的坐标，计算面积。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nump <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_iou</span>(<span class="params">pred_bboxes, gt_bbox</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    (x1,y1,x2,y2)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    ximin = np.maximum(pred[:, <span class="number">0</span>], gt_bbox[<span class="number">0</span>])</span><br><span class="line">    yimin = np.maximum(pred[:, <span class="number">1</span>], gt_bbox[<span class="number">1</span>])</span><br><span class="line">    ximax = np.minimum(pred[:,<span class="number">2</span>], gt_bbox[<span class="number">2</span>])</span><br><span class="line">    yimax = np.minimum(pred[:,<span class="number">3</span>], gt_bbox[<span class="number">3</span>])</span><br><span class="line">    wi = np.maximum(ximax - ximin, <span class="number">0.</span>)</span><br><span class="line">    hi = np.maximum(yimax - yimin, <span class="number">0.</span>)</span><br><span class="line">    </span><br><span class="line">    inter = wi * yi</span><br><span class="line">    </span><br><span class="line">    uni = (pred[:,<span class="number">2</span>] - pred[:, <span class="number">0</span>] + <span class="number">1</span>) * (pred[:,<span class="number">3</span>] - pred[:, <span class="number">1</span>] + <span class="number">1</span>) + \</span><br><span class="line">        (gt_bbox[<span class="number">2</span>] - gt_bbox[<span class="number">0</span>] + <span class="number">1</span>) * (gt_bbox[<span class="number">3</span>] - gt_bbox[<span class="number">1</span>] + <span class="number">1</span>) - inter</span><br><span class="line">    </span><br><span class="line">    IoU = inter / uni</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> IoU</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/07/%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-jde/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/07/%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-jde/" class="post-title-link" itemprop="url">目标跟踪-jde</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-07 09:56:55" itemprop="dateCreated datePublished" datetime="2022-05-07T09:56:55+08:00">2022-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-09 14:39:13" itemprop="dateModified" datetime="2022-05-09T14:39:13+08:00">2022-05-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h3><p>1.普通的目标跟踪模型耗时由检测模型和外观embedding生成模型两部分组成，耗时较长，而作者认为模型中有一些提取视觉上的底层特征的层可以通用，减少耗时</p>
+<p>2.在1基础上提出一种简单的检测结果与跟踪目标embedding联系的方法</p>
+<p><img src="目标追踪-jde/image-20220507104300219-1891381.png" alt="image-20220507104300219"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/28/%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -185,10 +339,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-28 15:23:28 / 修改时间：16:06:20" itemprop="dateCreated datePublished" datetime="2022-04-28T15:23:28+08:00">2022-04-28</time>
+              <time title="创建时间：2022-04-28 15:23:28" itemprop="dateCreated datePublished" datetime="2022-04-28T15:23:28+08:00">2022-04-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-07 09:59:25" itemprop="dateModified" datetime="2022-05-07T09:59:25+08:00">2022-05-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -214,7 +374,16 @@
 <p>传统的度量学习方法通常使用<strong>线性投影，在解决非线性特征的现实世界问题时受到限制（例如典型的文本中的语义相似度问题，很难保证直接通过线性变换的方式使得相似的样本在转换后的特征空间也相似）</strong>。在传统的度量学习中常使用<strong>核方法</strong>来解决这个问题。近年来，深度度量学习通过激活函数为数据的非线性变换提供了更好的解决方案，引起了许多领域研究人员的关注。本文旨在揭示深度度量学习的重要性，并结合近年来的研究发现深度度量学习存在的问题<strong>。在这一领域的研究中，现有的研究大多是受到Siamese和Triplet网络的启发，在深度度量学习中使用共享权值来实现样本间的关联</strong>。这些网络的成功是基于它们理解样本之间相似关系的能力。此外，<strong>采样策略、合适的距离度量和网络结构</strong>是研究人员提高网络模型性能的挑战性因素。这篇文章的重要性在于，它是第一个将这些因素作为一个整体进行系统的分析和评价，并通过比较方法的定量结果来支持的综合性研究。</p>
 <p>总结：metric learning研究的是通过对原始数据进行变换使得变换后的数据能够满足我们人工认定的某种相似度度量，这里的度量可以是简单的计算指标，例如文本相似度中的cosine similarity,overlap similarity,jaccard similarity,也可以是复杂的人工判定，例如语义相似度，情感相似度等等；</p>
 <p>传统的机器学习技术受到原始数据处理能力的限制。因此，它们需要特征工程，如在分类或聚类任务之前的预处理和特征提取步骤。所有这些步骤都需要专业知识。而深度学习直接在分类结构中学习更高层次的数据。这种观点显示了传统机器学习方法和深度学习之间的根本区别。与传统的机器学习方法不同，深度学习需要大量的数据才能获得成功的结果，因为深度学习在数据量较低的情况下不够成功。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39910711/article/details/113985520">马氏距离</a>讲的很好</p>
+<h3 id="各种距离计算原理与代码"><a href="#各种距离计算原理与代码" class="headerlink" title="各种距离计算原理与代码"></a>各种距离计算原理与代码</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39910711/article/details/113985520">马氏距离</a>讲的很好</p>
+<h4 id="欧式距离"><a href="#欧式距离" class="headerlink" title="欧式距离"></a>欧式距离</h4><p><img src="度量学习/image-20220505192219871-1749741.png" alt="image-20220505192219871"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">euclidean_dist</span>(<span class="params">x,y</span>):</span><br><span class="line">    m,n = x.size(<span class="number">0</span>),y.size(<span class="number">0</span>)</span><br><span class="line">    xx = torch.<span class="built_in">pow</span>(x,<span class="number">2</span>).<span class="built_in">sum</span>(<span class="number">1</span>,keepdim=<span class="literal">True</span>).expand(m,n)</span><br><span class="line">    yy = torch.<span class="built_in">pow</span>(y,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>,keepdim=<span class="literal">True</span>).expand(n,m).t()</span><br><span class="line">    dist = xx + yy</span><br><span class="line">    dist.addmm_(<span class="number">1</span>,-<span class="number">2</span>,x,y.t())</span><br><span class="line">    dist = dist.clamp(<span class="built_in">min</span>=<span class="number">1e-12</span>).sqrt()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dist</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="余弦距离"><a href="#余弦距离" class="headerlink" title="余弦距离"></a>余弦距离</h4><p>严格来讲余弦距离不是距离，而只是相似性。其他距离直接测量两个高维空间上的点的距离，如果距离为0则两个点“相同”；余弦的结果为在[0，1]之中，如果为 1，只能确定两者完全相关、完全相似。</p>
+<p>假设两用户同时对两件商品评分，向量分别为(3,3)和(5,5)，这两位用户对两件商品的喜好其实是一样的，余弦距离此时为1，欧式距离给出的解显然没有余弦值直观。</p>
+<p>对于点X和点Y，其余弦距离：</p>
+<p><img src="度量学习/20200703235330209.png" alt="在这里插入图片描述"></p>
+<p>余弦距离在给文本分类的词袋模型中使用，例如给一篇文章一共出现过6000个词，则用一个6000维度的向量X表示这篇文章，每个维度代表各个字出现的数目；另外一篇文章也恰好只出现过这6000字，用向量Y表示该文章，则这两篇文章相似度可以用余弦距离来测量。</p>
+<p>优点：余弦距离根据向量方向来判断向量相似度，与向量各个维度的相对大小有关，不受各个维度直接数值影响。<br>某种程度上，归一化后的欧氏距离和余弦相似性表征能力相同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cosine_dist</span>(<span class="params">x,y</span>):</span><br><span class="line">    bs1, bs2 = x.size(<span class="number">0</span>),y.size(<span class="number">0</span>)</span><br><span class="line">    frac_up = torch.matmul(x,y.transpose(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">    frac_down = (torch.sqrt( torch.<span class="built_in">pow</span>(x,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>) ).view(bs1,<span class="number">1</span>).repeat(<span class="number">1</span>,bs2)) * \</span><br><span class="line">                (torch.sqrt( torch.<span class="built_in">pow</span>(y,<span class="number">2</span>).<span class="built_in">sum</span>(dim=<span class="number">1</span>).view(<span class="number">1</span>,bs2).repeat(bs1,<span class="number">1</span>) )  )</span><br><span class="line">    cosine = frac_up/frac_down</span><br><span class="line">    cos_d = <span class="number">1</span> - cosine</span><br><span class="line">    <span class="keyword">return</span> cos_d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h3 id="Deep-metric-learning的pipeline（使用步骤）"><a href="#Deep-metric-learning的pipeline（使用步骤）" class="headerlink" title="Deep metric learning的pipeline（使用步骤）"></a>Deep metric learning的pipeline（使用步骤）</h3><p>深度度量学习的pipeline主要包括三个主要部分：</p>
 <p><strong>1.输入样本的选择和准备；</strong></p>
 <p><strong>2.网络模型结构的设计；</strong></p>
@@ -819,170 +988,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/" class="post-title-link" itemprop="url">算法系列-深度优先搜索dfs</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-24 21:51:46" itemprop="dateCreated datePublished" datetime="2022-03-24T21:51:46+08:00">2022-03-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-27 15:32:12" itemprop="dateModified" datetime="2022-03-27T15:32:12+08:00">2022-03-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="200-岛屿数量"><a href="#200-岛屿数量" class="headerlink" title="200. 岛屿数量"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></h4><p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
-<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
-<p>此外，你可以假设该网格的四条边均被水包围。</p>
-<p>示例 1：</p>
-<p>输入：grid = [<br>  [“1”,”1”,”1”,”1”,”0”],<br>  [“1”,”1”,”0”,”1”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”0”,”0”,”0”]<br>]<br>输出：1<br>示例 2：</p>
-<p>输入：grid = [<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”1”,”0”,”0”],<br>  [“0”,”0”,”0”,”1”,”1”]<br>]<br>输出：3</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">private</span>: </span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">inArea</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i &gt;= <span class="number">0</span> &amp;&amp; j &gt;= <span class="number">0</span> &amp;&amp; i &lt; grid.<span class="built_in">size</span>() &amp;&amp; j &lt; grid[<span class="number">0</span>].<span class="built_in">size</span>();<span class="comment">//判断坐标是否合法</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">inArea</span>(grid, i, j)) <span class="keyword">return</span>;<span class="comment">//先把数值读进来，再判断是不是符合规则，当然直接放在下面判断也行，但读起来有点冗余</span></span><br><span class="line">        <span class="keyword">if</span>(grid[i][j] != <span class="string">&#x27;1&#x27;</span>) <span class="keyword">return</span>;</span><br><span class="line">        grid[i][j] = <span class="string">&#x27;2&#x27;</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i - <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i + <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; row;i++) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; col;j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">dfs</span>(grid, i, j);</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>首先，dfs的逻辑应该包括判断base case，即在知道目前输入的情况下，应该怎么处理当下的值；</p>
-<p>其次，应该思考下一步状态应该往那个方向转移，状态的表征是通过改变dfs的传入参数来实现的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/" class="post-title-link" itemprop="url">深度学习基础-KL散度，JS散度和交叉熵</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-23 11:47:02 / 修改时间：13:46:19" itemprop="dateCreated datePublished" datetime="2022-03-23T11:47:02+08:00">2022-03-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h1><p>KL散度存在不对称性，为解决这个问题，在KL散度基础上引入了JS散度。</p>
-<p><img src="image-20220323134408097.png" alt="image-20220323134408097"></p>
-<p>JS散度的值域范围是[0,1]，相同则是0，相反为1</p>
-<h1 id="2-性质"><a href="#2-性质" class="headerlink" title="2. 性质"></a>2. 性质</h1><p>这个公式对于P1和P2明显是对称的，而且由于是两个KL叠加，故JS具有对称性和非负性。<br>当 𝑃1=（𝑃1+𝑃2）/ 2=𝑃2时，两个KL值均为0，故JS为0。也就是说当两个分布相同时JS为0。</p>
-<blockquote>
-<p>KL散度和JS散度度量的时候有一个问题：<br>如果两个分配P,Q离得很远，完全没有重叠的时候，那么KL散度值是没有意义的，而JS散度值是一个常数。这在学习算法中是比较致命的，这就意味这这一点的梯度为0。梯度消失了。</p>
-</blockquote>
-<h1 id="3-证明"><a href="#3-证明" class="headerlink" title="3. 证明"></a>3. 证明</h1><p>证明两个分布完全不重叠时，JS散度是一个常数。</p>
-<p><img src="image-20220323134507962-8014309.png" alt="image-20220323134507962"></p>
-<p>由于两个分布完全不重叠，故必有p(x)或q(x)为0<br>p(x)=0时</p>
-<p><img src="image-20220323134522191-8014323.png" alt="image-20220323134522191"></p>
-<p>q(x)=0时</p>
-<p><img src="image-20220323134532991-8014334.png" alt="image-20220323134532991"></p>
-<p>这就是JS散度的缺陷，当两个分布完全不重叠时，即便两个分布的中心距离有多近，其JS散度都是一个常数，导致梯度为0，无法更新。</p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/MorStar/p/14882813.html">https://www.cnblogs.com/MorStar/p/14882813.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1052,7 +1057,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

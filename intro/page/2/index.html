@@ -162,6 +162,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/" class="post-title-link" itemprop="url">算法系列-深度优先搜索dfs</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-24 21:51:46" itemprop="dateCreated datePublished" datetime="2022-03-24T21:51:46+08:00">2022-03-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-27 15:32:12" itemprop="dateModified" datetime="2022-03-27T15:32:12+08:00">2022-03-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="200-岛屿数量"><a href="#200-岛屿数量" class="headerlink" title="200. 岛屿数量"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></h4><p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p>示例 1：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”1”,”1”,”0”],<br>  [“1”,”1”,”0”,”1”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”0”,”0”,”0”]<br>]<br>输出：1<br>示例 2：</p>
+<p>输入：grid = [<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”1”,”0”,”0”],<br>  [“0”,”0”,”0”,”1”,”1”]<br>]<br>输出：3</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">private</span>: </span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">inArea</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i &gt;= <span class="number">0</span> &amp;&amp; j &gt;= <span class="number">0</span> &amp;&amp; i &lt; grid.<span class="built_in">size</span>() &amp;&amp; j &lt; grid[<span class="number">0</span>].<span class="built_in">size</span>();<span class="comment">//判断坐标是否合法</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid,<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">inArea</span>(grid, i, j)) <span class="keyword">return</span>;<span class="comment">//先把数值读进来，再判断是不是符合规则，当然直接放在下面判断也行，但读起来有点冗余</span></span><br><span class="line">        <span class="keyword">if</span>(grid[i][j] != <span class="string">&#x27;1&#x27;</span>) <span class="keyword">return</span>;</span><br><span class="line">        grid[i][j] = <span class="string">&#x27;2&#x27;</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i - <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i + <span class="number">1</span>, j);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">dfs</span>(grid, i, j + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="type">char</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; row;i++) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; col;j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">dfs</span>(grid, i, j);</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>首先，dfs的逻辑应该包括判断base case，即在知道目前输入的情况下，应该怎么处理当下的值；</p>
+<p>其次，应该思考下一步状态应该往那个方向转移，状态的表征是通过改变dfs的传入参数来实现的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-KL%E6%95%A3%E5%BA%A6%EF%BC%8CJS%E6%95%A3%E5%BA%A6%E5%92%8C%E4%BA%A4%E5%8F%89%E7%86%B5/" class="post-title-link" itemprop="url">深度学习基础-KL散度，JS散度和交叉熵</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-23 11:47:02 / 修改时间：13:46:19" itemprop="dateCreated datePublished" datetime="2022-03-23T11:47:02+08:00">2022-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h1><p>KL散度存在不对称性，为解决这个问题，在KL散度基础上引入了JS散度。</p>
+<p><img src="image-20220323134408097.png" alt="image-20220323134408097"></p>
+<p>JS散度的值域范围是[0,1]，相同则是0，相反为1</p>
+<h1 id="2-性质"><a href="#2-性质" class="headerlink" title="2. 性质"></a>2. 性质</h1><p>这个公式对于P1和P2明显是对称的，而且由于是两个KL叠加，故JS具有对称性和非负性。<br>当 𝑃1=（𝑃1+𝑃2）/ 2=𝑃2时，两个KL值均为0，故JS为0。也就是说当两个分布相同时JS为0。</p>
+<blockquote>
+<p>KL散度和JS散度度量的时候有一个问题：<br>如果两个分配P,Q离得很远，完全没有重叠的时候，那么KL散度值是没有意义的，而JS散度值是一个常数。这在学习算法中是比较致命的，这就意味这这一点的梯度为0。梯度消失了。</p>
+</blockquote>
+<h1 id="3-证明"><a href="#3-证明" class="headerlink" title="3. 证明"></a>3. 证明</h1><p>证明两个分布完全不重叠时，JS散度是一个常数。</p>
+<p><img src="image-20220323134507962-8014309.png" alt="image-20220323134507962"></p>
+<p>由于两个分布完全不重叠，故必有p(x)或q(x)为0<br>p(x)=0时</p>
+<p><img src="image-20220323134522191-8014323.png" alt="image-20220323134522191"></p>
+<p>q(x)=0时</p>
+<p><img src="image-20220323134532991-8014334.png" alt="image-20220323134532991"></p>
+<p>这就是JS散度的缺陷，当两个分布完全不重叠时，即便两个分布的中心距离有多近，其JS散度都是一个常数，导致梯度为0，无法更新。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/MorStar/p/14882813.html">https://www.cnblogs.com/MorStar/p/14882813.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -937,236 +1101,6 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/07/%E5%85%B3%E4%BA%8EBatch-Normalization%E7%9A%84%E5%90%84%E7%A7%8D/" class="post-title-link" itemprop="url">深度学习基础-关于Batch Normalization的各种</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-07 20:49:15" itemprop="dateCreated datePublished" datetime="2022-03-07T20:49:15+08:00">2022-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-24 11:40:13" itemprop="dateModified" datetime="2022-03-24T11:40:13+08:00">2022-03-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="归一化（Normalization）"><a href="#归一化（Normalization）" class="headerlink" title="归一化（Normalization）"></a>归一化（Normalization）</h1><p>目的：</p>
-<ol>
-<li>应用层面需要统一量纲</li>
-<li>在使用梯度下降发求解最优化问题时，归一化或标准化后可以加快梯度下降的求解速度，即提升收敛速度</li>
-<li>可以避免神经元饱和。神经元的激活在0或1时会饱和，这些区域梯度几乎为0，这样的话在反向传播的时候局部梯度也会接近0。因此归一化可以有效缓解梯度消失</li>
-<li>避免数据中小的数值被大数值吞噬，也避免数值太大引发的数值问题。（输入图像的值）</li>
-</ol>
-<h2 id="为什么要归一化"><a href="#为什么要归一化" class="headerlink" title="为什么要归一化"></a>为什么要归一化</h2><p>假设w1在[-10,10],w2在[-100,100]，梯度每次都前进一个单位，则w1在搜索全局最优时会相对来说走的更『快』。即提高了收敛速度</p>
-<h2 id="归一化类型"><a href="#归一化类型" class="headerlink" title="归一化类型"></a>归一化类型</h2><h3 id="线性归一化"><a href="#线性归一化" class="headerlink" title="线性归一化"></a>线性归一化</h3><script type="math/tex; mode=display">
-x^{'}=\frac{x-min(x)}{max(x)-min(x)}</script><p><img src="image-20220307211017670-6658619.png" alt="image-20220307211017670"></p>
-<h2 id="标准归一化"><a href="#标准归一化" class="headerlink" title="标准归一化"></a>标准归一化</h2><script type="math/tex; mode=display">
-x^{'}=\frac{x-\mu}{\sigma}</script><p><img src="image-20220307211225372-6658746.png" alt="image-20220307211225372"></p>
-<p>归一化后均值为0，标准差为1，$ \mu $ 为左右样本数据的均值，$\sigma$ 是所有样本数据的标准差。</p>
-<h1 id="批归一化（Batch-Normalization）"><a href="#批归一化（Batch-Normalization）" class="headerlink" title="批归一化（Batch Normalization）"></a>批归一化（Batch Normalization）</h1><p>在网络中间对数据进行归一化</p>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
-<li>减少对超参数的依赖，某些情况下可以取消Dropout方法或者L2正则项参数</li>
-<li>减少对学习率的要求（加强对学习率参数的鲁棒性）</li>
-<li>破坏原来的数据分布，一定程度上缓解过拟合，防止每批训练中某一个样本经常被选中</li>
-<li>减少梯度消失（数据分布奇怪使激活函数输入接近0或者1，梯度很小）</li>
-</ol>
-<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>$x_{i}$是上一层的输出结果，B和Y是学习参数</p>
-<ol>
-<li>计算上一层输出数据的均值</li>
-</ol>
-<script type="math/tex; mode=display">
-\mu _{\beta}=\frac{1}{m} \sum_{i=1}^{m}\left ( x_{i} \right)</script><p><img src="image-20220307212515863-6659517.png" alt="image-20220307212515863"></p>
-<ol>
-<li>计算上一层输出数据的标准差<script type="math/tex; mode=display">
-\sigma_{\beta}^{2}=\frac{1}{m} \sum_{i=1}^{m}(x_{i}-\mu _{\beta})^{2}</script></li>
-</ol>
-<p><img src="image-20220307212905080-6659746.png" alt="image-20220307212905080"></p>
-<ol>
-<li><p>进行归一化处理，得到</p>
-<script type="math/tex; mode=display">
-x_{i}=\frac{x_{i}+\mu _{\beta}}{\sqrt{\sigma_{\beta}^{2}+\epsilon}}</script><p><img src="image-20220307213044587.png" alt="image-20220307213044587"></p>
-<p>分母加一个极小值防止除0</p>
-</li>
-<li><p>重构</p>
-<script type="math/tex; mode=display">
-y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659962.png" alt="image-20220307213242003"></p>
-<p>gamma和beta是可学习参数。此时的均值是计算所有批次的mu_{beta}值的平均值得到的，标准差是每个批次的标准差的无偏估计。</p>
-</li>
-</ol>
-<h2 id="和组归一化比较（Group-Normalization）"><a href="#和组归一化比较（Group-Normalization）" class="headerlink" title="和组归一化比较（Group Normalization）"></a>和组归一化比较（Group Normalization）</h2><p>如果batch比较小，导致估计的值和整个数据集的真实均值方差差距较大，BN的误差就会很大。</p>
-<p>GN是将通道（channel）分成组，在每组内计算归一化的均值和方差，其准确度在各种批量大小下都很稳定</p>
-<h2 id="和权重归一化比较（weight-normalization）"><a href="#和权重归一化比较（weight-normalization）" class="headerlink" title="和权重归一化比较（weight normalization）"></a>和权重归一化比较（weight normalization）</h2><p>WN是对网络权重W进行归一化，适用于RNN，因为RNN处理的队列是变长的，基于时间状态计算，很难保存每个状态下的均值和方差，效率很低。</p>
-<h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><p> 适用于batch较大，数据分布比较接近的场景，不适用于动态网络和RNN结构。</p>
-<h2 id="梯度方向推导"><a href="#梯度方向推导" class="headerlink" title="梯度方向推导"></a>梯度方向推导</h2><p><img src="118059082-39d1a500-b3c2-11eb-80f8-75f2bf677451.png" alt="image"></p>
-<p>背诵版本：</p>
-<p><img src="118059220-9208a700-b3c2-11eb-841f-73781fa93342.png" alt="image"></p>
-<p>训练和测试时的区别：</p>
-<p><img src="68747470733a2f2f67697465652e636f6d2f6c6562686f7279692f506963476f506963747572654265642f7261772f6d61737465722f696d672f32303231303830333232353131312e706e67.png" alt="image-20210803225110049"></p>
-<h2 id="常用的归一化层"><a href="#常用的归一化层" class="headerlink" title="常用的归一化层"></a>常用的归一化层</h2><p><img src="68747470733a2f2f66696c65732e6d646e6963652e636f6d2f757365722f363933352f37383432636533652d613630662d346333372d623532302d3938383531353337663136642e706e67.png" alt="img"></p>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013289254/article/details/99690730">深度学习中的五种归一化（BN、LN、IN、GN和SN）方法简介</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuxiao214/article/details/81037416">BatchNormalization、LayerNormalization、InstanceNorm、GroupNorm、SwitchableNorm总结</a></p>
-</li>
-</ul>
-<h1 id="BN代码实现，以及多卡训练的sync-bn"><a href="#BN代码实现，以及多卡训练的sync-bn" class="headerlink" title="BN代码实现，以及多卡训练的sync_bn"></a>BN代码实现，以及多卡训练的sync_bn</h1><p>用numpy实现BN：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> Layers</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BatchNormlization</span>(<span class="title class_ inherited__">Layers</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    https://blog.csdn.net/weixin_44754861/article/details/108343938?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name, x,eps =<span class="number">1e-7</span>, momentum =<span class="number">0.9</span>, mode = <span class="string">&quot;train&quot;</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(BatchNormlization).__init__(name)</span><br><span class="line">        self.eps =eps</span><br><span class="line">        self.<span class="built_in">input</span> = x</span><br><span class="line">        n, c, h, w = x.shape</span><br><span class="line">        self.momentum = momentum</span><br><span class="line">        <span class="comment"># 相同batch里不同样本的相同的通道来计算均值和方差</span></span><br><span class="line">        self.running_mean = np.zeros(c)</span><br><span class="line">        self.running_var = np.zeros(c)</span><br><span class="line">        self.gamma = np.random(c)</span><br><span class="line">        self.beta =np.random(c)</span><br><span class="line">        self.mode = mode</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_dim</span>(<span class="params">x, dim</span>):</span><br><span class="line">        <span class="keyword">return</span> np.expand_dims(x, axis=dim) <span class="comment"># batch </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self</span>):</span><br><span class="line">        ib, ic, ih, iw = self.<span class="built_in">input</span>.shape</span><br><span class="line"></span><br><span class="line">        self.<span class="built_in">input</span> = self.<span class="built_in">input</span>.transpose(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>).reshape([ic, -<span class="number">1</span>]) <span class="comment"># n,c,h,w -&gt;c, n*h*w</span></span><br><span class="line">        <span class="keyword">if</span> self.mode ==<span class="string">&quot;train&quot;</span>:</span><br><span class="line">            self.var = np.sqrt(self.var +self.eps) <span class="comment"># </span></span><br><span class="line">            self.mean = np.mean(self.<span class="built_in">input</span>, axis=<span class="number">0</span>) <span class="comment"># 每个channel的均值</span></span><br><span class="line">            self.mean = self.add_dim(self.mean, <span class="number">1</span>) <span class="comment"># 与后面的self.input 维度一致</span></span><br><span class="line">            self.var = np.var(self.<span class="built_in">input</span>, axis=<span class="number">0</span>) <span class="comment">#每个channel的方差</span></span><br><span class="line">            self.var = self.add_dim(self.var , <span class="number">1</span>)</span><br><span class="line">            self.gamma = self.add_dim(self.gamma, <span class="number">1</span>)</span><br><span class="line">            self.beta = self.add_dim(self.beta, <span class="number">1</span>)</span><br><span class="line">            self.running_mean = self.momentum * self.running_mean + (<span class="number">1</span>-self.momentum) *self.mean</span><br><span class="line">            self.running_var = self.momentum * self.running_var + (<span class="number">1</span>-self.momentum) *self.var</span><br><span class="line">            self.input_ = (self.<span class="built_in">input</span> -  self.running_mean)/(self.running_var + self.eps)</span><br><span class="line">            dout = (self.input_*self.gamma +self.beta ).reshape(ic,ib, ih, iw).transpose(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">            self.cache = (self.input_, self.gamma, (self.<span class="built_in">input</span> - self.running_mean, self.running_var + self.eps))</span><br><span class="line">        <span class="keyword">elif</span> self.mode ==<span class="string">&quot;test&quot;</span>:</span><br><span class="line">            x_hat = (self.<span class="built_in">input</span> - self.running_mean) / (np.sqrt(self.running_var + self.eps))</span><br><span class="line">            dout = self.gamma * x_hat + self.beta</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Invalid forward batch normlization mode&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> dout, self.cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">self, dout</span>):</span><br><span class="line">        N, D = dout.shape</span><br><span class="line">        x_, gamma, x_minus_mean, var_plus_eps =self.cache</span><br><span class="line"></span><br><span class="line">        <span class="comment"># calculate gradients</span></span><br><span class="line">        dgamma = np.<span class="built_in">sum</span>(x_ * dout, axis=<span class="number">0</span>)</span><br><span class="line">        dbeta = np.<span class="built_in">sum</span>(dout, axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        dx_ = np.matmul(np.ones((N,<span class="number">1</span>)), gamma.reshape((<span class="number">1</span>, -<span class="number">1</span>))) * dout</span><br><span class="line">        dx = N * dx_ - np.<span class="built_in">sum</span>(dx_, axis=<span class="number">0</span>) - x_ * np.<span class="built_in">sum</span>(dx_ * x_, axis=<span class="number">0</span>)</span><br><span class="line">        dx *= (<span class="number">1.0</span>/N) / np.sqrt(var_plus_eps)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dx, dgamma, dbeta</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">self, lr, dgamma, dbeta</span>):</span><br><span class="line">        self.gamma -= dgamma *lr</span><br><span class="line">        self.beta -= dbeta*lr</span><br></pre></td></tr></table></figure>
-<p>BN 的性能和 batch size 有很大的关系。batch size 越大，BN 的统计量也会越准。然而像检测这样的任务，占用显存较高，一张显卡往往只能拿较少的图片（比如 2 张）来训练，这就导致 BN 的表现变差。一个解决方式是 SyncBN：所有卡共享同一个 BN，得到全局的统计量。</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/337732517">PyTorch 源码解读之 BN &amp; SyncBN：BN 与 多卡同步 BN 详解</a></li>
-</ul>
-<p>单卡上的 BN 会计算该卡对应输入的均值、方差，然后做 Normalize；SyncBN 则需要得到全局的统计量，也就是“所有卡上的输入”对应的均值、方差。一个简单的想法是分两个步骤：</p>
-<ol>
-<li>每张卡单独计算其均值，然后做一次同步，得到全局均值</li>
-<li>用全局均值去算每张卡对应的方差，然后做一次同步，得到全局方差</li>
-</ol>
-<p>但两次同步会消耗更多时间，事实上一次同步就可以实现 </p>
-<p><img src="v2-98c5ec4adfd6b827e25127af0d0ba988_720w.jpg" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/07/Python%E7%9F%A5%E8%AF%86%E7%82%B9-%E8%A3%85%E9%A5%B0%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/07/Python%E7%9F%A5%E8%AF%86%E7%82%B9-%E8%A3%85%E9%A5%B0%E5%99%A8/" class="post-title-link" itemprop="url">Python知识点-装饰器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-07 19:45:31" itemprop="dateCreated datePublished" datetime="2022-03-07T19:45:31+08:00">2022-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-10 20:03:51" itemprop="dateModified" datetime="2022-03-10T20:03:51+08:00">2022-03-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="实现一个简单的装饰器"><a href="#实现一个简单的装饰器" class="headerlink" title="实现一个简单的装饰器"></a>实现一个简单的装饰器</h3><p>一句话总结：把别装饰的函数替换成新函数，二者接受相同的参数，一般情况下返回被装饰的函数本该返回的值，同时还会做一些额外操作。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个简单的装饰器，输出函数的运行时间</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clock</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clocked</span>(<span class="params">*args</span>): <span class="comment">#*args的用法：当传入的参数个数未知，且不需要知道参数名称时。</span></span><br><span class="line">      <span class="comment">#**args的用法：当传入的参数个数未知，但需要知道参数的名称时(立马想到了字典，即键值对)</span></span><br><span class="line">        begin = time.perf_counter() <span class="comment"># 调用func时的时间</span></span><br><span class="line">        result = func(*args) <span class="comment">#运行被装饰函数</span></span><br><span class="line">        elapsed = time.perf_counter() - begin <span class="comment"># 函数运行时间</span></span><br><span class="line">        name = func.__name__ <span class="comment"># 得到被装饰函数名</span></span><br><span class="line">        arg_str = <span class="string">&#x27;,&#x27;</span>.join(<span class="built_in">repr</span>(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> args) <span class="comment"># 显示被装饰函数的传入参数</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;[%0.8fs] %s(%s) -&gt; %r&#x27;</span> % (elapsed, name, arg_str, result)) </span><br><span class="line">        <span class="comment"># func运行后，输出格式是[时间] 函数名（传入参数）-&gt; 函数结果</span></span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 记得返回结果！</span></span><br><span class="line">    <span class="keyword">return</span> clocked <span class="comment"># 被装饰函数已经被换成了一个新的函数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>使用装饰器：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> clockdeco <span class="keyword">import</span> clock <span class="comment"># 直接import</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@clock</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">snooze</span>(<span class="params">seconds</span>):</span><br><span class="line">    time.sleep(seconds)</span><br><span class="line"></span><br><span class="line"><span class="meta">@clock</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">factorial</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">if</span> n &lt; <span class="number">2</span> <span class="keyword">else</span> n*factorial(n-<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;*&#x27;</span> * <span class="number">40</span>, <span class="string">&#x27;Calling snooze(.123)&#x27;</span>)</span><br><span class="line">snooze(<span class="number">.123</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;*&#x27;</span> * <span class="number">40</span>, <span class="string">&#x27;Calling factorial(6)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;6! = &#x27;</span>, factorial(<span class="number">6</span>))</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">**************************************** Calling snooze(<span class="number">.123</span>)</span><br><span class="line">[<span class="number">0.12749738</span>s] snooze(<span class="number">0.123</span>) -&gt; <span class="literal">None</span></span><br><span class="line">**************************************** Calling factorial(<span class="number">6</span>)</span><br><span class="line">[<span class="number">0.00000154</span>s] factorial(<span class="number">1</span>) -&gt; <span class="number">1</span></span><br><span class="line">[<span class="number">0.00010962</span>s] factorial(<span class="number">2</span>) -&gt; <span class="number">2</span></span><br><span class="line">[<span class="number">0.00018708</span>s] factorial(<span class="number">3</span>) -&gt; <span class="number">6</span></span><br><span class="line">[<span class="number">0.00026196</span>s] factorial(<span class="number">4</span>) -&gt; <span class="number">24</span></span><br><span class="line">[<span class="number">0.00049425</span>s] factorial(<span class="number">5</span>) -&gt; <span class="number">120</span></span><br><span class="line">[<span class="number">0.00076513</span>s] factorial(<span class="number">6</span>) -&gt; <span class="number">720</span></span><br><span class="line"><span class="number">6</span>! =  <span class="number">720</span></span><br><span class="line">```</span><br></pre></td></tr></table></figure>
-<p>但此时如果访问被装饰函数的<code>__name__</code>和<code>__doc__</code>时就被clocked遮盖了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">snooze.__name__</span><br><span class="line"><span class="string">&#x27;clocked&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>可以用functools模块中的functools.wraps来构建行为良好的解释器</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个简单的装饰器，输出函数的运行时间</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clock</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clocked</span>(<span class="params">*args, **kwargs</span>): <span class="comment">#*args的用法：当传入的参数个数未知，且不需要知道参数名称时。</span></span><br><span class="line">        <span class="comment">#**args的用法：当传入的参数个数未知，但需要知道参数的名称时(立马想到了字典，即键值对)</span></span><br><span class="line">        begin = time.time() <span class="comment"># 调用func时的时间</span></span><br><span class="line">        result = func(*args, **kwargs) <span class="comment">#运行被装饰函数</span></span><br><span class="line">        elapsed = time.time() - begin <span class="comment"># 函数运行时间</span></span><br><span class="line">        name = func.__name__ <span class="comment"># 得到被装饰函数名</span></span><br><span class="line">        arg_lst = []</span><br><span class="line">        <span class="keyword">if</span> args:</span><br><span class="line">            arg_lst.append(<span class="string">&#x27;,&#x27;</span>.join(<span class="built_in">repr</span>(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> args))</span><br><span class="line">        <span class="keyword">if</span> kwargs:</span><br><span class="line">            pairs = [<span class="string">&#x27;%s=%r&#x27;</span> % (k, w) <span class="keyword">for</span> k, w <span class="keyword">in</span> <span class="built_in">sorted</span>(kwargs.items())]</span><br><span class="line">            arg_lst.append(<span class="string">&#x27;,&#x27;</span>.join(pairs))</span><br><span class="line">        arg_str = <span class="string">&#x27;,&#x27;</span>.join(arg_lst) <span class="comment"># 显示被装饰函数的传入参数</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;[%0.8fs] %s(%s) -&gt; %r&#x27;</span> % (elapsed, name, arg_str, result)) </span><br><span class="line">        <span class="comment"># func运行后，输出格式是[时间] 函数名（传入参数）-&gt; 函数结果</span></span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 记得返回结果！</span></span><br><span class="line">    <span class="keyword">return</span> clocked <span class="comment"># 被装饰函数已经被换成了一个新的函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="叠放装饰器"><a href="#叠放装饰器" class="headerlink" title="叠放装饰器"></a>叠放装饰器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@d1</span></span><br><span class="line"><span class="meta">@d2</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>等同于：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line">f() = d1(d2(f))</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1236,7 +1170,7 @@ y_{i}=\gamma \hat{x_{i}}+\beta</script><p><img src="image-20220307213242003-6659
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
