@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="部分内容来自 中科院1区：Few-Shot Object Detection: A Survey https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3519022 few-shot learning 目标检测的方法中大概分为四种思路：  更强的数据增强（Data Augmentation）  迁移学习（TransferLearning）  度量学习（Distance Metri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="few-shot目标检测">
+<meta property="og:url" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="Upperlan">
+<meta property="og:description" content="部分内容来自 中科院1区：Few-Shot Object Detection: A Survey https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3519022 few-shot learning 目标检测的方法中大概分为四种思路：  更强的数据增强（Data Augmentation）  迁移学习（TransferLearning）  度量学习（Distance Metri">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524175240863-3385962.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524173742775-3385064.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174053575-3385254.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174139955-3385301.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174411343-3385452.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174524165-3385524.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174620561-3385581.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174759221-3385680.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524174844302.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524175022468-3385823.png">
+<meta property="og:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/imageDownloadAddress.png">
+<meta property="article:published_time" content="2022-05-24T09:33:41.000Z">
+<meta property="article:modified_time" content="2022-05-24T09:52:56.135Z">
+<meta property="article:author" content="篮球架上打砖块">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/image-20220524175240863-3385962.png">
+
+<link rel="canonical" href="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>few-shot目标检测 | Upperlan</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Upperlan</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/24/few-shot%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          few-shot目标检测
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-24 17:33:41 / 修改时间：17:52:56" itemprop="dateCreated datePublished" datetime="2022-05-24T17:33:41+08:00">2022-05-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" itemprop="url" rel="index"><span itemprop="name">目标检测</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>部分内容来自</p>
+<p>中科院1区：Few-Shot Object Detection: A Survey</p>
+<p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3519022">https://dl.acm.org/doi/abs/10.1145/3519022</a></p>
+<p>few-shot learning 目标检测的方法中大概分为四种思路：</p>
+<ol>
+<li><p>更强的数据增强（Data Augmentation）</p>
+</li>
+<li><p>迁移学习（TransferLearning）</p>
+</li>
+<li><p>度量学习（Distance Metric Learning）</p>
+</li>
+<li><p>meta-learning（<a target="_blank" rel="noopener" href="https://wei-tianhao.github.io/blog/2019/09/17/meta-learning.html">﻿https://wei-tianhao.github.io/blog/2019/09/17/meta-learning.html</a>﻿）</p>
+</li>
+</ol>
+<h3 id="需要关注的问题"><a href="#需要关注的问题" class="headerlink" title="需要关注的问题"></a>需要关注的问题</h3><p>核心调研目的是希望优化和缓解业务上的错检，漏检问题</p>
+<ul>
+<li><p>在添加novel数据集后会不会影响base数据集检测的精度（训练策略与实验结果）</p>
+</li>
+<li><p>将RPN检测ROI位置的泛化性问题和ROI分类的问题分开来看（对业务更具针对性的模型设计思路）</p>
+</li>
+<li><p>度量学习提高了物体分类的准确率以外对于位置回归有没有影响</p>
+</li>
+<li><p>将增量学习和few-shot任务尽量分开来看</p>
+</li>
+</ul>
+<h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><p>跑通TFA论文代码，记录详细的实验过程和数据集的采样方式，以及可借鉴的地方。</p>
+<p>整理下看看在业务数据集上有没有效果。代码库链接 <a target="_blank" rel="noopener" href="https://github.com/ucbdrive/few-shot-object-detection">﻿https://github.com/ucbdrive/few-shot-object-detection</a>﻿</p>
+<p>再深入看一下论文，分析预训练后，base数据集和novel数据集在finetune时两者中的不同物体的类的检测效果有没有区别</p>
+<p>整理比较便于实现的模型结构</p>
+<p>﻿</p>
+<p>﻿</p>
+<h1 id="几种基本概念解释"><a href="#几种基本概念解释" class="headerlink" title="几种基本概念解释"></a>几种基本概念解释</h1><h1 id="Few-shot和one-shot的关系"><a href="#Few-shot和one-shot的关系" class="headerlink" title="Few-shot和one-shot的关系"></a><strong>Few-shot和one-shot的关系</strong></h1><p>﻿<img src="image-20220524175240863-3385962.png" alt="image-20220524175240863"></p>
+<p>上式指N个class，每个class有K个样本，称之为N-way-K-shot classification，即单个种类样本的数量K决定了模型的名称中为K-shot learning，而One-shot learning是一种特殊的K-shot learning，即只有一个样本具有监督信息，而zero-shot就是不为模型提供监督信息。</p>
+<p>FSL（few-shot learning）必须从已有的很少量的输入样本中提取一部分信息，并于之前的一些先验知识相结合。</p>
+<h3 id="Zero-shot-learning"><a href="#Zero-shot-learning" class="headerlink" title="Zero-shot learning"></a><strong>Zero-shot learning</strong></h3><p>目的是去检测到一个不存在于输入样本中的object（unseen）。训练集中存在的物体类别叫做seen，不存在的叫做unseen。与few-shot不同，zero-shot任务识别的目标物体在训练集中不存在。</p>
+<h3 id="有效样本定义"><a href="#有效样本定义" class="headerlink" title="有效样本定义"></a>有效样本定义</h3><p>有两种不同的方法来确定输入的图像是否是有效的样本：对于一些作者来说，图像包含需要被检测的类的对象是可以的，而对另一些作者来说，图像不能包含同一类别的任何其他对象。前者认为一些对象可能因在同一图像中多次出现而过度表示，而后者认为，模型只允许看到每个类的K实例。</p>
+<h3 id="Few-shot和（domain-adaption）-https-zhuanlan-zhihu-com-p-370359223"><a href="#Few-shot和（domain-adaption）-https-zhuanlan-zhihu-com-p-370359223" class="headerlink" title="Few-shot和（domain adaption）[﻿https://zhuanlan.zhihu.com/p/370359223﻿]"></a><strong>Few-shot和（domain adaption）[</strong><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/370359223">﻿https://zhuanlan.zhihu.com/p/370359223</a>﻿<strong>]</strong></h3><p>Domain adaption：把源域和目标域的特征提取到统一的特征空间中，让不同的特征之间的距离足够近，从而实现迁移学习，如车辆在行车记录仪视角和监控摄像头视角就属于两种不同的域，期望模型能够在两种不同的域都有泛化性。</p>
+<p>[Tao Wang, Xiaopeng Zhang, Li Yuan, and Jiashi Feng. 2019. Few-shot adaptive faster r-cnn. (2019), 7173ś7182. ]</p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p><strong>获取训练数据的成本较高，或者特定种类的数据很罕见，用户希望用到的训练样本越少越好</strong></p>
+<ul>
+<li><p>例如通过医学图像目标检测，检测一种很少见的病症</p>
+</li>
+<li><p>Person搜索：基于一小部分图片的某个人的特征，在大量图片，或者视频中找到这个人。可以应用在视频寻人（犯罪嫌疑人或者失踪者）</p>
+</li>
+<li><p>零件的异常，缺陷检测，一般工业机器造出来的零件出错率比较低，能够拿到的异常零件图片很少；如果直接用imagenet预训练的模型直接在少量图片上finetune，实验上效果比较差。</p>
+</li>
+<li><p>零食柜上新：</p>
+</li>
+</ul>
+<h1 id="文献详细记录"><a href="#文献详细记录" class="headerlink" title="文献详细记录"></a>文献详细记录</h1><h2 id="实现few-shot的几种思路"><a href="#实现few-shot的几种思路" class="headerlink" title="实现few-shot的几种思路"></a>实现few-shot的几种思路</h2><h3 id="基于数据增强（Data-Augmentation）"><a href="#基于数据增强（Data-Augmentation）" class="headerlink" title="基于数据增强（Data Augmentation）"></a>基于数据增强（Data Augmentation）</h3><p>这方面的应用比较小，因为缺少用于增强图像的标记边界框</p>
+<h4 id="Multi-Scale-Positive-Sample-Refinement-for-Few-Shot-Object-Detection"><a href="#Multi-Scale-Positive-Sample-Refinement-for-Few-Shot-Object-Detection" class="headerlink" title="Multi-Scale Positive Sample Refinement for Few-Shot Object Detection"></a>Multi-Scale Positive Sample Refinement for Few-Shot Object Detection</h4><p>代码库<a target="_blank" rel="noopener" href="https://github.com/jiaxi-wu/MPSR（122">https://github.com/jiaxi-wu/MPSR（122</a> stars）</p>
+<p>文献：Jiaxi Wu, Songtao Liu, Di Huang, and Yunhong Wang. 2020. <strong>Multi-scale positive sample reinement for few-shot object detection</strong>. InEuropean Conference on Computer Vision. 456ś472.（ECCV）</p>
+<p>在训练时给faster rcnn上加一个refinement分支，将提取出来的ROI区域放大缩小到不同尺度，输入到FPN中，每层输出额外的objectness和classification的分支。推理的时候去掉这个分支</p>
+<p><img src="image-20220524173742775-3385064.png" alt="image-20220524173742775"></p>
+<h3 id="迁移学习（TransferLearning）"><a href="#迁移学习（TransferLearning）" class="headerlink" title="迁移学习（TransferLearning）"></a>迁移学习（TransferLearning）</h3><p>这个思想下的绝大多数论文都是基于faster rcnn的模型来改的，尽量用各种结构来加强frcnn对物体的分类能力和前景背景的区分能力。同时TFA指出的有好的finetune策略可以让模型具有较好的few-shot检测能力。</p>
+<h4 id="LSTD-A-Low-Shot-Transfer-Detector-for-Object-Detection-LSTD"><a href="#LSTD-A-Low-Shot-Transfer-Detector-for-Object-Detection-LSTD" class="headerlink" title="LSTD: A Low-Shot Transfer Detector for Object Detection (LSTD)"></a>LSTD: A Low-Shot Transfer Detector for Object Detection (LSTD)</h4><p>文献：Hao Chen, Yali Wang, Guoyou Wang, and Yu Qiao. 2018. LSTD: A Low-Shot Transfer Detector for Object Detection. In Proceedings ofthe Thirty-Second AAAI Conference on Artiicial Intelligence, (AAAI-18), the 30th innovative Applications of Artiicial Intelligence (IAAI-18),and the 8th AAAI Symposium on Educational Advances in Artiicial Intelligence (EAAI-18), New Orleans, Louisiana, USA, February 2-7,2018. 2836ś2843.（AAAI）</p>
+<p>一种基于SSD的结构+rcnn的部分结构来实现K-shot learning。ssd主要负责识别物体的位置，后续的frcnn结构加强对物体分类的能力。</p>
+<p>在backbone部分引出一个背景和物体二分类的loss，加强模型对物体-背景的分辨能力，ssd部分后加上两个roi pooling分支，检测源数据集的物体类别和目标数据物体类别（K-shot）。</p>
+<p><img src="image-20220524174053575-3385254.png" alt="image-20220524174053575"></p>
+<h4 id="Frustratingly-Simple-Few-Shot-Object-Detection-TFA"><a href="#Frustratingly-Simple-Few-Shot-Object-Detection-TFA" class="headerlink" title="Frustratingly Simple Few-Shot Object Detection (TFA)"></a>Frustratingly Simple Few-Shot Object Detection (TFA)</h4><p>提出了一种基于faster rcnn的两步骤训练的方法</p>
+<p>核心思路是在base数据集上训练后再冻结模型浅层的部分，融合base和novel数据集后finetune最后的部分（下图黄色部分），就可以提升一定效果，这里的benchmark也是作者自己提出来的一种方法。</p>
+<p><img src="image-20220524174139955-3385301.png" alt="image-20220524174139955"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ucbdrive/few-shot-object-detection（773">https://github.com/ucbdrive/few-shot-object-detection（773</a> stars）</p>
+<p>Xin Wang, Thomas E. Huang, Joseph Gonzalez, Trevor Darrell, and Fisher Yu. 2020. Frustratingly Simple Few-Shot Object Detection. InProceedings of the 37th International Conference on Machine Learning, ICML 2020, 13-18 July 2020, Virtual Event. 9919ś9928.（ICML）</p>
+<h4 id="Generalized-Few-Shot-Object-Detection-without-Forgetting"><a href="#Generalized-Few-Shot-Object-Detection-without-Forgetting" class="headerlink" title="Generalized Few-Shot Object Detection without Forgetting"></a>Generalized Few-Shot Object Detection without Forgetting</h4><p>基于TFA的一些问题修改的模型。重点在于不要忘记以前识别的内容（区别于open set，open set是希望检测出所有物体，这个还是期望检测指定物体）</p>
+<p>具体想要解决的是RPN网络输出的roi并不能达到理想的，与物体种类无关，只关心物体位置的效果。</p>
+<p><img src="image-20220524174411343-3385452.png" alt="image-20220524174411343"></p>
+<h3 id="度量学习（Distance-Metric-Learning）"><a href="#度量学习（Distance-Metric-Learning）" class="headerlink" title="度量学习（Distance Metric Learning）"></a>度量学习（Distance Metric Learning）</h3><p>度量学习通常包括：1）生成测试样本的embedding的函数f；</p>
+<p>2）生成训练样本的embedding函数g；</p>
+<p>3）比较训练生成的embedding和测试样本生成embedding的距离函数s</p>
+<p>总结：这些模型大都会用两个分支来分别处理support图像和query图像。核心在于提取support上目标的特征来检测query图像中的类。目前的模型大多都是基于faster rcnn来修改得来的。修改思路大致如：</p>
+<p>如何让输入到RPN前的特征图中的support中的类能更突出。如利用注意力机制让特征图中support目标更突出。</p>
+<p>如何有一个好的embedding生成模型，让算法更好的分清前景，背景，不同对象之间的区别。如Two-way Contrastive Training Strategy，margin-based loss，利用度量学习的思想，让模型通过区分不同正负样本匹配对来学习特征</p>
+<h4 id="Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN-（IBM）"><a href="#Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN-（IBM）" class="headerlink" title="Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)（IBM）"></a>Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)（IBM）</h4><p>Eli Schwartz, Leonid Karlinsky, Joseph Shtok, Sivan Harary, Mattias Marder, Sharathchandra Pankanti, Rogério Schmidt Feris, AbhishekKumar, Raja Giryes, and Alexander M. Bronstein. 2018. RepMet: Representative-based metric learning for classiication and one-shotobject detection.CoRRabs/1806.04728 (2018)(CVPR)</p>
+<p>直接将提出的基于度量学习的head插到检测模型提取的ROIs后面。</p>
+<p>在这种方法中，每个类由一个具有多个模式的混合模型表示，因此它们的中心可以被视为该类的代表向量。其想法是共同学习主干参数、嵌入空间以及该空间中训练类的分布，即代表向量。</p>
+<p><img src="image-20220524174524165-3385524.png" alt="image-20220524174524165"></p>
+<h4 id="Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN"><a href="#Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN" class="headerlink" title="Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)"></a>Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)</h4><p>不需要重新训练或fine-tune就可以识别到support image中的对象。这是通过不同的权重共享分支实现的，一个用于查询集，另一个用于支持集，支持端到端的训练</p>
+<p><img src="image-20220524174620561-3385581.png" alt="image-20220524174620561"></p>
+<p>attention RPN利用support信息来过滤大多数背景框和不匹配类别中的背景框。该模块计算support特征图和query特征图之间的深度相似性。同时有个小结论，对于few-shot learning来说，多种类的训练比少种类，多数据量的训练更有用</p>
+<h4 id="FSCE-Few-Shot-Object-Detection-via-Contrastive-Proposal-Encoding"><a href="#FSCE-Few-Shot-Object-Detection-via-Contrastive-Proposal-Encoding" class="headerlink" title="FSCE: Few-Shot Object Detection via Contrastive Proposal Encoding"></a>FSCE: Few-Shot Object Detection via Contrastive Proposal Encoding</h4><p><strong><em>Bo Sun, Banghuai Li, Shengcai Cai, Ye Yuan, Chi Zhang</em></strong>; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 7352-7362</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MegviiDetection/FSCE（201stars）">https://github.com/MegviiDetection/FSCE（201stars）</a></p>
+<p><img src="image-20220524174759221-3385680.png" alt="image-20220524174759221"></p>
+<h3 id="meta-learning"><a href="#meta-learning" class="headerlink" title="meta-learning"></a>meta-learning</h3><p>核心在于让模型学会更加泛化的特征表达，学习如何从数据丰富的基类中提取类判别特征，以指导对low-shot novel对象的预测。</p>
+<p>该方向的模型思路也很相似：使用一个网络模块来学习输入图像的浅层特征（这些特征往往被认为是与类别无关的底层特征），另一个模块学习support类对象的特征，作为一种加权来对浅层特征进行处理，随后用已有的一些检测模型对处理后的特征图进行检测。</p>
+<p>在针对faster rcnn模型的修改上，大致都在ROI提取部分，针对ROIs的特征和support中的类进行匹配。</p>
+<p>在yolo中，因为yolo是端到端的处理检测问题，所以是期望输入到检测器之前的特征图已经将target类凸现出来，这里是使用类似注意力机制的方法。</p>
+<h3 id="Few-Shot-Object-Detection-via-Feature-Reweighting-MetaYOLO"><a href="#Few-Shot-Object-Detection-via-Feature-Reweighting-MetaYOLO" class="headerlink" title="Few-Shot Object Detection via Feature Reweighting (MetaYOLO)"></a>Few-Shot Object Detection via Feature Reweighting (MetaYOLO)</h3><p><img src="image-20220524174844302.png" alt="image-20220524174844302"></p>
+<p>Bingyi Kang, Zhuang Liu, XinWang, Fisher Yu, Jiashi Feng, and Trevor Darrell. 2019. Few-Shot Object Detection via Feature Reweighting. In 2019 IEEE/CVF International Conference on Computer Vision, ICCV 2019, Seoul, Korea (South), October 27 - November 2, 2019. 8419ś8428.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bingykang/Fewshot_Detection（423">https://github.com/bingykang/Fewshot_Detection（423</a> stars）</p>
+<p>在base数据集上预训练一个高效的目标检测模型后，只需要少量novel数据集标注样本，模型就可以检测出novel数据集上的类别的物体位置</p>
+<p>训练策略分为两个步骤：</p>
+<p>1.上图中三个黄色的模块合在一起同时训练，只用base class</p>
+<p>2.一个fine-tuning阶段，模型在base和novel类别上训练，每种只用K个bbox，相对来说样本量很少，但是类别数多。</p>
+<p>在训练过程中，Feature Extractor部分学习如何从query image中学习到meta-feature；reweighting 模块学习如何将(support image, bounding box)中的信息提取成一个embedding vector，用来调整query image中的meta-feature的数据分布（channel-wise multiplication），再输出到prediction layer（YOLOV2）进行目标检测。这里输出的c是指这个物体是否属于support输入的类别。</p>
+<p>在推理时，可以给reweighting模块输入k个我们想要检测的目标信息，然后将输出的vector取平均，就可以移除这个reweighting模块，直接在query图像上检测到目标物体</p>
+<h4 id="Meta-R-CNN-Towards-General-Solver-for-Instance-level-Low-shot-Learning-Meta-R-CNN"><a href="#Meta-R-CNN-Towards-General-Solver-for-Instance-level-Low-shot-Learning-Meta-R-CNN" class="headerlink" title="Meta R-CNN: Towards General Solver for Instance-level Low-shot Learning (Meta R-CNN)"></a>Meta R-CNN: Towards General Solver for Instance-level Low-shot Learning (Meta R-CNN)</h4><p><img src="image-20220524175022468-3385823.png" alt="image-20220524175022468"></p>
+<p>Xiaopeng Yan, Ziliang Chen, Anni Xu, Xiaoxi Wang, Xiaodan Liang, and Liang Lin. 2019. Meta R-CNN: Towards General Solver for Instance-Level Low-Shot Learning. In 2019 IEEE/CVF International Conference on Computer Vision, ICCV 2019, Seoul, Korea (South), October 27 - November 2, 2019. 9576ś9585</p>
+<p><a target="_blank" rel="noopener" href="https://yanxp.github.io/metarcnn.html.（154">https://yanxp.github.io/metarcnn.html.（154</a> star）</p>
+<p>这个模型希望用Predictor-head Remodeling Network这个模块来学习特定class的物体特征，并提取出一个class attentive vectors，这个向量包含了channel-wise soft-attention，用来加在提取出的RoI feature上让R-CNN模型能够识别到指定类别的物体</p>
+<p><img src="imageDownloadAddress.png" alt="img"></p>
+<p>在VOC-07/12上，K = 1有mAP为19.90，当K=5有mAP为45.70，比meta-yolo要好</p>
+<p>在MS-COCO上K=10和30分别为19.10和25.30，比meta-yolo的12.3，19.0的效果要好</p>
+<h2 id="存在的一些问题"><a href="#存在的一些问题" class="headerlink" title="存在的一些问题"></a>存在的一些问题</h2><p>FSOD和普通的检测任务一样，受限于数据的场景问题。low-shot检测器可能会遇到被检测的对象尺度和输入模型的对象尺度变化较大，角度不同，等等，也可能会遇到前景和后景区分困难的问题。此外，稀缺的数据机制还可能降低对遮挡和杂乱场景的鲁棒性。在很多决策中都必须数据的权衡，例如图像分辨率、主干类型和嵌入的维度。</p>
+<p>在训练数据集上，目前的FSOD任务通常是在常见的经典OD数据集上进行训练，有一些成果提出新的FSOD数据集，但并不能认为是该领域的标准。</p>
+<p>就所提出的每种方法中所利用的模型结构而言，它们之间存在着很强的相似性。在mAP方面存在差异并没有特别明显。此外，总体结果在精确度方面仍然相对较低，效果要比大多数其他物体检测的任务差一些。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/23/NMS/" rel="prev" title="NMS和IOU代码实现">
+      <i class="fa fa-chevron-left"></i> NMS和IOU代码实现
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">需要关注的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO"><span class="nav-number">2.</span> <span class="nav-text">TODO</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E8%A7%A3%E9%87%8A"><span class="nav-number"></span> <span class="nav-text">几种基本概念解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Few-shot%E5%92%8Cone-shot%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number"></span> <span class="nav-text">Few-shot和one-shot的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zero-shot-learning"><span class="nav-number">1.</span> <span class="nav-text">Zero-shot learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E6%95%88%E6%A0%B7%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">有效样本定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Few-shot%E5%92%8C%EF%BC%88domain-adaption%EF%BC%89-https-zhuanlan-zhihu-com-p-370359223"><span class="nav-number">3.</span> <span class="nav-text">Few-shot和（domain adaption）[﻿https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;370359223﻿]</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number"></span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E7%8C%AE%E8%AF%A6%E7%BB%86%E8%AE%B0%E5%BD%95"><span class="nav-number"></span> <span class="nav-text">文献详细记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0few-shot%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF"><span class="nav-number"></span> <span class="nav-text">实现few-shot的几种思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%EF%BC%88Data-Augmentation%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">基于数据增强（Data Augmentation）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-Scale-Positive-Sample-Refinement-for-Few-Shot-Object-Detection"><span class="nav-number">1.1.</span> <span class="nav-text">Multi-Scale Positive Sample Refinement for Few-Shot Object Detection</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%EF%BC%88TransferLearning%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">迁移学习（TransferLearning）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LSTD-A-Low-Shot-Transfer-Detector-for-Object-Detection-LSTD"><span class="nav-number">2.1.</span> <span class="nav-text">LSTD: A Low-Shot Transfer Detector for Object Detection (LSTD)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Frustratingly-Simple-Few-Shot-Object-Detection-TFA"><span class="nav-number">2.2.</span> <span class="nav-text">Frustratingly Simple Few-Shot Object Detection (TFA)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Generalized-Few-Shot-Object-Detection-without-Forgetting"><span class="nav-number">2.3.</span> <span class="nav-text">Generalized Few-Shot Object Detection without Forgetting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0%EF%BC%88Distance-Metric-Learning%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">度量学习（Distance Metric Learning）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN-%EF%BC%88IBM%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)（IBM）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Few-Shot-Object-Detection-with-Atention-RPN-and-Multi-Relation-Detector-Atention-RPN"><span class="nav-number">3.2.</span> <span class="nav-text">Few-Shot Object Detection with Atention-RPN and Multi-Relation Detector (Atention-RPN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FSCE-Few-Shot-Object-Detection-via-Contrastive-Proposal-Encoding"><span class="nav-number">3.3.</span> <span class="nav-text">FSCE: Few-Shot Object Detection via Contrastive Proposal Encoding</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#meta-learning"><span class="nav-number">4.</span> <span class="nav-text">meta-learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Few-Shot-Object-Detection-via-Feature-Reweighting-MetaYOLO"><span class="nav-number">5.</span> <span class="nav-text">Few-Shot Object Detection via Feature Reweighting (MetaYOLO)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Meta-R-CNN-Towards-General-Solver-for-Instance-level-Low-shot-Learning-Meta-R-CNN"><span class="nav-number">5.1.</span> <span class="nav-text">Meta R-CNN: Towards General Solver for Instance-level Low-shot Learning (Meta R-CNN)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number"></span> <span class="nav-text">存在的一些问题</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">篮球架上打砖块</p>
+  <div class="site-description" itemprop="description">Apodidae</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">篮球架上打砖块</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

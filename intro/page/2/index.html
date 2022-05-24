@@ -162,6 +162,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E9%80%92%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="篮球架上打砖块">
+      <meta itemprop="description" content="Apodidae">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Upperlan">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E9%80%92%E5%BD%92/" class="post-title-link" itemprop="url">算法系列-递归</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-24 22:18:20" itemprop="dateCreated datePublished" datetime="2022-03-24T22:18:20+08:00">2022-03-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-27 15:32:21" itemprop="dateModified" datetime="2022-03-27T15:32:21+08:00">2022-03-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21. 合并两个有序链表"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-two-sorted-lists/">21. 合并两个有序链表</a></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode() : val(0), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeTwoLists</span><span class="params">(ListNode* list1, ListNode* list2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(list1 == <span class="literal">nullptr</span>) &#123;<span class="comment">//如果遇到list1为空，则不用合并了，直接返回list2</span></span><br><span class="line">            <span class="keyword">return</span> list2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(list2 == <span class="literal">nullptr</span>) &#123;<span class="comment">//同理</span></span><br><span class="line">            <span class="keyword">return</span> list1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(list1-&gt;val &lt;= list2-&gt;val) &#123;<span class="comment">//如果list1指的值比较小</span></span><br><span class="line">            list1-&gt;next = <span class="built_in">mergeTwoLists</span>(list1-&gt;next, list2);<span class="comment">//因为list都是升序所以list-&gt;next一定比list小，</span></span><br><span class="line">          <span class="comment">//假设mergeTwoLists已经实现，可以返回已经排序好的list-&gt;next和list2合并好了的链表</span></span><br><span class="line">            <span class="keyword">return</span> list1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        list2-&gt;next = <span class="built_in">mergeTwoLists</span>(list1, list2-&gt;next);</span><br><span class="line">        <span class="keyword">return</span> list2;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>就是遇到输入就先解决输入的几种可能应该怎么样，再假设自身这个函数的功能已经实现，怎么通过这个已经实现的函数实现自己的目的。</p>
+<h4 id="124-二叉树中的最大路径和"><a href="#124-二叉树中的最大路径和" class="headerlink" title="124. 二叉树中的最大路径和"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/">124. 二叉树中的最大路径和</a></h4><p>路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。</p>
+<p>路径和 是路径中各节点值的总和。</p>
+<p>给你一个二叉树的根节点 root ，返回其 最大路径和 。</p>
+<p>示例 1：<img src="算法系列-递归/exx1-8283339.jpg" alt="exx1"></p>
+<p>输入：root = [1,2,3]<br>输出：6<br>解释：最优路径是 2 -&gt; 1 -&gt; 3 ，路径和为 2 + 1 + 3 = 6<br>示例 2：<img src="https://assets.leetcode.com/uploads/2020/10/13/exx2.jpg" alt="exx2"></p>
+<p>输入：root = [-10,9,20,null,null,15,7]<br>输出：42<br>解释：最优路径是 15 -&gt; 20 -&gt; 7 ，路径和为 15 + 20 + 7 = 42</p>
+<p>提示：</p>
+<p>树中节点数目范围是 [1, 3 * 104]<br>-1000 &lt;= Node.val &lt;= 1000</p>
+<p>思路：返回左右子树的最大值，然后更新一下sum，但是这个时候注意，<strong>更新的sum只能包括左右子树中的一个sum值，因为更新后这里成了一条路径，不能左右两边都走同时往上走</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() : val(0), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> maxSum = INT_MIN;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">pathsum</span><span class="params">(TreeNode *node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!node) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> left = <span class="built_in">max</span>(<span class="built_in">pathsum</span>(node-&gt;left), <span class="number">0</span>);</span><br><span class="line">        <span class="type">int</span> right = <span class="built_in">max</span>(<span class="built_in">pathsum</span>(node-&gt;right), <span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="type">int</span> sum = node-&gt;val + left + right;</span><br><span class="line"></span><br><span class="line">        maxSum = <span class="built_in">max</span>(maxSum, sum);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node-&gt;val + <span class="built_in">max</span>(left, right);<span class="comment">//这里只能返回一个</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxPathSum</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">pathsum</span>(root);</span><br><span class="line">        <span class="keyword">return</span> maxSum;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/24/%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -995,112 +1080,6 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E5%85%B3%E4%BA%8E%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%90%84%E7%A7%8D%E7%9A%84%E5%90%84%E7%A7%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="篮球架上打砖块">
-      <meta itemprop="description" content="Apodidae">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Upperlan">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80-%E5%85%B3%E4%BA%8E%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%90%84%E7%A7%8D%E7%9A%84%E5%90%84%E7%A7%8D/" class="post-title-link" itemprop="url">深度学习基础-关于参数初始化的各种</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-08 20:32:12" itemprop="dateCreated datePublished" datetime="2022-03-08T20:32:12+08:00">2022-03-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-09 10:37:31" itemprop="dateModified" datetime="2022-03-09T10:37:31+08:00">2022-03-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">深度学习基础知识</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="参数初始化"><a href="#参数初始化" class="headerlink" title="参数初始化"></a>参数初始化</h2><p>目的：让深度学习模型在训练过程中梯度不为零，可能会加快梯度下降的收敛速度，降低训练错误的概率。</p>
-<p>为了达到这个目的，初始化需要满足的条件：</p>
-<ol>
-<li>各层的激活值不会出现饱和迹象。（当输入过大或过小，激活函数的导数几乎为零，即梯度基本为0，称为饱和）</li>
-<li>各层的激活值不为0.</li>
-<li>尽量使各个层的激活值的方差保持一致。</li>
-<li>尽量使各个层对  状态的梯度  的方差保持一致</li>
-</ol>
-<h2 id="几种初始化方式"><a href="#几种初始化方式" class="headerlink" title="几种初始化方式"></a>几种初始化方式</h2><ol>
-<li>预训练模型</li>
-<li>随机初始化：使权重分布符合正态分布，在训练深度神经网络时可能会造成梯度消失或者梯度爆炸（网络层数太深，梯度容易一直变大或者一直变小）</li>
-<li>xavier初始化：基本思想事保持输入和输出的方差的一致，避免了所有的输出值都趋向于0；</li>
-<li>kaiming初始化：何恺明提出的一种针对Relu的初始化方法，思想是在Relu网络中，假设有一半的神经元被激活,另一半为0。保持方差不变，只需要在xavier基础上除以2即可。</li>
-</ol>
-<h2 id="为什么不能全0初始化"><a href="#为什么不能全0初始化" class="headerlink" title="为什么不能全0初始化"></a>为什么不能全0初始化</h2><p>如果权重是0，那么中间层的输出是输入数据乘权重，就也是0且相等。神经网络计算出来的输出值是一样的，那么神经网络反向传播算法计算出来的梯度也是一样，参数更新值也一样。所以不管再训练多少次，这些隐藏层梯度都是一样，和线性模型就没有区别了。</p>
-<h2 id="全部初始化为一样的值"><a href="#全部初始化为一样的值" class="headerlink" title="全部初始化为一样的值"></a>全部初始化为一样的值</h2><p>和上述一样，最后输出对于每一个参数反向传播的梯度都一样，相当于一个线性模型</p>
-<h2 id="初始化为小的随机数"><a href="#初始化为小的随机数" class="headerlink" title="初始化为小的随机数"></a>初始化为小的随机数</h2><p>是打破网络对称性的一个普遍的解决办法。神经元一开始的权重值是随机的，所以梯度反向传播时会有不同的更新。看起来初始化的值类似于</p>
-<script type="math/tex; mode=display">
-\mathbf{w} =0.01 \times np.random.randn(D,H)</script><p><img src="image-20220308213348126-6746429.png" alt="image-20220308213348126"></p>
-<p>0.01会试w变小，w很大时会导致神经元输出很大，再通过激活函数后容易梯度消失，饱和。当然如果太小，输出接近激活函数在负方向接近饱和，也容易梯度消失。</p>
-<h2 id="预训练"><a href="#预训练" class="headerlink" title="预训练"></a>预训练</h2><p>只谈finetune策略</p>
-<ol>
-<li>把预训练模型当做权重初始化权重，对整个网络进行完全训练，精度比2高很多。</li>
-<li>训练一些层而冻结其他层，一般较低层学习的是通用特征，较高层适用的是逻辑含义更复杂的抽象特征。如果模型很大，数据集不大，会冻结更多层以免过拟合。如果数据很多，模型不大，就可以训练更多层。一般只训练最后的分类层</li>
-<li>冻结卷积块，即卷积层，池化层等堆积的一个卷积模块。这种情况适用于训练、冻结平衡的极端情况。</li>
-</ol>
-<h2 id="为什么深度学习模型难训练"><a href="#为什么深度学习模型难训练" class="headerlink" title="为什么深度学习模型难训练"></a>为什么深度学习模型难训练</h2><p>1.梯度消失</p>
-<p>梯度反向传播的过程中越来越小，前面层比后面层学的慢，所以学习会卡住。反向传播过程中前面的层的梯度收到后面所有层的影响，如果梯度值很小，更新信息在传播中指数形式衰减，发生梯度消失。</p>
-<p>可能会由：</p>
-<p>学习率大小，网络初始化参数，激活函数的边缘效应（饱和）</p>
-<p>2.梯度爆炸</p>
-<p>梯度也可能在传播中指数增大，导致权重大幅度更新，甚至溢出，变成NaN值，无法更新</p>
-<p>3.权重矩阵退化导致模型的有效自由度变小。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1170,7 +1149,7 @@ f\left( x \right)=tanh(x)=\frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</script><p><img src=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1317,61 +1296,6 @@ $(document).ready(function() {
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '[object Object]';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
