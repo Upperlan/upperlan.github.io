@@ -28,7 +28,7 @@
 <meta property="og:description" content="unordered_map&lt;type1,type2&gt; map1type1类型的数据为key，对应一个type2数据为value。无序表，查询一次时间复杂度为O(n)。 map1.find(x) &#x3D;&#x3D; map1.end()意思是表中没有key为x1的键-值对 map.clear()是清楚所有现有的键值对 unordered_ser&lt;type&gt; set1set1中添加元素是se">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-06T12:55:34.000Z">
-<meta property="article:modified_time" content="2022-04-06T13:54:09.470Z">
+<meta property="article:modified_time" content="2022-06-08T07:51:29.873Z">
 <meta property="article:author" content="篮球架上打砖块">
 <meta name="twitter:card" content="summary">
 
@@ -187,10 +187,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-04-06 20:55:34 / 修改时间：21:54:09" itemprop="dateCreated datePublished" datetime="2022-04-06T20:55:34+08:00">2022-04-06</time>
+              <time title="创建时间：2022-04-06 20:55:34" itemprop="dateCreated datePublished" datetime="2022-04-06T20:55:34+08:00">2022-04-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-08 15:51:29" itemprop="dateModified" datetime="2022-06-08T15:51:29+08:00">2022-06-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -224,6 +230,11 @@
 <p><code>map.clear()</code>是清楚所有现有的键值对</p>
 <h3 id="unordered-ser-lt-type-gt-set1"><a href="#unordered-ser-lt-type-gt-set1" class="headerlink" title="unordered_ser&lt;type&gt; set1"></a><code>unordered_ser&lt;type&gt; set1</code></h3><p>set1中添加元素是set.insert(x),其中x为type类型。</p>
 <p>set1.erase(x)是消除set1中的x。set1.count(x)若返回值为0，则说明set1中没有元素x。</p>
+<h3 id="49-字母异位词分组"><a href="#49-字母异位词分组" class="headerlink" title="49. 字母异位词分组"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/group-anagrams/">49. 字母异位词分组</a></h3><p>字符串可是可以直接sort的；</p>
+<p>可以auto it一个迭代器来迭代哈希表里的元素</p>
+<p>it-&gt;second是值</p>
+<p>it-&gt;first是键</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;vector&lt;string&gt;&gt; <span class="built_in">groupAnagrams</span>(vector&lt;string&gt;&amp; strs) &#123;</span><br><span class="line">        vector&lt;vector&lt;string&gt;&gt; res;</span><br><span class="line">        unordered_map&lt;string, vector&lt;string&gt;&gt; map;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> str : strs) &#123;</span><br><span class="line">            string key = str;</span><br><span class="line">            <span class="built_in">sort</span>(str.<span class="built_in">begin</span>(), str.<span class="built_in">end</span>());</span><br><span class="line">            map[str].<span class="built_in">push_back</span>(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> it = map.<span class="built_in">begin</span>(); it != map.<span class="built_in">end</span>(); it++) &#123;</span><br><span class="line">            res.<span class="built_in">push_back</span>(it-&gt;second);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -304,7 +315,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-map-lt-type1-type2-gt-map1"><span class="nav-number">1.</span> <span class="nav-text">unordered_map&lt;type1,type2&gt; map1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-ser-lt-type-gt-set1"><span class="nav-number">2.</span> <span class="nav-text">unordered_ser&lt;type&gt; set1</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-map-lt-type1-type2-gt-map1"><span class="nav-number">1.</span> <span class="nav-text">unordered_map&lt;type1,type2&gt; map1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-ser-lt-type-gt-set1"><span class="nav-number">2.</span> <span class="nav-text">unordered_ser&lt;type&gt; set1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#49-%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84"><span class="nav-number">3.</span> <span class="nav-text">49. 字母异位词分组</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -318,14 +329,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
